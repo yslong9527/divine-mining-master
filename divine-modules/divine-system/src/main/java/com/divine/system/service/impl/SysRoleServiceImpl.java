@@ -71,14 +71,14 @@ public class SysRoleServiceImpl implements SysRoleService {
     private Wrapper<SysRole> buildQueryWrapper(SysRoleDto role) {
         Map<String, Object> params = role.getParams();
         QueryWrapper<SysRole> wrapper = Wrappers.query();
-        wrapper.eq("r.del_flag", UserConstants.NOT_DELETED)
-            .eq(ObjectUtil.isNotNull(role.getRoleId()), "r.role_id", role.getRoleId())
-            .like(StringUtils.isNotBlank(role.getRoleName()), "r.role_name", role.getRoleName())
-            .eq(StringUtils.isNotBlank(role.getStatus()), "r.status", role.getStatus())
-            .like(StringUtils.isNotBlank(role.getRoleKey()), "r.role_key", role.getRoleKey())
+        wrapper.eq("result.del_flag", UserConstants.NOT_DELETED)
+            .eq(ObjectUtil.isNotNull(role.getRoleId()), "result.role_id", role.getRoleId())
+            .like(StringUtils.isNotBlank(role.getRoleName()), "result.role_name", role.getRoleName())
+            .eq(StringUtils.isNotBlank(role.getStatus()), "result.status", role.getStatus())
+            .like(StringUtils.isNotBlank(role.getRoleKey()), "result.role_key", role.getRoleKey())
             .between(params.get("beginTime") != null && params.get("endTime") != null,
-                "r.create_time", params.get("beginTime"), params.get("endTime"))
-            .orderByAsc("r.role_sort").orderByAsc("r.create_time");
+                "result.create_time", params.get("beginTime"), params.get("endTime"))
+            .orderByAsc("result.role_sort").orderByAsc("result.create_time");
         return wrapper;
     }
 
