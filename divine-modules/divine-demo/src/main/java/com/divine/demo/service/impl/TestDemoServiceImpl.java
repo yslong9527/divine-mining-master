@@ -37,8 +37,8 @@ public class TestDemoServiceImpl implements ITestDemoService {
     }
 
     @Override
-    public PageInfoRes<TestDemoVo> queryPageList(TestDemoDto bo, BasePage basePage) {
-        LambdaQueryWrapper<TestDemo> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<TestDemoVo> queryPageList(TestDemoDto dto, BasePage basePage) {
+        LambdaQueryWrapper<TestDemo> lqw = buildQueryWrapper(dto);
         Page<TestDemoVo> result = baseMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
@@ -47,41 +47,41 @@ public class TestDemoServiceImpl implements ITestDemoService {
      * 自定义分页查询
      */
     @Override
-    public PageInfoRes<TestDemoVo> customPageList(TestDemoDto bo, BasePage basePage) {
-        LambdaQueryWrapper<TestDemo> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<TestDemoVo> customPageList(TestDemoDto dto, BasePage basePage) {
+        LambdaQueryWrapper<TestDemo> lqw = buildQueryWrapper(dto);
         Page<TestDemoVo> result = baseMapper.customPageList(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
 
     @Override
-    public List<TestDemoVo> queryList(TestDemoDto bo) {
-        return baseMapper.selectVoList(buildQueryWrapper(bo));
+    public List<TestDemoVo> queryList(TestDemoDto dto) {
+        return baseMapper.selectVoList(buildQueryWrapper(dto));
     }
 
-    private LambdaQueryWrapper<TestDemo> buildQueryWrapper(TestDemoDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<TestDemo> buildQueryWrapper(TestDemoDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<TestDemo> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getTestKey()), TestDemo::getTestKey, bo.getTestKey());
-        lqw.eq(StringUtils.isNotBlank(bo.getValue()), TestDemo::getValue, bo.getValue());
+        lqw.like(StringUtils.isNotBlank(dto.getTestKey()), TestDemo::getTestKey, dto.getTestKey());
+        lqw.eq(StringUtils.isNotBlank(dto.getValue()), TestDemo::getValue, dto.getValue());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
             TestDemo::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
     @Override
-    public Boolean insertByBo(TestDemoDto bo) {
-        TestDemo add = MapstructUtils.convert(bo, TestDemo.class);
+    public Boolean insertByBo(TestDemoDto dto) {
+        TestDemo add = MapstructUtils.convert(dto, TestDemo.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
-            bo.setId(add.getId());
+            dto.setId(add.getId());
         }
         return flag;
     }
 
     @Override
-    public Boolean updateByBo(TestDemoDto bo) {
-        TestDemo update = MapstructUtils.convert(bo, TestDemo.class);
+    public Boolean updateByBo(TestDemoDto dto) {
+        TestDemo update = MapstructUtils.convert(dto, TestDemo.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
     }

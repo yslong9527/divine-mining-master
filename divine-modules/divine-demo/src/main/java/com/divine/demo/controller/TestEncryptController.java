@@ -1,6 +1,7 @@
 package com.divine.demo.controller;
 
 import com.divine.common.core.domain.Result;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.demo.domain.entity.TestDemoEncrypt;
 import com.divine.demo.mapper.TestDemoEncryptMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,7 @@ public class TestEncryptController {
     public Result<Map<String, TestDemoEncrypt>> test(@Schema(description = "测试key") String key,
                                                      @Schema(description = "测试value") String value) {
         if (!encryptEnable) {
-            throw new RuntimeException("加密功能未开启!");
+            throw new BusinessException("加密功能未开启!");
         }
         Map<String, TestDemoEncrypt> map = new HashMap<>(2);
         TestDemoEncrypt demo = new TestDemoEncrypt();

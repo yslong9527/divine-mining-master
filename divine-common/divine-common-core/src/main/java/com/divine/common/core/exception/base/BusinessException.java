@@ -1,75 +1,38 @@
 package com.divine.common.core.exception.base;
 
-import com.divine.common.core.utils.MessageUtils;
-import com.divine.common.core.utils.StringUtils;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.divine.common.core.enums.HttpStatusEnum;
+import lombok.Getter;
 
-/**
- * 基础异常
- *
- * @author Yisl
- */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
+@Getter
 public class BusinessException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
 
-    /**
-     * 所属模块
-     */
-    private String module;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 错误码
      */
-    private String code;
+    private final Integer code;
 
-    /**
-     * 错误码对应的参数
-     */
-    private Object[] args;
-
-    /**
-     * 错误消息
-     */
-    private String message;
-
-    public BusinessException(String module, String code, Object[] args, String message) {
-        this.module = module;
-        this.code = code;
-        this.args = args;
-        this.message = message;
-    }
-
-    public BusinessException(String module, String code, Object[] args) {
-        this(module, code, args, null);
-    }
-
-    public BusinessException(String module, String message) {
-        this(module, null, null, message);
-    }
-
-    public BusinessException(String code, Object[] args) {
-        this(null, code, args, null);
+    public BusinessException(HttpStatusEnum errorCode) {
+        super(errorCode.getMsg());
+        this.code = errorCode.getCode();
     }
 
     public BusinessException(String message) {
-        this(null, null, null, message);
+        super(message);
+        this.code = HttpStatusEnum.FAIL.getCode();
     }
 
-    @Override
-    public String getMessage() {
-        String message = null;
-        if (!StringUtils.isEmpty(code)) {
-            message = MessageUtils.message(code, args);
-        }
-        if (message == null) {
-            message = this.message;
-        }
-        return message;
+    public BusinessException(HttpStatusEnum errorCode, String message) {
+        super(message);
+        this.code = errorCode.getCode();
     }
+
+    public BusinessException(String message, Throwable cause) {
+        super(message, cause);
+        this.code = HttpStatusEnum.FAIL.getCode();
+    }
+
 
 }
+

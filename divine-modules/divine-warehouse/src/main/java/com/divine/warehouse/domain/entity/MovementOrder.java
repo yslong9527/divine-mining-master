@@ -20,7 +20,6 @@ public class MovementOrder extends BaseOrder {
     @Serial
     private static final long serialVersionUID=1L;
 
-
     /**
      * 源仓库
      */

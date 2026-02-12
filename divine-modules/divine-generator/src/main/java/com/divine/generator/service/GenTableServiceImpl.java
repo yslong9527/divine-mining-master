@@ -10,13 +10,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.generator.constant.GenConstants;
 import com.divine.generator.domain.GenTable;
 import com.divine.generator.mapper.GenTableMapper;
 import com.divine.common.core.constant.Constants;
 import com.divine.common.mybatis.core.page.PageInfoRes;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.json.utils.JsonUtils;
 import com.divine.common.core.utils.StreamUtils;
 import com.divine.common.core.utils.StringUtils;
@@ -191,7 +191,7 @@ public class GenTableServiceImpl implements IGenTableService {
             }
         } catch (Exception e) {
             log.error("导入失败：" , e);
-            throw new ServiceException("导入失败：" + e.getMessage());
+            throw new BusinessException("导入失败：" + e.getMessage());
         }
     }
 
@@ -276,7 +276,7 @@ public class GenTableServiceImpl implements IGenTableService {
                     String path = getGenPath(table, template);
                     FileUtils.writeUtf8String(sw.toString(), path);
                 } catch (Exception e) {
-                    throw new ServiceException("渲染模板失败，表名：" + table.getTableName());
+                    throw new BusinessException("渲染模板失败，表名：" + table.getTableName());
                 }
             }
         }
@@ -296,7 +296,7 @@ public class GenTableServiceImpl implements IGenTableService {
 
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
         if (CollUtil.isEmpty(dbTableColumns)) {
-            throw new ServiceException("同步数据失败，原表结构不存在");
+            throw new BusinessException("同步数据失败，原表结构不存在");
         }
         List<String> dbTableColumnNames = StreamUtils.toList(dbTableColumns, GenTableColumn::getColumnName);
 
@@ -399,16 +399,16 @@ public class GenTableServiceImpl implements IGenTableService {
             String options = JsonUtils.toJsonString(genTable.getParams());
             Dict paramsObj = JsonUtils.parseMap(options);
             if (StringUtils.isEmpty(paramsObj.getStr(GenConstants.TREE_CODE))) {
-                throw new ServiceException("树编码字段不能为空");
+                throw new BusinessException("树编码字段不能为空");
             } else if (StringUtils.isEmpty(paramsObj.getStr(GenConstants.TREE_PARENT_CODE))) {
-                throw new ServiceException("树父编码字段不能为空");
+                throw new BusinessException("树父编码字段不能为空");
             } else if (StringUtils.isEmpty(paramsObj.getStr(GenConstants.TREE_NAME))) {
-                throw new ServiceException("树名称字段不能为空");
+                throw new BusinessException("树名称字段不能为空");
             } else if (GenConstants.TPL_SUB.equals(genTable.getTplCategory())) {
                 if (StringUtils.isEmpty(genTable.getSubTableName())) {
-                    throw new ServiceException("关联子表的表名不能为空");
+                    throw new BusinessException("关联子表的表名不能为空");
                 } else if (StringUtils.isEmpty(genTable.getSubTableFkName())) {
-                    throw new ServiceException("子表关联的外键名不能为空");
+                    throw new BusinessException("子表关联的外键名不能为空");
                 }
             }
         }

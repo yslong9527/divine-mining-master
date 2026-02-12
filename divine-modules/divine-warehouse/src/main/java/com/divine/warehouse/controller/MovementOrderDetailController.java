@@ -12,7 +12,7 @@ import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.dto.MovementOrderDetailDto;
-import com.divine.warehouse.domain.vo.MovementOrderDetailVo;
+import com.divine.warehouse.domain.vo.MovementOrderDetailVO;
 import com.divine.warehouse.service.MovementOrderDetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +46,8 @@ public class MovementOrderDetailController extends BaseController {
     @Operation(summary = "查询库存移动详情列表")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/list")
-    public PageInfoRes<MovementOrderDetailVo> list(MovementOrderDetailDto bo, BasePage basePage) {
-        return movementOrderDetailService.queryPageList(bo, basePage);
+    public PageInfoRes<MovementOrderDetailVO> list(MovementOrderDetailDto dto, BasePage basePage) {
+        return movementOrderDetailService.queryPageList(dto, basePage);
     }
 
     /**
@@ -57,9 +57,9 @@ public class MovementOrderDetailController extends BaseController {
     @SaCheckPermission("wms:movement:all")
     @Log(title = "库存移动详情", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(MovementOrderDetailDto bo, HttpServletResponse response) {
-        List<MovementOrderDetailVo> list = movementOrderDetailService.queryList(bo);
-        ExcelUtil.exportExcel(list, "库存移动详情", MovementOrderDetailVo.class, response);
+    public void export(MovementOrderDetailDto dto, HttpServletResponse response) {
+        List<MovementOrderDetailVO> list = movementOrderDetailService.queryList(dto);
+        ExcelUtil.exportExcel(list, "库存移动详情", MovementOrderDetailVO.class, response);
     }
 
     /**
@@ -70,7 +70,7 @@ public class MovementOrderDetailController extends BaseController {
     @Operation(summary = "获取库存移动详情详细信息")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/{id}")
-    public Result<MovementOrderDetailVo> getInfo(@NotNull(message = "主键不能为空")
+    public Result<MovementOrderDetailVO> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long id) {
         return Result.success(movementOrderDetailService.queryById(id));
     }
@@ -83,8 +83,8 @@ public class MovementOrderDetailController extends BaseController {
     @Log(title = "库存移动详情", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody MovementOrderDetailDto bo) {
-        movementOrderDetailService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody MovementOrderDetailDto dto) {
+        movementOrderDetailService.insertByBo(dto);
         return Result.success();
     }
 
@@ -96,8 +96,8 @@ public class MovementOrderDetailController extends BaseController {
     @Log(title = "库存移动详情", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody MovementOrderDetailDto bo) {
-        movementOrderDetailService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody MovementOrderDetailDto dto) {
+        movementOrderDetailService.updateByBo(dto);
         return Result.success();
     }
 
@@ -122,7 +122,7 @@ public class MovementOrderDetailController extends BaseController {
     @Operation(summary = "根据移库单id查询移库单详情列表")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/list/{movementOrderId}")
-    public Result<List<MovementOrderDetailVo>> listByMovementOrderId(@NotNull @PathVariable Long movementOrderId) {
+    public Result<List<MovementOrderDetailVO>> listByMovementOrderId(@NotNull @PathVariable Long movementOrderId) {
         return Result.success(movementOrderDetailService.queryByMovementOrderId(movementOrderId));
     }
 }

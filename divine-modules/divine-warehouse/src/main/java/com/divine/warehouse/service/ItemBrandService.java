@@ -24,22 +24,22 @@ public interface ItemBrandService {
     /**
      * 查询商品品牌列表
      */
-    PageInfoRes<ItemBrandVo> queryPageList(ItemBrandDto bo, BasePage basePage) ;
+    PageInfoRes<ItemBrandVo> queryPageList(ItemBrandDto dto, BasePage basePage) ;
 
     /**
      * 查询商品品牌列表
      */
-    List<ItemBrandVo> queryList(ItemBrandDto bo) ;
+    List<ItemBrandVo> queryList(ItemBrandDto dto) ;
 
     /**
      * 新增商品品牌
      */
-    void insertByBo(ItemBrandDto bo) ;
+    void insertByBo(ItemBrandDto dto) ;
 
     /**
      * 修改商品品牌
      */
-    void updateByBo(ItemBrandDto bo);
+    void updateByBo(ItemBrandDto dto);
 
     /**
      * 批量删除商品品牌

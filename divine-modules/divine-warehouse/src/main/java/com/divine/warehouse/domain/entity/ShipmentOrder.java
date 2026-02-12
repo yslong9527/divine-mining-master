@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName("wms_shipment_order")
 public class ShipmentOrder extends BaseOrder {
+
     /**
      * 仓库id
      */

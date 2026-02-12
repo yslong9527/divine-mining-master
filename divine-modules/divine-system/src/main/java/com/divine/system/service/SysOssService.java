@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface SysOssService {
 
-    PageInfoRes<SysOssVo> queryPageList(SysOssDto bo, BasePage basePage);
+    PageInfoRes<SysOssVo> queryPageList(SysOssDto dto, BasePage basePage);
 
     List<SysOssVo> listByIds(Collection<Long> ossIds);
 

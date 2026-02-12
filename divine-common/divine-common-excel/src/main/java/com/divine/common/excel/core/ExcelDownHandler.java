@@ -11,8 +11,8 @@ import com.alibaba.excel.util.ClassUtils;
 import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.service.DictService;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.StreamUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.core.utils.SpringUtils;
@@ -103,7 +103,7 @@ public class ExcelDownHandler implements SheetWriteHandler {
                 if (StringUtils.isNotBlank(dictType)) {
                     // 如果传递了字典名，则依据字典建立下拉
                     Collection<String> values = Optional.ofNullable(dictService.getAllDictByDictType(dictType))
-                        .orElseThrow(() -> new ServiceException(String.format("字典 %s 不存在", dictType)))
+                        .orElseThrow(() -> new BusinessException(String.format("字典 %s 不存在", dictType)))
                         .values();
                     options = new ArrayList<>(values);
                 } else if (StringUtils.isNotBlank(converterExp)) {

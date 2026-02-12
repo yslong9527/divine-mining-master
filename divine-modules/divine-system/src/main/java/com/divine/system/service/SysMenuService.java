@@ -107,18 +107,18 @@ public interface SysMenuService {
     /**
      * 新增保存菜单信息
      *
-     * @param bo 菜单信息
+     * @param dto 菜单信息
      * @return 结果
      */
-    int insertMenu(SysMenuDto bo);
+    int insertMenu(SysMenuDto dto);
 
     /**
      * 修改保存菜单信息
      *
-     * @param bo 菜单信息
+     * @param dto 菜单信息
      * @return 结果
      */
-    int updateMenu(SysMenuDto bo);
+    int updateMenu(SysMenuDto dto);
 
     /**
      * 删除菜单管理信息

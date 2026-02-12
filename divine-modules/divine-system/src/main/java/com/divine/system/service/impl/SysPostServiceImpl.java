@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.page.BasePage;
@@ -43,14 +43,14 @@ public class SysPostServiceImpl implements SysPostService {
     /**
      * 根据查询条件构建查询包装器
      *
-     * @param bo 查询条件对象
+     * @param dto 查询条件对象
      * @return 构建好的查询包装器
      */
-    private LambdaQueryWrapper<SysPost> buildQueryWrapper(SysPostDto bo) {
+    private LambdaQueryWrapper<SysPost> buildQueryWrapper(SysPostDto dto) {
         LambdaQueryWrapper<SysPost> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(StringUtils.isNotBlank(bo.getPostCode()), SysPost::getPostCode, bo.getPostCode())
-            .like(StringUtils.isNotBlank(bo.getPostName()), SysPost::getPostName, bo.getPostName())
-            .eq(StringUtils.isNotBlank(bo.getStatus()), SysPost::getStatus, bo.getStatus())
+        wrapper.like(StringUtils.isNotBlank(dto.getPostCode()), SysPost::getPostCode, dto.getPostCode())
+            .like(StringUtils.isNotBlank(dto.getPostName()), SysPost::getPostName, dto.getPostName())
+            .eq(StringUtils.isNotBlank(dto.getStatus()), SysPost::getStatus, dto.getStatus())
             .orderByAsc(SysPost::getPostSort);
         return wrapper;
     }
@@ -159,7 +159,7 @@ public class SysPostServiceImpl implements SysPostService {
         for (Long postId : postIds) {
             SysPost post = postMapper.selectById(postId);
             if (countUserPostById(postId) > 0) {
-                throw new ServiceException(String.format("%1$s已分配，不能删除!", post.getPostName()));
+                throw new BusinessException(String.format("%1$s已分配，不能删除!", post.getPostName()));
             }
         }
         return postMapper.deleteBatchIds(Arrays.asList(postIds));
@@ -168,24 +168,24 @@ public class SysPostServiceImpl implements SysPostService {
     /**
      * 新增保存岗位信息
      *
-     * @param bo 岗位信息
+     * @param dto 岗位信息
      * @return 结果
      */
     @Override
-    public int insertPost(SysPostDto bo) {
-        SysPost post = MapstructUtils.convert(bo, SysPost.class);
+    public int insertPost(SysPostDto dto) {
+        SysPost post = MapstructUtils.convert(dto, SysPost.class);
         return postMapper.insert(post);
     }
 
     /**
      * 修改保存岗位信息
      *
-     * @param bo 岗位信息
+     * @param dto 岗位信息
      * @return 结果
      */
     @Override
-    public int updatePost(SysPostDto bo) {
-        SysPost post = MapstructUtils.convert(bo, SysPost.class);
+    public int updatePost(SysPostDto dto) {
+        SysPost post = MapstructUtils.convert(dto, SysPost.class);
         return postMapper.updateById(post);
     }
 }

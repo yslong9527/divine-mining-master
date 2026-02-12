@@ -23,24 +23,23 @@ public interface ShipmentOrderService {
     /**
      * 查询出库单列表
      */
-    PageInfoRes<ShipmentOrderVo> queryPageList(ShipmentOrderDto bo, BasePage basePage) ;
+    PageInfoRes<ShipmentOrderVo> queryPageList(ShipmentOrderDto dto, BasePage basePage) ;
 
     /**
      * 查询出库单列表
      */
-    List<ShipmentOrderVo> queryList(ShipmentOrderDto bo) ;
+    List<ShipmentOrderVo> queryList(ShipmentOrderDto dto) ;
 
     /**
      * 暂存出库单
      */
-    Long insertByBo(ShipmentOrderDto bo) ;
+    Long insertByBo(ShipmentOrderDto dto) ;
 
-    void validateShipmentOrderNo(String shipmentOrderNo);
 
     /**
      * 修改出库单
      */
-    void updateByBo(ShipmentOrderDto bo) ;
+    void updateByBo(ShipmentOrderDto dto) ;
 
     /**
      * 批量删除出库单
@@ -51,9 +50,9 @@ public interface ShipmentOrderService {
 
     /**
      * 出库
-     * @param bo
+     * @param dto
      */
-    void shipment(ShipmentOrderDto bo);
+    void shipment(ShipmentOrderDto dto);
 
     Long queryIdByOrderNo(String orderNo);
 }

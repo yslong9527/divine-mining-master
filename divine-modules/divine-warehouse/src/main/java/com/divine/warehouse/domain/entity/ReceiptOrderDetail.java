@@ -1,8 +1,7 @@
 package com.divine.warehouse.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * 入库单详情对象 wms_receipt_order_detail
@@ -11,6 +10,7 @@ import lombok.EqualsAndHashCode;
  * @date 2024-07-19
  */
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TableName("wms_receipt_order_detail")
 public class ReceiptOrderDetail extends BaseOrderDetail {
@@ -18,7 +18,17 @@ public class ReceiptOrderDetail extends BaseOrderDetail {
     /**
      * 所属仓库
      */
+    private Long receiptId;
+
+    /**
+     * 所属仓库
+     */
     private Long warehouseId;
+
+    /**
+     * 货架
+     */
+    private String storageShelf;
 
 
 }

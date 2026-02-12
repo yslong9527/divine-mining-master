@@ -61,11 +61,11 @@ public class SysNoticeServiceImpl implements SysNoticeService {
         return noticeMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<SysNotice> buildQueryWrapper(SysNoticeDto bo) {
+    private LambdaQueryWrapper<SysNotice> buildQueryWrapper(SysNoticeDto dto) {
         LambdaQueryWrapper<SysNotice> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getNoticeTitle()), SysNotice::getNoticeTitle, bo.getNoticeTitle());
-        lqw.eq(StringUtils.isNotBlank(bo.getNoticeType()), SysNotice::getNoticeType, bo.getNoticeType());
-        lqw.eq(StringUtils.isNotBlank(bo.getCreateBy()), SysNotice::getCreateBy, bo.getCreateBy());
+        lqw.like(StringUtils.isNotBlank(dto.getNoticeTitle()), SysNotice::getNoticeTitle, dto.getNoticeTitle());
+        lqw.eq(StringUtils.isNotBlank(dto.getNoticeType()), SysNotice::getNoticeType, dto.getNoticeType());
+        lqw.eq(StringUtils.isNotBlank(dto.getCreateBy()), SysNotice::getCreateBy, dto.getCreateBy());
         lqw.orderByAsc(SysNotice::getNoticeId);
         return lqw;
     }
@@ -73,24 +73,24 @@ public class SysNoticeServiceImpl implements SysNoticeService {
     /**
      * 新增公告
      *
-     * @param bo 公告信息
+     * @param dto 公告信息
      * @return 结果
      */
     @Override
-    public int insertNotice(SysNoticeDto bo) {
-        SysNotice notice = MapstructUtils.convert(bo, SysNotice.class);
+    public int insertNotice(SysNoticeDto dto) {
+        SysNotice notice = MapstructUtils.convert(dto, SysNotice.class);
         return noticeMapper.insert(notice);
     }
 
     /**
      * 修改公告
      *
-     * @param bo 公告信息
+     * @param dto 公告信息
      * @return 结果
      */
     @Override
-    public int updateNotice(SysNoticeDto bo) {
-        SysNotice notice = MapstructUtils.convert(bo, SysNotice.class);
+    public int updateNotice(SysNoticeDto dto) {
+        SysNotice notice = MapstructUtils.convert(dto, SysNotice.class);
         return noticeMapper.updateById(notice);
     }
 

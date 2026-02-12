@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -495,15 +496,23 @@ public class RedisUtils {
     }
 
     /**
-     * 递增原子值
+     * 递增原子值（首次创建时设置过期时间）
      *
-     * @param key Redis键
-     * @return 当前值
+     * @param key Redis 键
+     * @param expireSeconds 过期时间（秒）
+     * @return 当前递增后的值
      */
-    public static long incrAtomicValue(String key) {
+    public static long incrAtomicValue(String key, long expireSeconds) {
         RAtomicLong atomic = CLIENT.getAtomicLong(key);
-        return atomic.incrementAndGet();
+        // 原子递增
+        long value = atomic.incrementAndGet();
+        // 只有第一次（value == 1）才设置过期时间
+        if (value == 1 && expireSeconds > 0) {
+            atomic.expire(expireSeconds, TimeUnit.SECONDS);
+        }
+        return value;
     }
+
 
     /**
      * 递减原子值

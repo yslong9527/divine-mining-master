@@ -254,24 +254,24 @@ public class SysMenuServiceImpl implements SysMenuService {
     /**
      * 新增保存菜单信息
      *
-     * @param bo 菜单信息
+     * @param dto 菜单信息
      * @return 结果
      */
     @Override
-    public int insertMenu(SysMenuDto bo) {
-        SysMenu menu = MapstructUtils.convert(bo, SysMenu.class);
+    public int insertMenu(SysMenuDto dto) {
+        SysMenu menu = MapstructUtils.convert(dto, SysMenu.class);
         return menuMapper.insert(menu);
     }
 
     /**
      * 修改保存菜单信息
      *
-     * @param bo 菜单信息
+     * @param dto 菜单信息
      * @return 结果
      */
     @Override
-    public int updateMenu(SysMenuDto bo) {
-        SysMenu menu = MapstructUtils.convert(bo, SysMenu.class);
+    public int updateMenu(SysMenuDto dto) {
+        SysMenu menu = MapstructUtils.convert(dto, SysMenu.class);
         return menuMapper.updateById(menu);
     }
 

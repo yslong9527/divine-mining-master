@@ -1,5 +1,6 @@
 package com.divine.common.core.enums;
 
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,6 @@ public enum UserType {
                 return value;
             }
         }
-        throw new RuntimeException("'UserType' not found By " + str);
+        throw new BusinessException("'UserType' not found By " + str);
     }
 }

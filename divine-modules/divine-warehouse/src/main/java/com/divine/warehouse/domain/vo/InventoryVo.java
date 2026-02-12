@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.divine.warehouse.domain.entity.Inventory;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -24,38 +25,30 @@ public class InventoryVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     */
-    @ExcelProperty(value = "")
+    @ExcelProperty(value = "id")
+    @Schema(description = "id")
     private Long id;
 
-    /**
-     * 规格ID
-     */
     @ExcelProperty(value = "规格ID")
+    @Schema(description = "规格ID")
     private Long skuId;
 
-    /**
-     * 所属仓库
-     */
     @ExcelProperty(value = "所属仓库")
+    @Schema(description = "所属仓库")
     private Long warehouseId;
 
-    /**
-     * 库存
-     */
     @ExcelProperty(value = "库存")
+    @Schema(description = "库存")
     private BigDecimal quantity;
 
-    /**
-     * 备注
-     */
     @ExcelProperty(value = "备注")
+    @Schema(description = "备注")
     private String remark;
 
+    @Schema(description = "sku信息")
     private ItemSkuVo itemSku;
 
+    @Schema(description = "物品信息")
     private ItemVo item;
 
 }

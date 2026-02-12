@@ -48,23 +48,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         inner join wms_item item on sku.item_id=item.id
         inner join wms_item_category category on item.item_category=category.id
         <where>
-            <if test="bo.itemName != null and bo.itemName != ''">
-                and item.item_name like concat('%', #{bo.itemName}, '%')
+            <if test="dto.itemName != null and dto.itemName != ''">
+                and item.item_name like concat('%', #{dto.itemName}, '%')
             </if>
-            <if test="bo.itemCode != null and bo.itemCode != ''">
-                and item.item_code like concat('%', #{bo.itemCode}, '%')
+            <if test="dto.itemCode != null and dto.itemCode != ''">
+                and item.item_code like concat('%', #{dto.itemCode}, '%')
             </if>
-            <if test="bo.itemBrand != null">
-                and item.item_brand=#{bo.itemBrand}
+            <if test="dto.itemBrand != null">
+                and item.item_brand=#{dto.itemBrand}
             </if>
-            <if test="bo.skuName != null and bo.skuName != ''">
-                and sku.sku_name like concat('%', #{bo.skuName}, '%')
+            <if test="dto.skuName != null and dto.skuName != ''">
+                and sku.sku_name like concat('%', #{dto.skuName}, '%')
             </if>
-            <if test="bo.barcode != null and bo.barcode != ''">
-                and sku.barcode like concat('%', #{bo.barcode}, '%')
+            <if test="dto.barcode != null and dto.barcode != ''">
+                and sku.barcode like concat('%', #{dto.barcode}, '%')
             </if>
-            <if test="bo.itemCategory != null and bo.itemCategory != ''">
-                and (category.id=#{bo.itemCategory} or category.parent_id=#{bo.itemCategory})
+            <if test="dto.itemCategory != null and dto.itemCategory != ''">
+                and (category.id=#{dto.itemCategory} or category.parent_id=#{dto.itemCategory})
             </if>
         </where>
         order by sku.item_id desc

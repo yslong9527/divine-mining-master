@@ -5,6 +5,8 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.divine.common.core.domain.Result;
+import com.divine.common.core.enums.HttpStatusEnum;
+import com.divine.common.core.exception.base.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.aspectj.lang.JoinPoint;
@@ -13,7 +15,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import com.divine.common.core.constant.GlobalConstants;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.MessageUtils;
 import com.divine.common.core.utils.ServletUtils;
 import com.divine.common.core.utils.StringUtils;
@@ -44,7 +45,7 @@ public class RepeatSubmitAspect {
         long interval = repeatSubmit.timeUnit().toMillis(repeatSubmit.interval());
 
         if (interval < 1000) {
-            throw new ServiceException("重复提交间隔时间不能小于'1'秒");
+            throw new BusinessException("重复提交间隔时间不能小于'1'秒");
         }
         HttpServletRequest request = ServletUtils.getRequest();
         String nowParams = argsArrayToString(point.getArgs());
@@ -65,7 +66,7 @@ public class RepeatSubmitAspect {
             if (StringUtils.startsWith(message, "{") && StringUtils.endsWith(message, "}")) {
                 message = MessageUtils.message(StringUtils.substring(message, 1, message.length() - 1));
             }
-            throw new ServiceException(message);
+            throw new BusinessException(message);
         }
     }
 
@@ -79,7 +80,7 @@ public class RepeatSubmitAspect {
         if (jsonResult instanceof Result<?> result) {
             try {
                 // 成功则不删除redis数据 保证在有效时间内无法重复提交
-                if (result.getCode() == Result.SUCCESS) {
+                if (result.getCode() == HttpStatusEnum.SUCCESS.getCode()) {
                     return;
                 }
                 RedisUtils.deleteObject(KEY_CACHE.get());

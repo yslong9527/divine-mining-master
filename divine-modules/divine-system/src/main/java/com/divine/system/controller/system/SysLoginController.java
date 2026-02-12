@@ -102,7 +102,7 @@ public class SysLoginController {
     @Operation(summary = "退出登录")
     @SaIgnore
     @PostMapping("/logout")
-    public Result<Void> logout() {
+    public Result<String> logout() {
         loginService.logout();
         return Result.success("退出成功");
     }

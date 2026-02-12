@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface ItemSkuMapper extends BaseMapperPlus<ItemSku, ItemSkuVo> {
 
-    IPage<ItemSkuMapVo> selectByBo(IPage<ItemSkuVo> page, @Param("bo") ItemSkuDto bo);
+    IPage<ItemSkuMapVo> selectByBo(IPage<ItemSkuVo> page, @Param("dto") ItemSkuDto dto);
 
     List<ItemSkuMapVo> queryItemSkuMapVos(Collection<Long> ids);
 

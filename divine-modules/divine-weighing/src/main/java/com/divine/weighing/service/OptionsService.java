@@ -2,7 +2,7 @@ package com.divine.weighing.service;
 
 
 
-import com.divine.weighing.domain.vo.OptionVO;
+import com.divine.common.core.domain.vo.OptionVO;
 
 import java.util.List;
 

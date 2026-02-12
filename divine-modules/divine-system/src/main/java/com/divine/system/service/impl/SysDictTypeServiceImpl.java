@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.divine.common.core.constant.CacheNames;
 import com.divine.common.core.constant.UserConstants;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.service.DictService;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.SpringUtils;
@@ -65,11 +65,11 @@ public class SysDictTypeServiceImpl implements SysDictTypeService,DictService {
         return dictTypeMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<SysDictType> buildQueryWrapper(SysDictTypeDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<SysDictType> buildQueryWrapper(SysDictTypeDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<SysDictType> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getDictName()), SysDictType::getDictName, bo.getDictName());
-        lqw.like(StringUtils.isNotBlank(bo.getDictType()), SysDictType::getDictType, bo.getDictType());
+        lqw.like(StringUtils.isNotBlank(dto.getDictName()), SysDictType::getDictName, dto.getDictName());
+        lqw.like(StringUtils.isNotBlank(dto.getDictType()), SysDictType::getDictType, dto.getDictType());
         lqw.between(params.get("beginTime") != null && params.get("endTime") != null,
             SysDictType::getCreateTime, params.get("beginTime"), params.get("endTime"));
         lqw.orderByAsc(SysDictType::getDictId);
@@ -135,7 +135,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService,DictService {
             SysDictType dictType = dictTypeMapper.selectById(dictId);
             if (dictDataMapper.exists(new LambdaQueryWrapper<SysDictData>()
                 .eq(SysDictData::getDictType, dictType.getDictType()))) {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", dictType.getDictName()));
+                throw new BusinessException(String.format("%1$s已分配,不能删除", dictType.getDictName()));
             }
             CacheUtils.evict(CacheNames.SYS_DICT, dictType.getDictType());
         }
@@ -176,32 +176,32 @@ public class SysDictTypeServiceImpl implements SysDictTypeService,DictService {
     /**
      * 新增保存字典类型信息
      *
-     * @param bo 字典类型信息
+     * @param dto 字典类型信息
      * @return 结果
      */
     @Override
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
-    public List<SysDictDataVo> insertDictType(SysDictTypeDto bo) {
-        SysDictType dict = MapstructUtils.convert(bo, SysDictType.class);
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#dto.dictType")
+    public List<SysDictDataVo> insertDictType(SysDictTypeDto dto) {
+        SysDictType dict = MapstructUtils.convert(dto, SysDictType.class);
         int row = dictTypeMapper.insert(dict);
         if (row > 0) {
             // 新增 type 下无 data 数据 返回空防止缓存穿透
             return new ArrayList<>();
         }
-        throw new ServiceException("操作失败");
+        throw new BusinessException("操作失败");
     }
 
     /**
      * 修改保存字典类型信息
      *
-     * @param bo 字典类型信息
+     * @param dto 字典类型信息
      * @return 结果
      */
     @Override
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#dto.dictType")
     @Transactional(rollbackFor = Exception.class)
-    public List<SysDictDataVo> updateDictType(SysDictTypeDto bo) {
-        SysDictType dict = MapstructUtils.convert(bo, SysDictType.class);
+    public List<SysDictDataVo> updateDictType(SysDictTypeDto dto) {
+        SysDictType dict = MapstructUtils.convert(dto, SysDictType.class);
         SysDictType oldDict = dictTypeMapper.selectById(dict.getDictId());
         dictDataMapper.update(null, new LambdaUpdateWrapper<SysDictData>()
             .set(SysDictData::getDictType, dict.getDictType())
@@ -211,7 +211,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService,DictService {
             CacheUtils.evict(CacheNames.SYS_DICT, oldDict.getDictType());
             return dictDataMapper.selectDictDataByType(dict.getDictType());
         }
-        throw new ServiceException("操作失败");
+        throw new BusinessException("操作失败");
     }
 
     /**

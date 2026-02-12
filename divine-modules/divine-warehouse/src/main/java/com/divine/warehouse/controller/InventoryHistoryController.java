@@ -46,8 +46,8 @@ public class InventoryHistoryController extends BaseController {
     @Operation(summary = "查询库存记录列表")
     @SaCheckPermission("wms:inventoryHistory:all")
     @GetMapping("/list")
-    public PageInfoRes<InventoryHistoryVo> list(InventoryHistoryDto bo, BasePage basePage) {
-        return inventoryHistoryService.queryPageList(bo, basePage);
+    public PageInfoRes<InventoryHistoryVo> list(InventoryHistoryDto dto, BasePage basePage) {
+        return inventoryHistoryService.queryPageList(dto, basePage);
     }
 
     /**
@@ -57,8 +57,8 @@ public class InventoryHistoryController extends BaseController {
     @SaCheckPermission("wms:inventoryHistory:all")
     @Log(title = "库存记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(InventoryHistoryDto bo, HttpServletResponse response) {
-        List<InventoryHistoryVo> list = inventoryHistoryService.queryList(bo);
+    public void export(InventoryHistoryDto dto, HttpServletResponse response) {
+        List<InventoryHistoryVo> list = inventoryHistoryService.queryList(dto);
         ExcelUtil.exportExcel(list, "库存记录", InventoryHistoryVo.class, response);
     }
 
@@ -83,8 +83,8 @@ public class InventoryHistoryController extends BaseController {
     @Log(title = "库存记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody InventoryHistoryDto bo) {
-        inventoryHistoryService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody InventoryHistoryDto dto) {
+        inventoryHistoryService.insertByBo(dto);
         return Result.success();
     }
 
@@ -96,8 +96,8 @@ public class InventoryHistoryController extends BaseController {
     @Log(title = "库存记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody InventoryHistoryDto bo) {
-        inventoryHistoryService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody InventoryHistoryDto dto) {
+        inventoryHistoryService.updateByBo(dto);
         return Result.success();
     }
 

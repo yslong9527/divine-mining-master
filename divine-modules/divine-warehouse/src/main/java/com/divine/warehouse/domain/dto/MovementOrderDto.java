@@ -5,6 +5,7 @@ import com.divine.common.core.validate.EditGroup;
 import com.divine.warehouse.domain.entity.MovementOrder;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,16 +22,15 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = MovementOrder.class, reverseConvertGenerate = false)
 public class MovementOrderDto extends BaseOrderDto<MovementOrderDetailDto> {
 
-    /**
-     * 源仓库
-     */
+
+    @Schema(description = "移库库单号")
+    @NotBlank(message = "入库单号不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String movementNo;
+
     @Schema(description = "源仓库")
     @NotNull(message = "源仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long sourceWarehouseId;
 
-    /**
-     * 目标仓库
-     */
     @Schema(description = "目标仓库")
     @NotNull(message = "目标仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long targetWarehouseId;

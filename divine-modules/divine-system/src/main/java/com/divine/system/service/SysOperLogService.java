@@ -27,9 +27,9 @@ public interface SysOperLogService {
     /**
      * 新增操作日志
      *
-     * @param bo 操作日志对象
+     * @param dto 操作日志对象
      */
-    void insertOperlog(SysOperLogDto bo);
+    void insertOperlog(SysOperLogDto dto);
 
     /**
      * 查询系统操作日志集合

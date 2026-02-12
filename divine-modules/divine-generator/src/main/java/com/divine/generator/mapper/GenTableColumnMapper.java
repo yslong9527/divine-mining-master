@@ -3,6 +3,7 @@ package com.divine.generator.mapper;
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.divine.common.mybatis.core.mapper.BaseMapperPlus;
 import com.divine.generator.domain.GenTableColumn;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  *
  * @author Lion Li
  */
+@Mapper
 @InterceptorIgnore(dataPermission = "true")
 public interface GenTableColumnMapper extends BaseMapperPlus<GenTableColumn, GenTableColumn> {
     /**

@@ -47,22 +47,22 @@ public class TestDemoController extends BaseController {
     @Operation(summary = "查询测试单表列表")
     @SaCheckPermission("demo:demo:list")
     @GetMapping("/list")
-    public PageInfoRes<TestDemoVo> list(@Validated(QueryGroup.class) TestDemoDto bo, BasePage basePage) {
-        return iTestDemoService.queryPageList(bo, basePage);
+    public PageInfoRes<TestDemoVo> list(@Validated(QueryGroup.class) TestDemoDto dto, BasePage basePage) {
+        return iTestDemoService.queryPageList(dto, basePage);
     }
 
     @Operation(summary = "自定义分页查询")
     @SaCheckPermission("demo:demo:list")
     @GetMapping("/page")
-    public PageInfoRes<TestDemoVo> page(@Validated(QueryGroup.class) TestDemoDto bo, BasePage basePage) {
-        return iTestDemoService.customPageList(bo, basePage);
+    public PageInfoRes<TestDemoVo> page(@Validated(QueryGroup.class) TestDemoDto dto, BasePage basePage) {
+        return iTestDemoService.customPageList(dto, basePage);
     }
 
     @Operation(summary = "导入数据")
     @Log(title = "测试单表", businessType = BusinessType.IMPORT)
     @SaCheckPermission("demo:demo:import")
     @PostMapping(value = "/importData", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result<Void> importData(@RequestPart("file") MultipartFile file) throws Exception {
+    public Result<String> importData(@RequestPart("file") MultipartFile file) throws Exception {
         ExcelResult<TestDemoImportDto> excelResult = ExcelUtil.importExcel(file.getInputStream(), TestDemoImportDto.class, true);
         List<TestDemoImportDto> volist = excelResult.getList();
         List<TestDemo> list = MapstructUtils.convert(volist, TestDemo.class);
@@ -74,8 +74,8 @@ public class TestDemoController extends BaseController {
     @SaCheckPermission("demo:demo:export")
     @Log(title = "测试单表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(@Validated TestDemoDto bo, HttpServletResponse response) {
-        List<TestDemoVo> list = iTestDemoService.queryList(bo);
+    public void export(@Validated TestDemoDto dto, HttpServletResponse response) {
+        List<TestDemoVo> list = iTestDemoService.queryList(dto);
         // 测试雪花id导出
 //        for (TestDemoVo vo : list) {
 //            vo.setId(1234567891234567893L);
@@ -96,11 +96,11 @@ public class TestDemoController extends BaseController {
     @Log(title = "测试单表", businessType = BusinessType.INSERT)
     @RepeatSubmit(interval = 2, timeUnit = TimeUnit.SECONDS, message = "{repeat.submit.message}")
     @PostMapping()
-    public Result<Void> add(@RequestBody TestDemoDto bo) {
+    public Result<Void> add(@RequestBody TestDemoDto dto) {
         // 使用校验工具对标 @Validated(AddGroup.class) 注解
         // 用于在非 Controller 的地方校验对象
-        ValidatorUtils.validate(bo, AddGroup.class);
-        return toAjax(iTestDemoService.insertByBo(bo));
+        ValidatorUtils.validate(dto, AddGroup.class);
+        return toAjax(iTestDemoService.insertByBo(dto));
     }
 
     @Operation(summary = "修改测试单表")
@@ -108,8 +108,8 @@ public class TestDemoController extends BaseController {
     @Log(title = "测试单表", businessType = BusinessType.UPDATE)
     @RepeatSubmit
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody TestDemoDto bo) {
-        return toAjax(iTestDemoService.updateByBo(bo));
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody TestDemoDto dto) {
+        return toAjax(iTestDemoService.updateByBo(dto));
     }
 
     @Operation(summary = "删除测试单表")

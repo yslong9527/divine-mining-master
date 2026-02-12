@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.divine.common.core.constant.CacheNames;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.json.utils.JsonUtils;
@@ -65,24 +65,24 @@ public class SysOssConfigServiceImpl implements SysOssConfigService {
     }
 
     @Override
-    public PageInfoRes<SysOssConfigVo> queryPageList(SysOssConfigDto bo, BasePage basePage) {
-        LambdaQueryWrapper<SysOssConfig> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<SysOssConfigVo> queryPageList(SysOssConfigDto dto, BasePage basePage) {
+        LambdaQueryWrapper<SysOssConfig> lqw = buildQueryWrapper(dto);
         Page<SysOssConfigVo> result = ossConfigMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
 
 
-    private LambdaQueryWrapper<SysOssConfig> buildQueryWrapper(SysOssConfigDto bo) {
+    private LambdaQueryWrapper<SysOssConfig> buildQueryWrapper(SysOssConfigDto dto) {
         LambdaQueryWrapper<SysOssConfig> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getConfigKey()), SysOssConfig::getConfigKey, bo.getConfigKey());
-        lqw.like(StringUtils.isNotBlank(bo.getBucketName()), SysOssConfig::getBucketName, bo.getBucketName());
-        lqw.eq(StringUtils.isNotBlank(bo.getStatus()), SysOssConfig::getStatus, bo.getStatus());
+        lqw.eq(StringUtils.isNotBlank(dto.getConfigKey()), SysOssConfig::getConfigKey, dto.getConfigKey());
+        lqw.like(StringUtils.isNotBlank(dto.getBucketName()), SysOssConfig::getBucketName, dto.getBucketName());
+        lqw.eq(StringUtils.isNotBlank(dto.getStatus()), SysOssConfig::getStatus, dto.getStatus());
         return lqw;
     }
 
     @Override
-    public Boolean insertByBo(SysOssConfigDto bo) {
-        SysOssConfig config = MapstructUtils.convert(bo, SysOssConfig.class);
+    public Boolean insertByBo(SysOssConfigDto dto) {
+        SysOssConfig config = MapstructUtils.convert(dto, SysOssConfig.class);
         validEntityBeforeSave(config);
         boolean flag = ossConfigMapper.insert(config) > 0;
         if (flag) {
@@ -92,8 +92,8 @@ public class SysOssConfigServiceImpl implements SysOssConfigService {
     }
 
     @Override
-    public Boolean updateByBo(SysOssConfigDto bo) {
-        SysOssConfig config = MapstructUtils.convert(bo, SysOssConfig.class);
+    public Boolean updateByBo(SysOssConfigDto dto) {
+        SysOssConfig config = MapstructUtils.convert(dto, SysOssConfig.class);
         validEntityBeforeSave(config);
         LambdaUpdateWrapper<SysOssConfig> luw = new LambdaUpdateWrapper<>();
         luw.set(ObjectUtil.isNull(config.getPrefix()), SysOssConfig::getPrefix, "");
@@ -113,7 +113,7 @@ public class SysOssConfigServiceImpl implements SysOssConfigService {
      */
     private void validEntityBeforeSave(SysOssConfig entity) {
         if (StringUtils.isNotEmpty(entity.getConfigKey()) && !checkConfigKeyUnique(entity)) {
-            throw new ServiceException("操作配置'" + entity.getConfigKey() + "'失败, 配置key已存在!");
+            throw new BusinessException("操作配置'" + entity.getConfigKey() + "'失败, 配置key已存在!");
         }
     }
 
@@ -121,7 +121,7 @@ public class SysOssConfigServiceImpl implements SysOssConfigService {
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if (isValid) {
             if (CollUtil.containsAny(ids, OssConstant.SYSTEM_DATA_IDS)) {
-                throw new ServiceException("系统内置, 不可删除!");
+                throw new BusinessException("系统内置, 不可删除!");
             }
         }
         List<SysOssConfig> list = CollUtil.newArrayList();
@@ -156,8 +156,8 @@ public class SysOssConfigServiceImpl implements SysOssConfigService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int updateOssConfigStatus(SysOssConfigDto bo) {
-        SysOssConfig sysOssConfig = MapstructUtils.convert(bo, SysOssConfig.class);
+    public int updateOssConfigStatus(SysOssConfigDto dto) {
+        SysOssConfig sysOssConfig = MapstructUtils.convert(dto, SysOssConfig.class);
         int row = ossConfigMapper.update(null, new LambdaUpdateWrapper<SysOssConfig>()
             .set(SysOssConfig::getStatus, "0"));
         row += ossConfigMapper.updateById(sysOssConfig);

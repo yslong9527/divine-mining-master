@@ -17,5 +17,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface InventoryHistoryMapper extends BaseMapperPlus<InventoryHistory, InventoryHistoryVo> {
 
-    Page<InventoryHistoryVo> selectVoPageByBo(Page<Object> page, @Param("bo") InventoryHistoryDto bo);
+    Page<InventoryHistoryVo> selectVoPageByBo(Page<Object> page, @Param("dto") InventoryHistoryDto dto);
 }

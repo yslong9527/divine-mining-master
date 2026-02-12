@@ -7,6 +7,7 @@ import com.divine.common.excel.annotation.ExcelDictFormat;
 import com.divine.common.excel.convert.ExcelDictConvert;
 import com.divine.warehouse.domain.entity.ItemCategory;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -23,46 +24,32 @@ public class ItemCategoryVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 物料类型id
-     */
+    @Schema(description = "物料类型id")
     @ExcelProperty(value = "物料类型id")
     private Long id;
 
-    /**
-     * 父物料类型id
-     */
+    @Schema(description = "父物料类型id")
     @ExcelProperty(value = "父物料类型id")
     private Long parentId;
 
-    /**
-     * 祖级列表
-     */
+    @Schema(description = "祖级列表")
     @ExcelProperty(value = "祖级列表")
     private String ancestors;
 
-    /**
-     * 物料类型名称
-     */
+    @Schema(description = "物料类型名称")
     @ExcelProperty(value = "物料类型名称")
     private String categoryName;
 
-    /**
-     * 显示顺序
-     */
+    @Schema(description = "显示顺序")
     @ExcelProperty(value = "显示顺序")
     private Long orderNum;
 
-    /**
-     * 物料类型状态（0正常 1停用）
-     */
+    @Schema(description = "物料类型状态（0正常 1停用）")
     @ExcelProperty(value = "物料类型状态", converter = ExcelDictConvert.class)
     @ExcelDictFormat(readConverterExp = "0=正常,1=停用")
     private String status;
 
-    /**
-     * 子物料类型
-     */
+    @Schema(description = "子物料类型")
     @TableField(exist = false)
     private List<ItemCategoryVo> children = new ArrayList<ItemCategoryVo>();
 

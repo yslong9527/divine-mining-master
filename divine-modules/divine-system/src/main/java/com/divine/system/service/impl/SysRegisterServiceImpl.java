@@ -5,9 +5,7 @@ import com.divine.common.core.constant.CacheConstants;
 import com.divine.common.core.constant.Constants;
 import com.divine.common.core.domain.dto.RegisterBody;
 import com.divine.common.core.enums.UserType;
-import com.divine.common.core.exception.user.CaptchaException;
-import com.divine.common.core.exception.user.CaptchaExpireException;
-import com.divine.common.core.exception.user.UserException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MessageUtils;
 import com.divine.common.core.utils.ServletUtils;
 import com.divine.common.core.utils.SpringUtils;
@@ -55,11 +53,11 @@ public class SysRegisterServiceImpl implements SysRegisterService {
         sysUser.setUserType(userType);
 
         if (!userService.checkUserNameUnique(sysUser)) {
-            throw new UserException("user.register.save.error", username);
+            throw new BusinessException("用户名已存在");
         }
         boolean regFlag = userService.registerUser(sysUser);
         if (!regFlag) {
-            throw new UserException("user.register.error");
+            throw new BusinessException("注册失败，请稍后再试");
         }
         recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success"));
     }
@@ -78,11 +76,11 @@ public class SysRegisterServiceImpl implements SysRegisterService {
         RedisUtils.deleteObject(verifyKey);
         if (captcha == null) {
             recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.jcaptcha.expire"));
-            throw new CaptchaExpireException();
+            throw new BusinessException("验证码错误");
         }
         if (!code.equalsIgnoreCase(captcha)) {
             recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.jcaptcha.error"));
-            throw new CaptchaException();
+            throw new BusinessException("验证码错误");
         }
     }
 

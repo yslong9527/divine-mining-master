@@ -12,7 +12,7 @@ import com.divine.common.log.enums.BusinessType;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
-import com.divine.warehouse.domain.vo.CheckOrderDetailVo;
+import com.divine.warehouse.domain.vo.CheckOrderDetailVO;
 import com.divine.warehouse.service.CheckOrderDetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +46,8 @@ public class CheckOrderDetailController extends BaseController {
     @Operation(summary = "查询库存盘点单据详情列表")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/list")
-    public PageInfoRes<CheckOrderDetailVo> list(CheckOrderDetailDto bo, BasePage basePage) {
-        return checkOrderDetailService.queryPageList(bo, basePage);
+    public PageInfoRes<CheckOrderDetailVO> list(CheckOrderDetailDto dto, BasePage basePage) {
+        return checkOrderDetailService.queryPageList(dto, basePage);
     }
 
     /**
@@ -57,9 +57,9 @@ public class CheckOrderDetailController extends BaseController {
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据详情", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(CheckOrderDetailDto bo, HttpServletResponse response) {
-        List<CheckOrderDetailVo> list = checkOrderDetailService.queryList(bo);
-        ExcelUtil.exportExcel(list, "库存盘点单据详情", CheckOrderDetailVo.class, response);
+    public void export(CheckOrderDetailDto dto, HttpServletResponse response) {
+        List<CheckOrderDetailVO> list = checkOrderDetailService.queryList(dto);
+        ExcelUtil.exportExcel(list, "库存盘点单据详情", CheckOrderDetailVO.class, response);
     }
 
     /**
@@ -70,7 +70,7 @@ public class CheckOrderDetailController extends BaseController {
     @Operation(summary = "获取库存盘点单据详情详细信息")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/{id}")
-    public Result<CheckOrderDetailVo> getInfo(@NotNull(message = "主键不能为空")
+    public Result<CheckOrderDetailVO> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long id) {
         return Result.success(checkOrderDetailService.queryById(id));
     }
@@ -83,8 +83,8 @@ public class CheckOrderDetailController extends BaseController {
     @Log(title = "库存盘点单据详情", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody CheckOrderDetailDto bo) {
-        checkOrderDetailService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody CheckOrderDetailDto dto) {
+        checkOrderDetailService.insertByBo(dto);
         return Result.success();
     }
 
@@ -96,8 +96,8 @@ public class CheckOrderDetailController extends BaseController {
     @Log(title = "库存盘点单据详情", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody CheckOrderDetailDto bo) {
-        checkOrderDetailService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody CheckOrderDetailDto dto) {
+        checkOrderDetailService.updateByBo(dto);
         return Result.success();
     }
 
@@ -122,7 +122,7 @@ public class CheckOrderDetailController extends BaseController {
     @Operation(summary = "根据盘库单id查询盘库单详情列表")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/list/{checkOrderId}")
-    public Result<List<CheckOrderDetailVo>> listByCheckOrderId(@NotNull @PathVariable Long checkOrderId) {
+    public Result<List<CheckOrderDetailVO>> listByCheckOrderId(@NotNull @PathVariable Long checkOrderId) {
         return Result.success(checkOrderDetailService.queryByCheckOrderId(checkOrderId));
     }
 }

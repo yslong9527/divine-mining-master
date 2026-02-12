@@ -66,8 +66,8 @@ public class ItemServiceImpl implements ItemService {
      * 查询物料列表
      */
     @Override
-    public PageInfoRes<ItemVo> queryPageList(ItemDto bo, BasePage basePage) {
-        LambdaQueryWrapper<Item> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<ItemVo> queryPageList(ItemDto dto, BasePage basePage) {
+        LambdaQueryWrapper<Item> lqw = buildQueryWrapper(dto);
         Page<ItemVo> result = itemMapper.selectVoPage(basePage.build(), lqw);
         List<ItemVo> itemVoList = result.getRecords();
         if (!CollUtil.isEmpty(itemVoList)) {
@@ -85,24 +85,24 @@ public class ItemServiceImpl implements ItemService {
      * 查询物料列表
      */
     @Override
-    public List<ItemVo> queryList(ItemDto bo) {
-        LambdaQueryWrapper<Item> lqw = buildQueryWrapper(bo);
+    public List<ItemVo> queryList(ItemDto dto) {
+        LambdaQueryWrapper<Item> lqw = buildQueryWrapper(dto);
         return itemMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<Item> buildQueryWrapper(ItemDto bo) {
+    private LambdaQueryWrapper<Item> buildQueryWrapper(ItemDto dto) {
         LambdaQueryWrapper<Item> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StrUtil.isNotBlank(bo.getItemCode()), Item::getItemCode, bo.getItemCode());
+        lqw.eq(StrUtil.isNotBlank(dto.getItemCode()), Item::getItemCode, dto.getItemCode());
         // 主键集合
-        lqw.in(!CollUtil.isEmpty(bo.getIds()), Item::getId, bo.getIds());
-        lqw.like(StrUtil.isNotBlank(bo.getItemName()), Item::getItemName, bo.getItemName());
-        if (!StrUtil.isBlank(bo.getItemCategory())){
-            Long parentId = Long.valueOf(bo.getItemCategory());
+        lqw.in(!CollUtil.isEmpty(dto.getIds()), Item::getId, dto.getIds());
+        lqw.like(StrUtil.isNotBlank(dto.getItemName()), Item::getItemName, dto.getItemName());
+        if (!StrUtil.isBlank(dto.getItemCategory())){
+            Long parentId = Long.valueOf(dto.getItemCategory());
             List<Long> subIdList = this.buildSubItemCategoryIdList(parentId);
-            subIdList.add(Long.valueOf(bo.getItemCategory()));
+            subIdList.add(Long.valueOf(dto.getItemCategory()));
             lqw.in(Item::getItemCategory, subIdList);
         }
-        lqw.eq(StrUtil.isNotBlank(bo.getUnit()), Item::getUnit, bo.getUnit());
+        lqw.eq(StrUtil.isNotBlank(dto.getUnit()), Item::getUnit, dto.getUnit());
         return lqw;
     }
 
@@ -115,30 +115,30 @@ public class ItemServiceImpl implements ItemService {
     /**
      * 新增物料
      *
-     * @param bo
+     * @param dto
      */
     @Override
     @Transactional
-    public void insertByForm(ItemDto bo) {
-        validateBoBeforeSave(bo);
-        Item item = MapstructUtils.convert(bo, Item.class);
+    public void insertByForm(ItemDto dto) {
+        validateBoBeforeSave(dto);
+        Item item = MapstructUtils.convert(dto, Item.class);
         itemMapper.insert(item);
-        itemSkuService.setItemId(bo.getSku(),item.getId());
-        itemSkuService.saveOrUpdateBatchByBo(bo.getSku());
+        itemSkuService.setItemId(dto.getSku(),item.getId());
+        itemSkuService.saveOrUpdateBatchByBo(dto.getSku());
     }
 
     /**
      * 修改物料
      *
-     * @param bo
+     * @param dto
      */
     @Override
     @Transactional
-    public void updateByForm(ItemDto bo) {
-        validateBoBeforeSave(bo);
-        itemMapper.updateById(MapstructUtils.convert(bo, Item.class));
-        itemSkuService.setItemId(bo.getSku(),bo.getId());
-        itemSkuService.saveOrUpdateBatchByBo(bo.getSku());
+    public void updateByForm(ItemDto dto) {
+        validateBoBeforeSave(dto);
+        itemMapper.updateById(MapstructUtils.convert(dto, Item.class));
+        itemSkuService.setItemId(dto.getSku(),dto.getId());
+        itemSkuService.saveOrUpdateBatchByBo(dto.getSku());
     }
 
     /**

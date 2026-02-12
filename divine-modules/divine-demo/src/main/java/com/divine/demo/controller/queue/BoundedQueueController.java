@@ -31,7 +31,7 @@ public class BoundedQueueController {
 
     @Operation(summary = "添加队列数据")
     @GetMapping("/add")
-    public Result<Void> add(@Schema(description = "队列名") String queueName,
+    public Result<String> add(@Schema(description = "队列名") String queueName,
                             @Schema(description = "容量") int capacity) {
         // 用完了一定要销毁 否则会一直存在
         boolean b = QueueUtils.destroyBoundedQueue(queueName);
@@ -57,7 +57,7 @@ public class BoundedQueueController {
 
     @Operation(summary = "删除队列数据")
     @GetMapping("/remove")
-    public Result<Void> remove(@Schema(description = "队列名") String queueName) {
+    public Result<String> remove(@Schema(description = "队列名") String queueName) {
         String data = "data-" + 5;
         if (QueueUtils.removeBoundedQueueObject(queueName, data)) {
             log.info("通道: {} , 删除数据: {}", queueName, data);
@@ -69,7 +69,7 @@ public class BoundedQueueController {
 
     @Operation(summary = "获取队列数据")
     @GetMapping("/get")
-    public Result<Void> get(@Schema(description = "队列名") String queueName) {
+    public Result<String> get(@Schema(description = "队列名") String queueName) {
         String data;
         do {
             data = QueueUtils.getBoundedQueueObject(queueName);

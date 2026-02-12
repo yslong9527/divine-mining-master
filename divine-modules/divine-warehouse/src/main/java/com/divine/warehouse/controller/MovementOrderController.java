@@ -46,8 +46,8 @@ public class MovementOrderController extends BaseController {
     @Operation(summary = "查询移库单列表")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/list")
-    public PageInfoRes<MovementOrderVo> list(MovementOrderDto bo, BasePage basePage) {
-        return movementOrderService.queryPageList(bo, basePage);
+    public PageInfoRes<MovementOrderVo> list(MovementOrderDto dto, BasePage basePage) {
+        return movementOrderService.queryPageList(dto, basePage);
     }
 
     /**
@@ -57,8 +57,8 @@ public class MovementOrderController extends BaseController {
     @SaCheckPermission("wms:movement:all")
     @Log(title = "移库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(MovementOrderDto bo, HttpServletResponse response) {
-        List<MovementOrderVo> list = movementOrderService.queryList(bo);
+    public void export(MovementOrderDto dto, HttpServletResponse response) {
+        List<MovementOrderVo> list = movementOrderService.queryList(dto);
         ExcelUtil.exportExcel(list, "移库单", MovementOrderVo.class, response);
     }
 
@@ -83,9 +83,9 @@ public class MovementOrderController extends BaseController {
     @Log(title = "移库单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody MovementOrderDto bo) {
-        bo.setOrderStatus(ServiceConstants.MovementOrderStatus.PENDING);
-        movementOrderService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody MovementOrderDto dto) {
+        dto.setOrderStatus(ServiceConstants.MovementOrderStatus.PENDING);
+        movementOrderService.insertByBo(dto);
         return Result.success();
     }
 
@@ -97,8 +97,8 @@ public class MovementOrderController extends BaseController {
     @Log(title = "移库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody MovementOrderDto bo) {
-        movementOrderService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody MovementOrderDto dto) {
+        movementOrderService.updateByBo(dto);
         return Result.success();
     }
 
@@ -110,9 +110,9 @@ public class MovementOrderController extends BaseController {
     @Log(title = "移库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/move")
-    public Result<Void> move(@Validated(AddGroup.class) @RequestBody MovementOrderDto bo) {
-        bo.setOrderStatus(ServiceConstants.MovementOrderStatus.FINISH);
-        movementOrderService.move(bo);
+    public Result<Void> move(@Validated(AddGroup.class) @RequestBody MovementOrderDto dto) {
+        dto.setOrderStatus(ServiceConstants.MovementOrderStatus.FINISH);
+        movementOrderService.move(dto);
         return Result.success();
     }
 

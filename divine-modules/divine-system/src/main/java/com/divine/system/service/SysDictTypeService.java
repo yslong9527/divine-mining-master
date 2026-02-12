@@ -82,18 +82,18 @@ public interface SysDictTypeService {
     /**
      * 新增保存字典类型信息
      *
-     * @param bo 字典类型信息
+     * @param dto 字典类型信息
      * @return 结果
      */
-    List<SysDictDataVo> insertDictType(SysDictTypeDto bo);
+    List<SysDictDataVo> insertDictType(SysDictTypeDto dto);
 
     /**
      * 修改保存字典类型信息
      *
-     * @param bo 字典类型信息
+     * @param dto 字典类型信息
      * @return 结果
      */
-    List<SysDictDataVo> updateDictType(SysDictTypeDto bo);
+    List<SysDictDataVo> updateDictType(SysDictTypeDto dto);
 
     /**
      * 校验字典类型称是否唯一

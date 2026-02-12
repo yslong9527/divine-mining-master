@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.divine.warehouse.domain.entity.Item;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -18,50 +19,34 @@ public class ItemVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     */
-    @ExcelProperty(value = "")
+    @Schema(description = "id")
+    @ExcelProperty(value = "id")
     private Long id;
 
-    /**
-     * 编号
-     */
+    @Schema(description = "编号")
     @ExcelProperty(value = "编号")
     private String itemCode;
 
-    /**
-     * 名称
-     */
+    @Schema(description = "名称")
     @ExcelProperty(value = "名称")
     private String itemName;
 
-    /**
-     * 分类
-     */
+    @Schema(description = "分类")
     @ExcelProperty(value = "分类")
     private String itemCategory;
 
-    /**
-     * 单位类别
-     */
+    @Schema(description = "单位类别")
     @ExcelProperty(value = "单位类别")
     private String unit;
 
-    /**
-     * 品牌
-     */
+    @Schema(description = "品牌")
     @ExcelProperty(value = "品牌")
     private Long itemBrand;
 
-    /**
-     * 备注
-     */
+    @Schema(description = "备注")
     @ExcelProperty(value = "备注")
     private String remark;
 
-    /**
-     * 类别
-     */
+    @Schema(description = "类别")
     private ItemCategoryVo itemCategoryInfo;
 }

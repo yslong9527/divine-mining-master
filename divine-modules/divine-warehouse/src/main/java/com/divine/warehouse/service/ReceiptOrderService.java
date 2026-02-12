@@ -26,18 +26,18 @@ public interface ReceiptOrderService {
     /**
      * 查询入库单列表
      */
-    PageInfoRes<ReceiptOrderVo> queryPageList(ReceiptOrderDto bo, BasePage basePage);
+    PageInfoRes<ReceiptOrderVo> queryPageList(ReceiptOrderDto dto, BasePage basePage);
 
     /**
      * 查询入库单列表
      */
-    List<ReceiptOrderVo> queryList(ReceiptOrderDto bo) ;
+    List<ReceiptOrderVo> queryList(ReceiptOrderDto dto) ;
 
 
     /**
      * 暂存入库单
      */
-    Long insertByBo(ReceiptOrderDto bo);
+    Long insertByBo(ReceiptOrderDto dto);
 
     /**
      * 入库：
@@ -47,12 +47,12 @@ public interface ReceiptOrderService {
      * 4.增加库存
      * 5.保存库存记录
      */
-    void receive(ReceiptOrderDto bo);
+    void warehousing(ReceiptOrderDto dto);
 
     /**
      * 修改入库单
      */
-    void updateByBo(ReceiptOrderDto bo) ;
+    void updateByBo(ReceiptOrderDto dto) ;
 
     /**
      * 入库单作废
@@ -70,5 +70,4 @@ public interface ReceiptOrderService {
      */
     void deleteByIds(Collection<Long> ids);
 
-    void validateReceiptOrderNo(String receiptOrderNo) ;
 }

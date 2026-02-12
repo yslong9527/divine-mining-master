@@ -11,26 +11,27 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper=true)
 public class BaseOrderDetail extends BaseEntity {
     /**
-     *
+     * id
      */
     @TableId(value = "id")
     private Long id;
-    /**
-     * 入库单号
-     */
-    private Long orderId;
+
     /**
      * 规格id
      */
     private Long skuId;
     /**
-     * 入库数量
+     * 数量
      */
     private BigDecimal quantity;
     /**
-     * 金额
+     * 单价
      */
-    private BigDecimal amount;
+    private BigDecimal unitPrice;
+    /**
+     * 货架
+     */
+    private String storageShelf;
     /**
      * 备注
      */

@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.core.utils.sql.SqlUtil;
 import lombok.Data;
@@ -92,7 +92,7 @@ public class BasePage implements Serializable {
         String[] orderByArr = orderBy.split(StringUtils.SEPARATOR);
         String[] isAscArr = isAsc.split(StringUtils.SEPARATOR);
         if (isAscArr.length != 1 && isAscArr.length != orderByArr.length) {
-            throw new ServiceException("排序参数有误");
+            throw new BusinessException("排序参数有误");
         }
 
         List<OrderItem> list = new ArrayList<>();
@@ -105,7 +105,7 @@ public class BasePage implements Serializable {
             } else if ("desc".equals(isAscStr)) {
                 list.add(OrderItem.desc(orderByStr));
             } else {
-                throw new ServiceException("排序参数有误");
+                throw new BusinessException("排序参数有误");
             }
         }
         return list;

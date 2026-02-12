@@ -2,7 +2,7 @@ package com.divine.weighing.controller;
 
 
 import com.divine.common.core.domain.Result;
-import com.divine.weighing.domain.vo.OptionVO;
+import com.divine.common.core.domain.vo.OptionVO;
 import com.divine.weighing.service.OptionsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

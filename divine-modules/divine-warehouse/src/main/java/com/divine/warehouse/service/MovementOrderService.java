@@ -24,22 +24,22 @@ public interface MovementOrderService {
     /**
      * 查询移库单列表
      */
-    PageInfoRes<MovementOrderVo> queryPageList(MovementOrderDto bo, BasePage basePage);
+    PageInfoRes<MovementOrderVo> queryPageList(MovementOrderDto dto, BasePage basePage);
 
     /**
      * 查询移库单列表
      */
-    List<MovementOrderVo> queryList(MovementOrderDto bo);
+    List<MovementOrderVo> queryList(MovementOrderDto dto);
 
     /**
      * 新增移库单
      */
-    void insertByBo(MovementOrderDto bo);
+    void insertByBo(MovementOrderDto dto);
 
     /**
      * 修改移库单
      */
-    void updateByBo(MovementOrderDto bo);
+    void updateByBo(MovementOrderDto dto);
 
     /**
      * 删除移库单
@@ -54,8 +54,8 @@ public interface MovementOrderService {
 
     /**
      * 移库
-     * @param bo
+     * @param dto
      */
-    void move(MovementOrderDto bo);
+    void move(MovementOrderDto dto);
 
 }

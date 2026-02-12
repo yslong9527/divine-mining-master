@@ -1,4 +1,4 @@
-package ${packageName}.domain.bo;
+package ${packageName}.domain.dto;
 
 import ${packageName}.domain.entity.${ClassName};
 import lombok.Data;
@@ -22,13 +22,13 @@ import ${import};
 #if($table.crud || $table.sub)
 #set($Entity="BaseEntity")
 #elseif($table.tree)
-#set($Entity="TreeEntity<${ClassName}Bo>")
+#set($Entity="TreeEntity<${ClassName}Dto>")
 #end
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = ${ClassName}.class, reverseConvertGenerate = false)
-public class ${ClassName}Bo extends ${Entity} {
+public class ${ClassName}Dto extends ${Entity} {
 
 #foreach ($column in $columns)
 #if(!$table.isSuperColumn($column.javaField) && ($column.query || $column.insert || $column.edit))

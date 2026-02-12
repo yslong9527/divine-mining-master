@@ -36,18 +36,18 @@ public interface SysNoticeService {
     /**
      * 新增公告
      *
-     * @param bo 公告信息
+     * @param dto 公告信息
      * @return 结果
      */
-    int insertNotice(SysNoticeDto bo);
+    int insertNotice(SysNoticeDto dto);
 
     /**
      * 修改公告
      *
-     * @param bo 公告信息
+     * @param dto 公告信息
      * @return 结果
      */
-    int updateNotice(SysNoticeDto bo);
+    int updateNotice(SysNoticeDto dto);
 
     /**
      * 删除公告对象

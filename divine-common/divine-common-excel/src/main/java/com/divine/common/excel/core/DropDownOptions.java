@@ -1,10 +1,10 @@
 package com.divine.common.excel.core;
 
 import cn.hutool.core.util.StrUtil;
+import com.divine.common.core.exception.base.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.divine.common.core.exception.ServiceException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +67,7 @@ public class DropDownOptions {
         for (int i = 0; i < vars.length; i++) {
             String var = StrUtil.trimToEmpty(String.valueOf(vars[i]));
             if (!var.matches(regex)) {
-                throw new ServiceException("选项数据不符合规则，仅允许使用中英文字符以及数字");
+                throw new BusinessException("选项数据不符合规则，仅允许使用中英文字符以及数字");
             }
             stringBuffer.append(var);
             if (i < vars.length - 1) {
@@ -76,7 +76,7 @@ public class DropDownOptions {
             }
         }
         if (stringBuffer.toString().matches("^\\d_*$")) {
-            throw new ServiceException("禁止以数字开头");
+            throw new BusinessException("禁止以数字开头");
         }
         return stringBuffer.toString();
     }

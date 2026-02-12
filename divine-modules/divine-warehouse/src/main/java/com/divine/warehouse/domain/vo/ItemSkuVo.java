@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.divine.warehouse.domain.entity.ItemSku;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -20,75 +21,55 @@ public class ItemSkuVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     */
-    @ExcelProperty(value = "")
+    @ExcelProperty(value = "id")
+    @Schema(description = "id")
     private Long id;
 
-    /**
-     * 规格名称
-     */
-    @ExcelProperty(value = "规格名称")
-    private String skuName;
-
-    /**
-     *
-     */
-    @ExcelProperty(value = "")
+    @Schema(description = "规格id")
+    @ExcelProperty(value = "规格id")
     private Long itemId;
 
-    /**
-     * sku条码
-     */
+    @ExcelProperty(value = "规格名称")
+    @Schema(description = "规格名称")
+    private String skuName;
+
+    @Schema(description = "sku条码")
     @ExcelProperty(value = "sku条码")
     private String barcode;
 
-    /**
-     * sku编码
-     */
+    @Schema(description = "sku编码")
     @ExcelProperty(value = "sku编码")
     private String skuCode;
 
-    /**
-     * 长(cm)
-     */
+    @Schema(description = "长(cm)")
     @ExcelProperty(value = "长(cm)")
     private BigDecimal length;
 
-    /**
-     * 宽(cm)
-     */
+    @Schema(description = "宽(cm)")
     @ExcelProperty(value = "宽(cm)")
     private BigDecimal width;
 
-    /**
-     * 高(cm)
-     */
+    @Schema(description = "高(cm)")
     @ExcelProperty(value = "=高(cm)")
     private BigDecimal height;
 
-    /**
-     * 毛重(kg)
-     */
+    @Schema(description = "毛重(kg)")
     @ExcelProperty(value = "毛重(kg)")
     private BigDecimal grossWeight;
 
-    /**
-     * 净重(kg)
-     */
+    @Schema(description = "净重(kg)")
     @ExcelProperty(value = "净重(kg)")
     private BigDecimal netWeight;
 
-    /**
-     * 成本价(元)
-     */
-    @ExcelProperty(value = "成本价(元)")
+    @Schema(description = "成本价($)")
+    @ExcelProperty(value = "成本价($)")
     private BigDecimal costPrice;
 
-    /**
-     * 销售价(元)
-     */
-    @ExcelProperty(value = "销售价(元)")
+    @Schema(description = "销售价($)")
+    @ExcelProperty(value = "销售价($)")
     private BigDecimal sellingPrice;
+
+    @Schema(description = "所属货架")
+    @ExcelProperty(value = "所属货架")
+    private String storageShelf;
 }

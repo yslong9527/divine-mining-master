@@ -12,7 +12,7 @@ import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.dto.ShipmentOrderDetailDto;
-import com.divine.warehouse.domain.vo.ShipmentOrderDetailVo;
+import com.divine.warehouse.domain.vo.ShipmentOrderDetailVO;
 import com.divine.warehouse.service.ShipmentOrderDetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +46,8 @@ public class ShipmentOrderDetailController extends BaseController {
     @Operation(summary = "查询出库单详情列表")
     @SaCheckPermission("wms:shipment:all")
     @GetMapping("/list")
-    public PageInfoRes<ShipmentOrderDetailVo> list(ShipmentOrderDetailDto bo, BasePage basePage) {
-        return shipmentOrderDetailService.queryPageList(bo, basePage);
+    public PageInfoRes<ShipmentOrderDetailVO> list(ShipmentOrderDetailDto dto, BasePage basePage) {
+        return shipmentOrderDetailService.queryPageList(dto, basePage);
     }
 
     /**
@@ -57,9 +57,9 @@ public class ShipmentOrderDetailController extends BaseController {
     @SaCheckPermission("wms:shipment:all")
     @Log(title = "出库单详情", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(ShipmentOrderDetailDto bo, HttpServletResponse response) {
-        List<ShipmentOrderDetailVo> list = shipmentOrderDetailService.queryList(bo);
-        ExcelUtil.exportExcel(list, "出库单详情", ShipmentOrderDetailVo.class, response);
+    public void export(ShipmentOrderDetailDto dto, HttpServletResponse response) {
+        List<ShipmentOrderDetailVO> list = shipmentOrderDetailService.queryList(dto);
+        ExcelUtil.exportExcel(list, "出库单详情", ShipmentOrderDetailVO.class, response);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ShipmentOrderDetailController extends BaseController {
     @Operation(summary = "获取出库单详情详细信息")
     @SaCheckPermission("wms:shipment:all")
     @GetMapping("/{id}")
-    public Result<ShipmentOrderDetailVo> getInfo(@NotNull(message = "主键不能为空")
+    public Result<ShipmentOrderDetailVO> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long id) {
         return Result.success(shipmentOrderDetailService.queryById(id));
     }
@@ -83,8 +83,8 @@ public class ShipmentOrderDetailController extends BaseController {
     @Log(title = "出库单详情", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ShipmentOrderDetailDto bo) {
-        shipmentOrderDetailService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ShipmentOrderDetailDto dto) {
+        shipmentOrderDetailService.insertByBo(dto);
         return Result.success();
     }
 
@@ -96,8 +96,8 @@ public class ShipmentOrderDetailController extends BaseController {
     @Log(title = "出库单详情", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ShipmentOrderDetailDto bo) {
-        shipmentOrderDetailService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ShipmentOrderDetailDto dto) {
+        shipmentOrderDetailService.updateByBo(dto);
         return Result.success();
     }
 
@@ -123,7 +123,7 @@ public class ShipmentOrderDetailController extends BaseController {
     @Operation(summary = "获取出库单详情详细信息")
     @SaCheckPermission("wms:shipment:all")
     @GetMapping("/list/{shipmentOrderId}")
-    public Result<List<ShipmentOrderDetailVo>> listByShipmentOrderId(@NotNull @PathVariable Long shipmentOrderId) {
+    public Result<List<ShipmentOrderDetailVO>> listByShipmentOrderId(@NotNull @PathVariable Long shipmentOrderId) {
         return Result.success(shipmentOrderDetailService.queryByShipmentOrderId(shipmentOrderId));
     }
 }

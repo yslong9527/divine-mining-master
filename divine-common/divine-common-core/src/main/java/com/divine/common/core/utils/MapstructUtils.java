@@ -14,7 +14,6 @@ import java.util.Map;
  * Mapstruct 工具类
  * <p>参考文档：<a href="https://mapstruct.plus/introduction/quick-start.html">mapstruct-plus</a></p>
  *
- *
  * @author Michelle.Chung
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -31,10 +30,10 @@ public class MapstructUtils {
      */
     public static <T, V> V convert(T source, Class<V> desc) {
         if (ObjectUtil.isNull(source)) {
-            return null;
+            throw new RuntimeException("MapstructUtils source is null");
         }
         if (ObjectUtil.isNull(desc)) {
-            return null;
+            throw new RuntimeException("MapstructUtils desc is null");
         }
         return CONVERTER.convert(source, desc);
     }
@@ -48,10 +47,10 @@ public class MapstructUtils {
      */
     public static <T, V> V convert(T source, V desc) {
         if (ObjectUtil.isNull(source)) {
-            return null;
+            throw new RuntimeException("MapstructUtils source is null");
         }
         if (ObjectUtil.isNull(desc)) {
-            return null;
+            throw new RuntimeException("MapstructUtils desc is null");
         }
         return CONVERTER.convert(source, desc);
     }
@@ -65,7 +64,7 @@ public class MapstructUtils {
      */
     public static <T, V> List<V> convert(List<T> sourceList, Class<V> desc) {
         if (ObjectUtil.isNull(sourceList)) {
-            return null;
+            throw new RuntimeException("MapstructUtils sourceList is null");
         }
         if (CollUtil.isEmpty(sourceList)) {
             return CollUtil.newArrayList();
@@ -82,10 +81,10 @@ public class MapstructUtils {
      */
     public static <T> T convert(Map<String, Object> map, Class<T> beanClass) {
         if (MapUtil.isEmpty(map)) {
-            return null;
+            throw new RuntimeException("MapstructUtils map is null");
         }
         if (ObjectUtil.isNull(beanClass)) {
-            return null;
+            throw new RuntimeException("MapstructUtils beanClass is null");
         }
         return CONVERTER.convert(map, beanClass);
     }

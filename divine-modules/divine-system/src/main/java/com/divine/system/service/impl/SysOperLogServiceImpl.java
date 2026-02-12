@@ -78,11 +78,11 @@ public class SysOperLogServiceImpl implements SysOperLogService {
     /**
      * 新增操作日志
      *
-     * @param bo 操作日志对象
+     * @param dto 操作日志对象
      */
     @Override
-    public void insertOperlog(SysOperLogDto bo) {
-        SysOperLog operLog = MapstructUtils.convert(bo, SysOperLog.class);
+    public void insertOperlog(SysOperLogDto dto) {
+        SysOperLog operLog = MapstructUtils.convert(dto, SysOperLog.class);
         operLog.setOperTime(LocalDateTime.now());
         operLogMapper.insert(operLog);
     }

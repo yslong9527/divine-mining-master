@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.divine.warehouse.domain.dto.ReceiptOrderDetailDto;
 import com.divine.warehouse.domain.entity.ReceiptOrderDetail;
-import com.divine.warehouse.domain.vo.ReceiptOrderDetailVo;
+import com.divine.warehouse.domain.vo.ReceiptOrderDetailVO;
 import com.divine.warehouse.mapper.ReceiptOrderDetailMapper;
 import com.divine.warehouse.service.ItemSkuService;
 import com.divine.warehouse.service.ReceiptOrderDetailService;
@@ -19,10 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 入库单详情Service业务层处理
@@ -41,7 +38,7 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
      * 查询入库单详情
      */
     @Override
-    public ReceiptOrderDetailVo queryById(Long id){
+    public ReceiptOrderDetailVO queryById(Long id){
         return receiptOrderDetailMapper.selectVoById(id);
     }
 
@@ -49,9 +46,9 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
      * 查询入库单详情列表
      */
     @Override
-    public PageInfoRes<ReceiptOrderDetailVo> queryPageList(ReceiptOrderDetailDto bo, BasePage basePage) {
-        LambdaQueryWrapper<ReceiptOrderDetail> lqw = buildQueryWrapper(bo);
-        Page<ReceiptOrderDetailVo> result = receiptOrderDetailMapper.selectVoPage(basePage.build(), lqw);
+    public PageInfoRes<ReceiptOrderDetailVO> queryPageList(ReceiptOrderDetailDto dto, BasePage basePage) {
+        LambdaQueryWrapper<ReceiptOrderDetail> lqw = buildQueryWrapper(dto);
+        Page<ReceiptOrderDetailVO> result = receiptOrderDetailMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
 
@@ -59,19 +56,19 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
      * 查询入库单详情列表
      */
     @Override
-    public List<ReceiptOrderDetailVo> queryList(ReceiptOrderDetailDto bo) {
-        LambdaQueryWrapper<ReceiptOrderDetail> lqw = buildQueryWrapper(bo);
+    public List<ReceiptOrderDetailVO> queryList(ReceiptOrderDetailDto dto) {
+        LambdaQueryWrapper<ReceiptOrderDetail> lqw = buildQueryWrapper(dto);
         return receiptOrderDetailMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<ReceiptOrderDetail> buildQueryWrapper(ReceiptOrderDetailDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<ReceiptOrderDetail> buildQueryWrapper(ReceiptOrderDetailDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<ReceiptOrderDetail> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getOrderId() != null, ReceiptOrderDetail::getOrderId, bo.getOrderId());
-        lqw.eq(bo.getSkuId() != null, ReceiptOrderDetail::getSkuId, bo.getSkuId());
-        lqw.eq(bo.getQuantity() != null, ReceiptOrderDetail::getQuantity, bo.getQuantity());
-        lqw.eq(bo.getAmount() != null, ReceiptOrderDetail::getAmount, bo.getAmount());
-        lqw.eq(bo.getWarehouseId() != null, ReceiptOrderDetail::getWarehouseId, bo.getWarehouseId());
+        lqw.eq(dto.getOrderId() != null, ReceiptOrderDetail::getReceiptId, dto.getOrderId());
+        lqw.eq(dto.getSkuId() != null, ReceiptOrderDetail::getSkuId, dto.getSkuId());
+        lqw.eq(dto.getQuantity() != null, ReceiptOrderDetail::getQuantity, dto.getQuantity());
+        lqw.eq(dto.getUnitPrice() != null, ReceiptOrderDetail::getUnitPrice, dto.getUnitPrice());
+        lqw.eq(dto.getWarehouseId() != null, ReceiptOrderDetail::getWarehouseId, dto.getWarehouseId());
         return lqw;
     }
 
@@ -79,8 +76,8 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
      * 新增入库单详情
      */
     @Override
-    public void insertByBo(ReceiptOrderDetailDto bo) {
-        ReceiptOrderDetail add = MapstructUtils.convert(bo, ReceiptOrderDetail.class);
+    public void insertByBo(ReceiptOrderDetailDto dto) {
+        ReceiptOrderDetail add = MapstructUtils.convert(dto, ReceiptOrderDetail.class);
         receiptOrderDetailMapper.insert(add);
     }
 
@@ -88,8 +85,8 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
      * 修改入库单详情
      */
     @Override
-    public void updateByBo(ReceiptOrderDetailDto bo) {
-        ReceiptOrderDetail update = MapstructUtils.convert(bo, ReceiptOrderDetail.class);
+    public void updateByBo(ReceiptOrderDetailDto dto) {
+        ReceiptOrderDetail update = MapstructUtils.convert(dto, ReceiptOrderDetail.class);
         receiptOrderDetailMapper.updateById(update);
     }
 
@@ -107,7 +104,7 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
     @Override
     public void deleteByReceiptOrderId(@NotNull Long receiptOrderId) {
         LambdaQueryWrapper<ReceiptOrderDetail> lqw = Wrappers.lambdaQuery();
-        lqw.eq(ReceiptOrderDetail::getOrderId, receiptOrderId);
+        lqw.eq(ReceiptOrderDetail::getReceiptId, receiptOrderId);
         receiptOrderDetailMapper.delete(lqw);
     }
 
@@ -121,10 +118,10 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
     }
 
     @Override
-    public List<ReceiptOrderDetailVo> queryByReceiptOrderId(Long receiptOrderId) {
-        ReceiptOrderDetailDto bo = new ReceiptOrderDetailDto();
-        bo.setOrderId(receiptOrderId);
-        List<ReceiptOrderDetailVo> details = queryList(bo);
+    public List<ReceiptOrderDetailVO> queryByReceiptOrderId(Long receiptOrderId) {
+        ReceiptOrderDetailDto dto = new ReceiptOrderDetailDto();
+        dto.setOrderId(receiptOrderId);
+        List<ReceiptOrderDetailVO> details = queryList(dto);
         if (CollUtil.isEmpty(details)) {
             return Collections.emptyList();
         }

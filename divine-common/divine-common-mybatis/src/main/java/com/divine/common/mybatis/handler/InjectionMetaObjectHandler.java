@@ -4,7 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.divine.common.core.domain.dto.LoginUser;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.enums.HttpStatusEnum;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
 import com.divine.common.mybatis.core.domain.BaseHistoryEntity;
@@ -47,7 +48,7 @@ public class InjectionMetaObjectHandler implements MetaObjectHandler {
                 baseHistoryEntity.setCreateTime(current);
             }
         } catch (Exception e) {
-            throw new ServiceException("自动注入异常 => " + e.getMessage(), HttpStatus.HTTP_UNAUTHORIZED);
+            throw new BusinessException("自动注入异常 => " + e.getMessage());
         }
     }
 
@@ -64,7 +65,7 @@ public class InjectionMetaObjectHandler implements MetaObjectHandler {
                 }
             }
         } catch (Exception e) {
-            throw new ServiceException("自动注入异常 => " + e.getMessage(), HttpStatus.HTTP_UNAUTHORIZED);
+            throw new BusinessException("自动注入异常 => " + e.getMessage());
         }
     }
 

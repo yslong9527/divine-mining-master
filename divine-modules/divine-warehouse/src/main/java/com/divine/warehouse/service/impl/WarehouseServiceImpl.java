@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.WarehouseDto;
 import com.divine.warehouse.domain.entity.Warehouse;
 import com.divine.warehouse.domain.vo.WarehouseVo;
@@ -14,7 +15,6 @@ import com.divine.warehouse.mapper.WarehouseMapper;
 import com.divine.warehouse.service.InventoryService;
 import com.divine.warehouse.service.WarehouseService;
 import com.divine.common.core.constant.HttpStatus;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -52,8 +52,8 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
      * 查询仓库列表
      */
     @Override
-    public PageInfoRes<WarehouseVo> queryPageList(WarehouseDto bo, BasePage basePage) {
-        LambdaQueryWrapper<Warehouse> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<WarehouseVo> queryPageList(WarehouseDto dto, BasePage basePage) {
+        LambdaQueryWrapper<Warehouse> lqw = buildQueryWrapper(dto);
         Page<WarehouseVo> result = warehouseMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
@@ -62,16 +62,16 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
      * 查询仓库列表
      */
     @Override
-    public List<WarehouseVo> queryList(WarehouseDto bo) {
-        LambdaQueryWrapper<Warehouse> lqw = buildQueryWrapper(bo);
+    public List<WarehouseVo> queryList(WarehouseDto dto) {
+        LambdaQueryWrapper<Warehouse> lqw = buildQueryWrapper(dto);
         return warehouseMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<Warehouse> buildQueryWrapper(WarehouseDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<Warehouse> buildQueryWrapper(WarehouseDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<Warehouse> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StrUtil.isNotBlank(bo.getWarehouseCode()), Warehouse::getWarehouseCode, bo.getWarehouseCode());
-        lqw.like(StrUtil.isNotBlank(bo.getWarehouseName()), Warehouse::getWarehouseName, bo.getWarehouseName());
+        lqw.eq(StrUtil.isNotBlank(dto.getWarehouseCode()), Warehouse::getWarehouseCode, dto.getWarehouseCode());
+        lqw.like(StrUtil.isNotBlank(dto.getWarehouseName()), Warehouse::getWarehouseName, dto.getWarehouseName());
         lqw.orderByAsc(Warehouse::getOrderNum);
         return lqw;
     }
@@ -80,9 +80,9 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
      * 新增仓库
      */
     @Override
-    public void insertByBo(WarehouseDto bo) {
-        validateWarehouseNameAndNo(bo);
-        Warehouse add = MapstructUtils.convert(bo, Warehouse.class);
+    public void insertByBo(WarehouseDto dto) {
+        validateWarehouseNameAndNo(dto);
+        Warehouse add = MapstructUtils.convert(dto, Warehouse.class);
         add.setOrderNum(this.getNextOrderNum());
         warehouseMapper.insert(add);
     }
@@ -99,9 +99,9 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
      * 修改仓库
      */
     @Override
-    public void updateByBo(WarehouseDto bo) {
-        validateWarehouseNameAndNo(bo);
-        Warehouse update = MapstructUtils.convert(bo, Warehouse.class);
+    public void updateByBo(WarehouseDto dto) {
+        validateWarehouseNameAndNo(dto);
+        Warehouse update = MapstructUtils.convert(dto, Warehouse.class);
         warehouseMapper.updateById(update);
     }
 
@@ -128,7 +128,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
 
     private void validIdBeforeDelete(Long id) {
         if (inventoryService.existsByWarehouseId(id)) {
-            throw new ServiceException("删除失败", HttpStatus.CONFLICT, "该仓库已有业务关联，无法删除！");
+            throw new BusinessException("该仓库已有业务关联，无法删除！");
         }
     }
 

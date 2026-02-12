@@ -1,14 +1,13 @@
 package com.divine.common.web.handler;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpStatus;
 import com.divine.common.core.domain.Result;
+import com.divine.common.core.enums.HttpStatusEnum;
+import com.divine.common.core.exception.base.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import com.divine.common.core.exception.ServiceException;
-import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.StreamUtils;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.util.Objects;
 
 /**
  * 全局异常处理器
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
                                                             HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',不支持'{}'请求", requestURI, e.getMethod());
-        return Result.fail(HttpStatus.HTTP_BAD_METHOD, e.getMessage());
+        return Result.fail(HttpStatus.HTTP_BAD_METHOD, "请求方式不支持");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -48,28 +49,11 @@ public class GlobalExceptionHandler {
         return Result.fail("文件名或填写内容过长");
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Result<Void> handleIllegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        log.error("请求地址'{}'，发生不合法参数异常", requestURI, e);
-        return Result.fail(e.getMessage());
-    }
-
-    /**
-     * 业务异常
-     */
-    @ExceptionHandler(ServiceException.class)
-    public Result<Void> handleServiceException(ServiceException e, HttpServletRequest request) {
-        log.error(e.getMessage());
-        Integer code = e.getCode();
-        return ObjectUtil.isNotNull(code) ? Result.fail(code, e.getMessage(),e.getDetailMessage()) : Result.fail(e.getMessage());
-    }
-
     /**
      * 业务异常
      */
     @ExceptionHandler(BusinessException.class)
-    public Result<Void> handleBaseException(BusinessException e, HttpServletRequest request) {
+    public Result<Void> handleBaseException(com.divine.common.core.exception.base.BusinessException e, HttpServletRequest request) {
         log.error(e.getMessage());
         return Result.fail(e.getMessage());
     }
@@ -101,7 +85,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleNoHandlerFoundException(NoHandlerFoundException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}'不存在.", requestURI);
-        return Result.fail(HttpStatus.HTTP_NOT_FOUND, e.getMessage());
+        return Result.fail(HttpStatusEnum.NOT_FOUND.getCode(),HttpStatusEnum.NOT_FOUND.getMsg());
     }
 
     /**
@@ -111,7 +95,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生未知异常.", requestURI, e);
-        return Result.fail(e.getMessage());
+        return Result.fail(HttpStatusEnum.FAIL.getMsg());
     }
 
     /**
@@ -121,7 +105,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleException(Exception e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生系统异常.", requestURI, e);
-        return Result.fail(e.getMessage());
+        return Result.fail(HttpStatusEnum.FAIL.getMsg());
     }
 
     /**
@@ -150,7 +134,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage());
-        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        String message = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
         return Result.fail(message);
     }
 

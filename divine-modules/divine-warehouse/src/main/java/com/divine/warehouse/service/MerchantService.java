@@ -24,22 +24,22 @@ public interface MerchantService {
     /**
      * 查询往来单位列表
      */
-    PageInfoRes<MerchantVo> queryPageList(MerchantDto bo, BasePage basePage) ;
+    PageInfoRes<MerchantVo> queryPageList(MerchantDto dto, BasePage basePage) ;
 
     /**
      * 查询往来单位列表
      */
-    List<MerchantVo> queryList(MerchantDto bo) ;
+    List<MerchantVo> queryList(MerchantDto dto) ;
 
     /**
      * 新增往来单位
      */
-    void insertByBo(MerchantDto bo) ;
+    void insertByBo(MerchantDto dto) ;
 
     /**
      * 修改往来单位
      */
-    void updateByBo(MerchantDto bo);
+    void updateByBo(MerchantDto dto);
 
     /**
      * 删除往来单位

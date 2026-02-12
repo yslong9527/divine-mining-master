@@ -1,7 +1,7 @@
 package com.divine.common.ratelimiter.aspectj;
 
 import com.divine.common.core.constant.GlobalConstants;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MessageUtils;
 import com.divine.common.core.utils.ServletUtils;
 import com.divine.common.core.utils.SpringUtils;
@@ -66,14 +66,14 @@ public class RateLimiterAspect {
                 if (StringUtils.startsWith(message, "{") && StringUtils.endsWith(message, "}")) {
                     message = MessageUtils.message(StringUtils.substring(message, 1, message.length() - 1));
                 }
-                throw new ServiceException(message);
+                throw new BusinessException(message);
             }
             log.info("限制令牌 => {}, 剩余令牌 => {}, 缓存key => '{}'", count, number, combineKey);
         } catch (Exception e) {
-            if (e instanceof ServiceException) {
+            if (e instanceof BusinessException) {
                 throw e;
             } else {
-                throw new RuntimeException("服务器限流异常，请稍候再试", e);
+                throw new BusinessException("服务器限流异常，请稍候再试", e);
             }
         }
     }

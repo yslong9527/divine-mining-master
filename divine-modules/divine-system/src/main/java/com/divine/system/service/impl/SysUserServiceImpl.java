@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.divine.common.core.constant.CacheNames;
 import com.divine.common.core.constant.UserConstants;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.service.UserService;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StreamUtils;
@@ -250,7 +250,7 @@ public class SysUserServiceImpl implements SysUserService,UserService {
     @Override
     public void checkUserAllowed(Long userId) {
         if (ObjectUtil.isNotNull(userId) && LoginHelper.isAdmin(userId)) {
-            throw new ServiceException("不允许操作超级管理员用户");
+            throw new BusinessException("不允许操作超级管理员用户");
         }
     }
 
@@ -268,7 +268,7 @@ public class SysUserServiceImpl implements SysUserService,UserService {
             return;
         }
         if (userMapper.countUserById(userId) == 0) {
-            throw new ServiceException("没有权限访问用户数据！");
+            throw new BusinessException("没有权限访问用户数据！");
         }
     }
 

@@ -18,7 +18,7 @@ public class RedisPubSubController {
 
     @Operation(summary = "发布消息")
     @GetMapping("/pub")
-    public Result<Void> pub(@Schema(description = "通道Key") String key,
+    public Result<String> pub(@Schema(description = "通道Key") String key,
                             @Schema(description = "发送内容") String value) {
         RedisUtils.publish(key, value, consumer -> {
             System.out.println("发布通道 => " + key + ", 发送值 => " + value);
@@ -28,7 +28,7 @@ public class RedisPubSubController {
 
     @Operation(summary = "发布消息")
     @GetMapping("/sub")
-    public Result<Void> sub(@Schema(description = "通道Key") String key) {
+    public Result<String> sub(@Schema(description = "通道Key") String key) {
         RedisUtils.subscribe(key, String.class, msg -> {
             System.out.println("订阅通道 => " + key + ", 接收值 => " + msg);
         });

@@ -3,6 +3,7 @@ package com.divine.warehouse.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.MerchantDto;
 import com.divine.warehouse.domain.entity.Merchant;
 import com.divine.warehouse.domain.entity.ReceiptOrder;
@@ -11,7 +12,6 @@ import com.divine.warehouse.mapper.MerchantMapper;
 import com.divine.warehouse.mapper.ReceiptOrderMapper;
 import com.divine.warehouse.service.MerchantService;
 import com.divine.common.core.constant.HttpStatus;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.page.BasePage;
@@ -48,8 +48,8 @@ public class MerchantServiceImpl implements MerchantService {
      * 查询往来单位列表
      */
     @Override
-    public PageInfoRes<MerchantVo> queryPageList(MerchantDto bo, BasePage basePage) {
-        LambdaQueryWrapper<Merchant> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<MerchantVo> queryPageList(MerchantDto dto, BasePage basePage) {
+        LambdaQueryWrapper<Merchant> lqw = buildQueryWrapper(dto);
         Page<MerchantVo> result = merchantMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
@@ -58,17 +58,17 @@ public class MerchantServiceImpl implements MerchantService {
      * 查询往来单位列表
      */
     @Override
-    public List<MerchantVo> queryList(MerchantDto bo) {
-        LambdaQueryWrapper<Merchant> lqw = buildQueryWrapper(bo);
+    public List<MerchantVo> queryList(MerchantDto dto) {
+        LambdaQueryWrapper<Merchant> lqw = buildQueryWrapper(dto);
         return merchantMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<Merchant> buildQueryWrapper(MerchantDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<Merchant> buildQueryWrapper(MerchantDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<Merchant> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getMerchantCode()), Merchant::getMerchantCode, bo.getMerchantCode());
-        lqw.like(StringUtils.isNotBlank(bo.getMerchantName()), Merchant::getMerchantName, bo.getMerchantName());
-        lqw.eq(bo.getMerchantType() != null, Merchant::getMerchantType, bo.getMerchantType());
+        lqw.eq(StringUtils.isNotBlank(dto.getMerchantCode()), Merchant::getMerchantCode, dto.getMerchantCode());
+        lqw.like(StringUtils.isNotBlank(dto.getMerchantName()), Merchant::getMerchantName, dto.getMerchantName());
+        lqw.eq(dto.getMerchantType() != null, Merchant::getMerchantType, dto.getMerchantType());
         return lqw;
     }
 
@@ -76,8 +76,8 @@ public class MerchantServiceImpl implements MerchantService {
      * 新增往来单位
      */
     @Override
-    public void insertByBo(MerchantDto bo) {
-        Merchant add = MapstructUtils.convert(bo, Merchant.class);
+    public void insertByBo(MerchantDto dto) {
+        Merchant add = MapstructUtils.convert(dto, Merchant.class);
         merchantMapper.insert(add);
     }
 
@@ -85,8 +85,8 @@ public class MerchantServiceImpl implements MerchantService {
      * 修改往来单位
      */
     @Override
-    public void updateByBo(MerchantDto bo) {
-        Merchant update = MapstructUtils.convert(bo, Merchant.class);
+    public void updateByBo(MerchantDto dto) {
+        Merchant update = MapstructUtils.convert(dto, Merchant.class);
         merchantMapper.updateById(update);
     }
 
@@ -104,7 +104,7 @@ public class MerchantServiceImpl implements MerchantService {
         receiptOrderLqw.eq(ReceiptOrder::getMerchantId, id);
         Long receiptOrderCount = receiptOrderMapper.selectCount(receiptOrderLqw);
         if (receiptOrderCount != null && receiptOrderCount > 0) {
-            throw new ServiceException("删除失败", HttpStatus.CONFLICT,"该企业已有业务关联，无法删除！");
+            throw new BusinessException("该企业已有业务关联，无法删除！");
         }
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
 public interface InventoryHistoryService {
 
 
-    void saveInventoryHistory(BaseOrderDto<? extends BaseOrderDetailDto> bo, Integer orderType, Boolean isAdd);
+    void saveInventoryHistory(BaseOrderDto<? extends BaseOrderDetailDto> dto, Integer orderType, Boolean isAdd);
 
     /**
      * 查询库存记录
@@ -29,22 +29,22 @@ public interface InventoryHistoryService {
     /**
      * 查询库存记录列表
      */
-    PageInfoRes<InventoryHistoryVo> queryPageList(InventoryHistoryDto bo, BasePage basePage);
+    PageInfoRes<InventoryHistoryVo> queryPageList(InventoryHistoryDto dto, BasePage basePage);
 
     /**
      * 查询库存记录列表
      */
-    List<InventoryHistoryVo> queryList(InventoryHistoryDto bo);
+    List<InventoryHistoryVo> queryList(InventoryHistoryDto dto);
 
     /**
      * 新增库存记录
      */
-    void insertByBo(InventoryHistoryDto bo);
+    void insertByBo(InventoryHistoryDto dto);
 
     /**
      * 修改库存记录
      */
-    void updateByBo(InventoryHistoryDto bo);
+    void updateByBo(InventoryHistoryDto dto);
 
     /**
      * 批量删除库存记录

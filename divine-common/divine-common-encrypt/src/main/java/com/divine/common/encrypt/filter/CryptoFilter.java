@@ -1,13 +1,14 @@
 package com.divine.common.encrypt.filter;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.divine.common.core.enums.HttpStatusEnum;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.encrypt.annotation.ApiEncrypt;
 import com.divine.common.encrypt.properties.ApiDecryptProperties;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.divine.common.core.constant.HttpStatus;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.SpringUtils;
 import com.divine.common.core.utils.StringUtils;
 import org.springframework.http.HttpMethod;
@@ -55,7 +56,7 @@ public class CryptoFilter implements Filter {
                     HandlerExceptionResolver exceptionResolver = SpringUtils.getBean("handlerExceptionResolver", HandlerExceptionResolver.class);
                     exceptionResolver.resolveException(
                         servletRequest, servletResponse, null,
-                        new ServiceException("没有访问权限，请联系管理员授权", HttpStatus.FORBIDDEN));
+                        new BusinessException(HttpStatusEnum.FORBIDDEN,"没有访问权限，请联系管理员授权"));
                     return;
                 }
             }

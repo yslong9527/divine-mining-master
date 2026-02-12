@@ -57,8 +57,8 @@ public class CheckOrderController extends BaseController {
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(CheckOrderDto bo, HttpServletResponse response) {
-        List<CheckOrderVo> list = checkOrderService.queryList(bo);
+    public void export(CheckOrderDto dto, HttpServletResponse response) {
+        List<CheckOrderVo> list = checkOrderService.queryList(dto);
         ExcelUtil.exportExcel(list, "库存盘点单据", CheckOrderVo.class, response);
     }
 
@@ -83,9 +83,9 @@ public class CheckOrderController extends BaseController {
     @Log(title = "库存盘点单据", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody CheckOrderDto bo) {
-        bo.setOrderStatus(ServiceConstants.CheckOrderStatus.PENDING);
-        checkOrderService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody CheckOrderDto dto) {
+        dto.setOrderStatus(ServiceConstants.CheckOrderStatus.PENDING);
+        checkOrderService.insertByBo(dto);
         return Result.success();
     }
 
@@ -97,8 +97,8 @@ public class CheckOrderController extends BaseController {
     @Log(title = "库存盘点单据", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody CheckOrderDto bo) {
-        checkOrderService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody CheckOrderDto dto) {
+        checkOrderService.updateByBo(dto);
         return Result.success();
     }
 
@@ -110,9 +110,9 @@ public class CheckOrderController extends BaseController {
     @Log(title = "库存盘点单据", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/check")
-    public Result<Void> check(@Validated(AddGroup.class) @RequestBody CheckOrderDto bo) {
-        bo.setOrderStatus(ServiceConstants.CheckOrderStatus.FINISH);
-        checkOrderService.check(bo);
+    public Result<Void> check(@Validated(AddGroup.class) @RequestBody CheckOrderDto dto) {
+        dto.setOrderStatus(ServiceConstants.CheckOrderStatus.FINISH);
+        checkOrderService.check(dto);
         return Result.success();
     }
 

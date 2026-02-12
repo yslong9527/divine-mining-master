@@ -31,9 +31,9 @@ public interface SysLogininforService {
     /**
      * 新增系统登录日志
      *
-     * @param bo 访问日志对象
+     * @param dto 访问日志对象
      */
-    void insertLogininfor(SysLogininforDto bo);
+    void insertLogininfor(SysLogininforDto dto);
 
     /**
      * 查询系统登录日志集合

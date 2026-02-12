@@ -29,17 +29,17 @@ public interface CheckOrderService {
     /**
      * 查询库存盘点单据列表
      */
-    List<CheckOrderVo> queryList(CheckOrderDto bo);
+    List<CheckOrderVo> queryList(CheckOrderDto dto);
 
     /**
      * 新增库存盘点单据
      */
-    void insertByBo(CheckOrderDto bo);
+    void insertByBo(CheckOrderDto dto);
 
     /**
      * 修改库存盘点单据
      */
-    void updateByBo(CheckOrderDto bo);
+    void updateByBo(CheckOrderDto dto);
 
     void deleteById(Long id);
 
@@ -49,8 +49,8 @@ public interface CheckOrderService {
     void deleteByIds(Collection<Long> ids);
 
     /**
-     * @param bo
+     * @param dto
      */
-    void check(CheckOrderDto bo);
+    void check(CheckOrderDto dto);
 
 }

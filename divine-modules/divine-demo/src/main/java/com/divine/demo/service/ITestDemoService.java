@@ -27,33 +27,33 @@ public interface ITestDemoService {
     /**
      * 查询列表
      */
-    PageInfoRes<TestDemoVo> queryPageList(TestDemoDto bo, BasePage basePage);
+    PageInfoRes<TestDemoVo> queryPageList(TestDemoDto dto, BasePage basePage);
 
     /**
      * 自定义分页查询
      */
-    PageInfoRes<TestDemoVo> customPageList(TestDemoDto bo, BasePage basePage);
+    PageInfoRes<TestDemoVo> customPageList(TestDemoDto dto, BasePage basePage);
 
     /**
      * 查询列表
      */
-    List<TestDemoVo> queryList(TestDemoDto bo);
+    List<TestDemoVo> queryList(TestDemoDto dto);
 
     /**
      * 根据新增业务对象插入测试单表
      *
-     * @param bo 测试单表新增业务对象
+     * @param dto 测试单表新增业务对象
      * @return
      */
-    Boolean insertByBo(TestDemoDto bo);
+    Boolean insertByBo(TestDemoDto dto);
 
     /**
      * 根据编辑业务对象修改测试单表
      *
-     * @param bo 测试单表编辑业务对象
+     * @param dto 测试单表编辑业务对象
      * @return
      */
-    Boolean updateByBo(TestDemoDto bo);
+    Boolean updateByBo(TestDemoDto dto);
 
     /**
      * 校验并删除数据

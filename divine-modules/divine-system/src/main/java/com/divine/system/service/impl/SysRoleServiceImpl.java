@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.divine.common.core.constant.UserConstants;
 import com.divine.common.core.domain.dto.LoginUser;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StreamUtils;
 import com.divine.common.core.utils.StringUtils;
@@ -179,12 +179,12 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public void checkRoleAllowed(SysRoleDto role) {
         if (ObjectUtil.isNotNull(role.getRoleId()) && role.isAdmin()) {
-            throw new ServiceException("不允许操作超级管理员角色");
+            throw new BusinessException("不允许操作超级管理员角色");
         }
         // 新增不允许使用 管理员标识符
         if (ObjectUtil.isNull(role.getRoleId())
             && StringUtils.equals(role.getRoleKey(), UserConstants.ADMIN_ROLE_KEY)) {
-            throw new ServiceException("不允许使用系统内置管理员角色标识符!");
+            throw new BusinessException("不允许使用系统内置管理员角色标识符!");
         }
         // 修改不允许修改 管理员标识符
         if (ObjectUtil.isNotNull(role.getRoleId())) {
@@ -192,9 +192,9 @@ public class SysRoleServiceImpl implements SysRoleService {
             // 如果标识符不相等 判断为修改了管理员标识符
             if (!StringUtils.equals(sysRole.getRoleKey(), role.getRoleKey())) {
                 if (StringUtils.equals(sysRole.getRoleKey(), UserConstants.ADMIN_ROLE_KEY)) {
-                    throw new ServiceException("不允许修改系统内置管理员角色标识符!");
+                    throw new BusinessException("不允许修改系统内置管理员角色标识符!");
                 } else if (StringUtils.equals(role.getRoleKey(), UserConstants.ADMIN_ROLE_KEY)) {
-                    throw new ServiceException("不允许使用系统内置管理员角色标识符!");
+                    throw new BusinessException("不允许使用系统内置管理员角色标识符!");
                 }
             }
         }
@@ -212,7 +212,7 @@ public class SysRoleServiceImpl implements SysRoleService {
             role.setRoleId(roleId);
             List<SysRoleVo> roles = this.selectRoleList(role);
             if (CollUtil.isEmpty(roles)) {
-                throw new ServiceException("没有权限访问角色数据！");
+                throw new BusinessException("没有权限访问角色数据！");
             }
         }
     }
@@ -236,29 +236,29 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int insertRole(SysRoleDto bo) {
-        SysRole role = MapstructUtils.convert(bo, SysRole.class);
+    public int insertRole(SysRoleDto dto) {
+        SysRole role = MapstructUtils.convert(dto, SysRole.class);
         // 新增角色信息
         roleMapper.insert(role);
-        bo.setRoleId(role.getRoleId());
-        return insertRoleMenu(bo);
+        dto.setRoleId(role.getRoleId());
+        return insertRoleMenu(dto);
     }
 
     /**
      * 修改保存角色信息
      *
-     * @param bo 角色信息
+     * @param dto 角色信息
      * @return 结果
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int updateRole(SysRoleDto bo) {
-        SysRole role = MapstructUtils.convert(bo, SysRole.class);
+    public int updateRole(SysRoleDto dto) {
+        SysRole role = MapstructUtils.convert(dto, SysRole.class);
         // 修改角色信息
         roleMapper.updateById(role);
         // 删除角色与菜单关联
         roleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, role.getRoleId()));
-        return insertRoleMenu(bo);
+        return insertRoleMenu(dto);
     }
 
     /**
@@ -271,7 +271,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public int updateRoleStatus(Long roleId, String status) {
         if (UserConstants.ROLE_DISABLE.equals(status) && this.countUserRoleByRoleId(roleId) > 0) {
-            throw new ServiceException("角色已分配，不能禁用!");
+            throw new BusinessException("角色已分配，不能禁用!");
         }
         return roleMapper.update(null,
             new LambdaUpdateWrapper<SysRole>()
@@ -282,13 +282,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     /**
      * 修改数据权限信息
      *
-     * @param bo 角色信息
+     * @param dto 角色信息
      * @return 结果
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int authDataScope(SysRoleDto bo) {
-        SysRole role = MapstructUtils.convert(bo, SysRole.class);
+    public int authDataScope(SysRoleDto dto) {
+        SysRole role = MapstructUtils.convert(dto, SysRole.class);
         // 修改角色信息
         roleMapper.updateById(role);
         // 删除角色与部门关联
@@ -371,7 +371,7 @@ public class SysRoleServiceImpl implements SysRoleService {
             checkRoleAllowed(BeanUtil.toBean(role, SysRoleDto.class));
             checkRoleDataScope(roleId);
             if (countUserRoleByRoleId(roleId) > 0) {
-                throw new ServiceException(String.format("%1$s已分配，不能删除!", role.getRoleName()));
+                throw new BusinessException(String.format("%1$s已分配，不能删除!", role.getRoleName()));
             }
         }
         List<Long> ids = Arrays.asList(roleIds);

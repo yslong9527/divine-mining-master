@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @ExcelIgnoreUnannotated
 @AutoMapper(target = ShipmentOrder.class)
-public class ShipmentOrderVo extends BaseOrderVo<ShipmentOrderDetailVo>{
+public class ShipmentOrderVo extends BaseOrderVo<ShipmentOrderDetailVO>{
 
     /**
      * 入库类型

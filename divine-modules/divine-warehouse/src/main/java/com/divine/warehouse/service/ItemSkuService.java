@@ -1,7 +1,7 @@
 package com.divine.warehouse.service;
 
 import com.divine.warehouse.domain.dto.ItemSkuDto;
-import com.divine.warehouse.domain.vo.BaseOrderDetailVo;
+import com.divine.warehouse.domain.vo.BaseOrderDetailVO;
 import com.divine.warehouse.domain.vo.ItemSkuMapVo;
 import com.divine.warehouse.domain.vo.ItemSkuVo;
 import com.divine.common.mybatis.core.page.BasePage;
@@ -25,22 +25,22 @@ public interface ItemSkuService{
     /**
      * 查询sku信息列表，用于出入库的选择组件
      */
-    PageInfoRes<ItemSkuMapVo> queryPageList(ItemSkuDto bo, BasePage basePage);
+    PageInfoRes<ItemSkuMapVo> queryPageList(ItemSkuDto dto, BasePage basePage);
 
     /**
      * 查询sku信息列表
      */
-    List<ItemSkuVo> queryList(ItemSkuDto bo);
+    List<ItemSkuVo> queryList(ItemSkuDto dto);
 
     /**
      * 新增sku信息
      */
-    Boolean insertByBo(ItemSkuDto bo) ;
+    Boolean insertByBo(ItemSkuDto dto) ;
 
     /**
      * 修改sku信息
      */
-    Boolean updateByBo(ItemSkuDto bo) ;
+    Boolean updateByBo(ItemSkuDto dto) ;
 
     void deleteById(Long id) ;
 
@@ -67,5 +67,5 @@ public interface ItemSkuService{
 
     Map<Long, ItemSkuMapVo> queryItemSkuMapVosByIds(Set<Long> skuIds);
 
-    void setItemSkuMap(List<? extends BaseOrderDetailVo> details);
+    void setItemSkuMap(List<? extends BaseOrderDetailVO> details);
 }

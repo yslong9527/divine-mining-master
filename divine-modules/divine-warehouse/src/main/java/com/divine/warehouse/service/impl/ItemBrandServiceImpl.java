@@ -3,6 +3,7 @@ package com.divine.warehouse.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.ItemBrandDto;
 import com.divine.warehouse.domain.entity.Item;
 import com.divine.warehouse.domain.entity.ItemBrand;
@@ -11,7 +12,6 @@ import com.divine.warehouse.mapper.ItemBrandMapper;
 import com.divine.warehouse.mapper.ItemMapper;
 import com.divine.warehouse.service.ItemBrandService;
 import com.divine.common.core.constant.HttpStatus;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
 import com.divine.common.mybatis.core.page.BasePage;
@@ -48,8 +48,8 @@ public class ItemBrandServiceImpl implements ItemBrandService {
      * 查询商品品牌列表
      */
     @Override
-    public PageInfoRes<ItemBrandVo> queryPageList(ItemBrandDto bo, BasePage basePage) {
-        LambdaQueryWrapper<ItemBrand> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<ItemBrandVo> queryPageList(ItemBrandDto dto, BasePage basePage) {
+        LambdaQueryWrapper<ItemBrand> lqw = buildQueryWrapper(dto);
         Page<ItemBrandVo> result = itemBrandMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
@@ -58,15 +58,15 @@ public class ItemBrandServiceImpl implements ItemBrandService {
      * 查询商品品牌列表
      */
     @Override
-    public List<ItemBrandVo> queryList(ItemBrandDto bo) {
-        LambdaQueryWrapper<ItemBrand> lqw = buildQueryWrapper(bo);
+    public List<ItemBrandVo> queryList(ItemBrandDto dto) {
+        LambdaQueryWrapper<ItemBrand> lqw = buildQueryWrapper(dto);
         return itemBrandMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<ItemBrand> buildQueryWrapper(ItemBrandDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<ItemBrand> buildQueryWrapper(ItemBrandDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<ItemBrand> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getBrandName()), ItemBrand::getBrandName, bo.getBrandName());
+        lqw.like(StringUtils.isNotBlank(dto.getBrandName()), ItemBrand::getBrandName, dto.getBrandName());
         lqw.orderByDesc(BaseEntity::getCreateTime);
         return lqw;
     }
@@ -75,8 +75,8 @@ public class ItemBrandServiceImpl implements ItemBrandService {
      * 新增商品品牌
      */
     @Override
-    public void insertByBo(ItemBrandDto bo) {
-        ItemBrand add = MapstructUtils.convert(bo, ItemBrand.class);
+    public void insertByBo(ItemBrandDto dto) {
+        ItemBrand add = MapstructUtils.convert(dto, ItemBrand.class);
         itemBrandMapper.insert(add);
     }
 
@@ -84,8 +84,8 @@ public class ItemBrandServiceImpl implements ItemBrandService {
      * 修改商品品牌
      */
     @Override
-    public void updateByBo(ItemBrandDto bo) {
-        ItemBrand update = MapstructUtils.convert(bo, ItemBrand.class);
+    public void updateByBo(ItemBrandDto dto) {
+        ItemBrand update = MapstructUtils.convert(dto, ItemBrand.class);
         itemBrandMapper.updateById(update);
     }
 
@@ -102,7 +102,7 @@ public class ItemBrandServiceImpl implements ItemBrandService {
         LambdaQueryWrapper<Item> itemLambdaQueryWrapper = Wrappers.lambdaQuery();
         itemLambdaQueryWrapper.eq(Item::getItemBrand, id);
         if (itemMapper.exists(itemLambdaQueryWrapper)) {
-            throw new ServiceException("删除失败", HttpStatus.CONFLICT,"该品牌已有业务关联，无法删除！");
+            throw new BusinessException("该品牌已有业务关联，无法删除！");
         }
     }
 }

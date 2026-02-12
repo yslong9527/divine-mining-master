@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 库存对象 wms_inventory
@@ -28,6 +29,7 @@ public class Inventory extends BaseEntity{
      */
     @TableId(value = "id")
     private Long id;
+
     /**
      * 规格ID
      */
@@ -36,10 +38,17 @@ public class Inventory extends BaseEntity{
      * 所属仓库
      */
     private Long warehouseId;
+
+    /**
+     * 货架
+     */
+    private String storageShelf;
+
     /**
      * 库存
      */
     private BigDecimal quantity;
+
     /**
      * 备注
      */

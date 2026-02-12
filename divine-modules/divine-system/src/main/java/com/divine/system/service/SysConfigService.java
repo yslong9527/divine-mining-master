@@ -44,18 +44,18 @@ public interface SysConfigService {
     /**
      * 新增参数配置
      *
-     * @param bo 参数配置信息
+     * @param dto 参数配置信息
      * @return 结果
      */
-    String insertConfig(SysConfigDto bo);
+    String insertConfig(SysConfigDto dto);
 
     /**
      * 修改参数配置
      *
-     * @param bo 参数配置信息
+     * @param dto 参数配置信息
      * @return 结果
      */
-    String updateConfig(SysConfigDto bo);
+    String updateConfig(SysConfigDto dto);
 
     /**
      * 批量删除参数信息

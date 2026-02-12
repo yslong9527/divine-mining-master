@@ -12,14 +12,18 @@ import java.math.BigDecimal;
 public class BaseOrder extends BaseEntity {
 
     /**
-     *
+     * id
      */
     @TableId(value = "id")
     private Long id;
     /**
-     * 入库单号
+     * 业务单号
      */
     private String orderNo;
+    /**
+     * 业务状态
+     */
+    private Integer orderStatus;
 
     /**
      * 商品总数
@@ -28,11 +32,7 @@ public class BaseOrder extends BaseEntity {
     /**
      * 订单总金额
      */
-    private BigDecimal totalAmount;
-    /**
-     * 订单状态
-     */
-    private Integer orderStatus;
+    private BigDecimal totalPrice;
 
     /**
      * 备注

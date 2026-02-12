@@ -18,23 +18,23 @@ public interface ItemCategoryService {
     /**
      * 查询物料类型列表
      */
-    PageInfoRes<ItemCategoryVo> queryPageList(ItemCategoryDto bo, BasePage basePage);
+    PageInfoRes<ItemCategoryVo> queryPageList(ItemCategoryDto dto, BasePage basePage);
 
     /**
      * 查询物料类型列表
      */
-    List<ItemCategoryVo> queryList(ItemCategoryDto bo);
+    List<ItemCategoryVo> queryList(ItemCategoryDto dto);
 
 
     /**
      * 新增物料类型
      */
-    void insertByBo(ItemCategoryDto bo);
+    void insertByBo(ItemCategoryDto dto);
 
     /**
      * 修改物料类型
      */
-    void updateByBo(ItemCategoryDto bo);
+    void updateByBo(ItemCategoryDto dto);
 
     /**
      * 批量删除物料类型

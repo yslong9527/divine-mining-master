@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.divine.common.core.constant.CacheNames;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.service.OssService;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.SpringUtils;
@@ -52,8 +52,8 @@ public class SysOssServiceImpl implements SysOssService, OssService {
     private final SysOssMapper ossMapper;
 
     @Override
-    public PageInfoRes<SysOssVo> queryPageList(SysOssDto bo, BasePage basePage) {
-        LambdaQueryWrapper<SysOss> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<SysOssVo> queryPageList(SysOssDto dto, BasePage basePage) {
+        LambdaQueryWrapper<SysOss> lqw = buildQueryWrapper(dto);
         Page<SysOssVo> result = ossMapper.selectVoPage(basePage.build(), lqw);
         List<SysOssVo> filterResult = StreamUtils.toList(result.getRecords(), this::matchingUrl);
         result.setRecords(filterResult);
@@ -94,17 +94,17 @@ public class SysOssServiceImpl implements SysOssService, OssService {
         return String.join(StringUtils.SEPARATOR, list);
     }
 
-    private LambdaQueryWrapper<SysOss> buildQueryWrapper(SysOssDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<SysOss> buildQueryWrapper(SysOssDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<SysOss> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getFileName()), SysOss::getFileName, bo.getFileName());
-        lqw.like(StringUtils.isNotBlank(bo.getOriginalName()), SysOss::getOriginalName, bo.getOriginalName());
-        lqw.eq(StringUtils.isNotBlank(bo.getFileSuffix()), SysOss::getFileSuffix, bo.getFileSuffix());
-        lqw.eq(StringUtils.isNotBlank(bo.getUrl()), SysOss::getUrl, bo.getUrl());
+        lqw.like(StringUtils.isNotBlank(dto.getFileName()), SysOss::getFileName, dto.getFileName());
+        lqw.like(StringUtils.isNotBlank(dto.getOriginalName()), SysOss::getOriginalName, dto.getOriginalName());
+        lqw.eq(StringUtils.isNotBlank(dto.getFileSuffix()), SysOss::getFileSuffix, dto.getFileSuffix());
+        lqw.eq(StringUtils.isNotBlank(dto.getUrl()), SysOss::getUrl, dto.getUrl());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
             SysOss::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
-        lqw.eq(StringUtils.isNotBlank(bo.getCreateBy()), SysOss::getCreateBy, bo.getCreateBy());
-        lqw.eq(StringUtils.isNotBlank(bo.getService()), SysOss::getService, bo.getService());
+        lqw.eq(StringUtils.isNotBlank(dto.getCreateBy()), SysOss::getCreateBy, dto.getCreateBy());
+        lqw.eq(StringUtils.isNotBlank(dto.getService()), SysOss::getService, dto.getService());
         return lqw;
     }
 
@@ -118,7 +118,7 @@ public class SysOssServiceImpl implements SysOssService, OssService {
     public void download(Long ossId, HttpServletResponse response) {
         SysOssVo sysOss = SpringUtils.getAopProxy(this).getById(ossId);
         if (ObjectUtil.isNull(sysOss)) {
-            throw new ServiceException("文件数据不存在!");
+            throw new BusinessException("文件数据不存在!");
         }
         FileUtils.setAttachmentResponseHeader(response, sysOss.getOriginalName());
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
@@ -128,7 +128,7 @@ public class SysOssServiceImpl implements SysOssService, OssService {
             IoUtil.copy(inputStream, response.getOutputStream(), available);
             response.setContentLength(available);
         } catch (Exception e) {
-            throw new ServiceException(e.getMessage());
+            throw new BusinessException(e.getMessage());
         }
     }
 
@@ -141,7 +141,7 @@ public class SysOssServiceImpl implements SysOssService, OssService {
         try {
             uploadResult = storage.uploadSuffix(file.getBytes(), suffix, file.getContentType());
         } catch (IOException e) {
-            throw new ServiceException(e.getMessage());
+            throw new BusinessException(e.getMessage());
         }
         // 保存文件信息
         return buildResultEntity(originalfileName, suffix, storage.getConfigKey(), uploadResult);

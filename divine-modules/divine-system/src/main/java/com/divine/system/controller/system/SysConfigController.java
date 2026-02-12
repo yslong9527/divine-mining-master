@@ -54,7 +54,7 @@ public class SysConfigController extends BaseController {
 
     @Operation(summary = "根据参数键名查询参数值")
     @GetMapping(value = "/configKey/{configKey}")
-    public Result<Void> getConfigKey(@PathVariable String configKey) {
+    public Result<String> getConfigKey(@PathVariable String configKey) {
         return Result.success(configService.selectConfigByKey(configKey));
     }
 

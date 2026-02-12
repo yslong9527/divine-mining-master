@@ -2,7 +2,7 @@ package com.divine.warehouse.service;
 
 import com.divine.warehouse.domain.dto.ReceiptOrderDetailDto;
 import com.divine.warehouse.domain.entity.ReceiptOrderDetail;
-import com.divine.warehouse.domain.vo.ReceiptOrderDetailVo;
+import com.divine.warehouse.domain.vo.ReceiptOrderDetailVO;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import jakarta.validation.constraints.NotNull;
@@ -21,27 +21,27 @@ public interface ReceiptOrderDetailService{
     /**
      * 查询入库单详情
      */
-    ReceiptOrderDetailVo queryById(Long id);
+    ReceiptOrderDetailVO queryById(Long id);
 
     /**
      * 查询入库单详情列表
      */
-    PageInfoRes<ReceiptOrderDetailVo> queryPageList(ReceiptOrderDetailDto bo, BasePage basePage);
+    PageInfoRes<ReceiptOrderDetailVO> queryPageList(ReceiptOrderDetailDto dto, BasePage basePage);
 
     /**
      * 查询入库单详情列表
      */
-    List<ReceiptOrderDetailVo> queryList(ReceiptOrderDetailDto bo);
+    List<ReceiptOrderDetailVO> queryList(ReceiptOrderDetailDto dto);
 
     /**
      * 新增入库单详情
      */
-    void insertByBo(ReceiptOrderDetailDto bo);
+    void insertByBo(ReceiptOrderDetailDto dto);
 
     /**
      * 修改入库单详情
      */
-    void updateByBo(ReceiptOrderDetailDto bo);
+    void updateByBo(ReceiptOrderDetailDto dto);
 
     /**
      * 批量删除入库单详情
@@ -55,5 +55,5 @@ public interface ReceiptOrderDetailService{
 
     void saveDetails(List<ReceiptOrderDetail> list);
 
-    List<ReceiptOrderDetailVo> queryByReceiptOrderId(Long receiptOrderId);
+    List<ReceiptOrderDetailVO> queryByReceiptOrderId(Long receiptOrderId);
 }

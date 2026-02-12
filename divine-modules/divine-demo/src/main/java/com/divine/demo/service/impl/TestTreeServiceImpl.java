@@ -36,34 +36,34 @@ public class TestTreeServiceImpl implements ITestTreeService {
 
     // @DS("slave") // 切换从库查询
     @Override
-    public List<TestTreeVo> queryList(TestTreeDto bo) {
-        LambdaQueryWrapper<TestTree> lqw = buildQueryWrapper(bo);
+    public List<TestTreeVo> queryList(TestTreeDto dto) {
+        LambdaQueryWrapper<TestTree> lqw = buildQueryWrapper(dto);
         return baseMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<TestTree> buildQueryWrapper(TestTreeDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<TestTree> buildQueryWrapper(TestTreeDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<TestTree> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getTreeName()), TestTree::getTreeName, bo.getTreeName());
+        lqw.like(StringUtils.isNotBlank(dto.getTreeName()), TestTree::getTreeName, dto.getTreeName());
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
             TestTree::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
     @Override
-    public Boolean insertByBo(TestTreeDto bo) {
-        TestTree add = MapstructUtils.convert(bo, TestTree.class);
+    public Boolean insertByBo(TestTreeDto dto) {
+        TestTree add = MapstructUtils.convert(dto, TestTree.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
-            bo.setId(add.getId());
+            dto.setId(add.getId());
         }
         return flag;
     }
 
     @Override
-    public Boolean updateByBo(TestTreeDto bo) {
-        TestTree update = MapstructUtils.convert(bo, TestTree.class);
+    public Boolean updateByBo(TestTreeDto dto) {
+        TestTree update = MapstructUtils.convert(dto, TestTree.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
     }

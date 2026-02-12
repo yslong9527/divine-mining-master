@@ -1,7 +1,7 @@
 package com.divine.warehouse.mapper;
 
 import com.divine.warehouse.domain.entity.CheckOrderDetail;
-import com.divine.warehouse.domain.vo.CheckOrderDetailVo;
+import com.divine.warehouse.domain.vo.CheckOrderDetailVO;
 import com.divine.common.mybatis.core.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2024-08-13
  */
 @Mapper
-public interface CheckOrderDetailMapper extends BaseMapperPlus<CheckOrderDetail, CheckOrderDetailVo> {
+public interface CheckOrderDetailMapper extends BaseMapperPlus<CheckOrderDetail, CheckOrderDetailVO> {
 
 }

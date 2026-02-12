@@ -24,32 +24,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join wms_item_sku sku on history.sku_id=sku.id
         left join wms_item item on sku.item_id=item.id
         <where>
-            <if test="bo.orderType != null">
-                history.order_type=#{bo.orderType}
+            <if test="dto.orderType != null">
+                history.order_type=#{dto.orderType}
             </if>
-            <if test="bo.orderNo != null and bo.orderNo != ''">
-                and history.order_no=#{bo.orderNo}
+            <if test="dto.orderNo != null and dto.orderNo != ''">
+                and history.order_no=#{dto.orderNo}
             </if>
-            <if test="bo.itemName != null and bo.itemName != ''">
-                and item.item_name like concat('%', #{bo.itemName}, '%')
+            <if test="dto.itemName != null and dto.itemName != ''">
+                and item.item_name like concat('%', #{dto.itemName}, '%')
             </if>
-            <if test="bo.itemCode != null and bo.itemCode != ''">
-                and item.item_code like concat('%', #{bo.itemCode}, '%')
+            <if test="dto.itemCode != null and dto.itemCode != ''">
+                and item.item_code like concat('%', #{dto.itemCode}, '%')
             </if>
-            <if test="bo.skuName != null and bo.skuName != ''">
-                and sku.sku_name like concat('%', #{bo.skuName}, '%')
+            <if test="dto.skuName != null and dto.skuName != ''">
+                and sku.sku_name like concat('%', #{dto.skuName}, '%')
             </if>
-            <if test="bo.skuId != null">
-                and sku.id = #{bo.skuId}
+            <if test="dto.skuId != null">
+                and sku.id = #{dto.skuId}
             </if>
-            <if test="bo.skuCode != null and bo.skuCode != ''">
-                and sku.sku_code like concat('%', #{bo.skuCode}, '%')
+            <if test="dto.skuCode != null and dto.skuCode != ''">
+                and sku.sku_code like concat('%', #{dto.skuCode}, '%')
             </if>
-            <if test="bo.warehouseId != null">
-                and history.warehouse_id=#{bo.warehouseId}
+            <if test="dto.warehouseId != null">
+                and history.warehouse_id=#{dto.warehouseId}
             </if>
-            <if test="bo.startTime != null and bo.startTime != '' and bo.endTime != null and bo.endTime != ''">
-                and (history.create_time between #{bo.startTime} and #{bo.endTime})
+            <if test="dto.startTime != null and dto.startTime != '' and dto.endTime != null and dto.endTime != ''">
+                and (history.create_time between #{dto.startTime} and #{dto.endTime})
             </if>
         </where>
         order by history.create_time desc

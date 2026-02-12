@@ -3,6 +3,7 @@ package com.divine.system.controller.system;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.log.annotation.Log;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.web.core.BaseController;
@@ -10,7 +11,6 @@ import com.divine.common.core.domain.Result;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.core.validate.QueryGroup;
 import com.divine.common.log.enums.BusinessType;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.system.domain.dto.SysOssDto;
 import com.divine.system.domain.vo.SysOssVo;
 import com.divine.system.service.SysOssService;
@@ -44,8 +44,8 @@ public class SysOssController extends BaseController {
     @Operation(summary = "查询OSS对象存储列表")
     @SaCheckPermission("system:oss:list")
     @GetMapping("/list")
-    public PageInfoRes<SysOssVo> list(@Validated(QueryGroup.class) SysOssDto bo, BasePage basePage) {
-        return sysSssService.queryPageList(bo, basePage);
+    public PageInfoRes<SysOssVo> list(@Validated(QueryGroup.class) SysOssDto dto, BasePage basePage) {
+        return sysSssService.queryPageList(dto, basePage);
     }
 
     /**
@@ -73,7 +73,7 @@ public class SysOssController extends BaseController {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result<Map<String, String>> upload(@RequestPart("file") MultipartFile file) {
         if (ObjectUtil.isNull(file)) {
-            throw new ServiceException("上传文件不能为空");
+            throw new BusinessException("上传文件不能为空");
         }
         SysOssVo oss = sysSssService.upload(file);
         return Result.success(Map.of(

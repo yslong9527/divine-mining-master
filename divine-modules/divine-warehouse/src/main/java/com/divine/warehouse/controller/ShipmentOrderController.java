@@ -46,8 +46,8 @@ public class ShipmentOrderController extends BaseController {
     @Operation(summary = "查询出库单列表")
     @SaCheckPermission("wms:shipment:all")
     @GetMapping("/list")
-    public PageInfoRes<ShipmentOrderVo> list(ShipmentOrderDto bo, BasePage basePage) {
-        return shipmentOrderService.queryPageList(bo, basePage);
+    public PageInfoRes<ShipmentOrderVo> list(ShipmentOrderDto dto, BasePage basePage) {
+        return shipmentOrderService.queryPageList(dto, basePage);
     }
 
     /**
@@ -57,8 +57,8 @@ public class ShipmentOrderController extends BaseController {
     @SaCheckPermission("wms:shipment:all")
     @Log(title = "出库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(ShipmentOrderDto bo, HttpServletResponse response) {
-        List<ShipmentOrderVo> list = shipmentOrderService.queryList(bo);
+    public void export(ShipmentOrderDto dto, HttpServletResponse response) {
+        List<ShipmentOrderVo> list = shipmentOrderService.queryList(dto);
         ExcelUtil.exportExcel(list, "出库单", ShipmentOrderVo.class, response);
     }
 
@@ -90,8 +90,8 @@ public class ShipmentOrderController extends BaseController {
     @Log(title = "出库单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Long> add(@Validated(AddGroup.class) @RequestBody ShipmentOrderDto bo) {
-        Long id = shipmentOrderService.insertByBo(bo);
+    public Result<Long> add(@Validated(AddGroup.class) @RequestBody ShipmentOrderDto dto) {
+        Long id = shipmentOrderService.insertByBo(dto);
         return Result.success(id);
     }
 
@@ -103,8 +103,8 @@ public class ShipmentOrderController extends BaseController {
     @Log(title = "出库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ShipmentOrderDto bo) {
-        shipmentOrderService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ShipmentOrderDto dto) {
+        shipmentOrderService.updateByBo(dto);
         return Result.success();
     }
 
@@ -116,9 +116,9 @@ public class ShipmentOrderController extends BaseController {
     @Log(title = "出库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping("/shipment")
-    public Result<Void> shipment(@Validated(AddGroup.class) @RequestBody ShipmentOrderDto bo) {
-        bo.setOrderStatus(ServiceConstants.ShipmentOrderStatus.FINISH);
-        shipmentOrderService.shipment(bo);
+    public Result<Void> shipment(@Validated(AddGroup.class) @RequestBody ShipmentOrderDto dto) {
+        dto.setOrderStatus(ServiceConstants.ShipmentOrderStatus.FINISH);
+        shipmentOrderService.shipment(dto);
         return Result.success();
     }
 

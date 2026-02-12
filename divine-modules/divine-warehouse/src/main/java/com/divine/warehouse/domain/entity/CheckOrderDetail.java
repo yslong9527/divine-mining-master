@@ -18,6 +18,11 @@ import java.math.BigDecimal;
 public class CheckOrderDetail extends BaseOrderDetail {
 
     /**
+     * 盘库单id
+     */
+    private Long checkId;
+
+    /**
      * 盘点数量
      */
     private BigDecimal checkQuantity;

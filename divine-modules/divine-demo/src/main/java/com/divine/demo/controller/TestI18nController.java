@@ -30,7 +30,7 @@ public class TestI18nController {
      */
     @Operation(summary = "通过code获取国际化内容")
     @GetMapping()
-    public Result<Void> get(String code) {
+    public Result<String> get(String code) {
         return Result.success(MessageUtils.message(code));
     }
 
@@ -42,7 +42,7 @@ public class TestI18nController {
      */
     @Operation(summary = "Validator 校验国际化")
     @GetMapping("/test1")
-    public Result<Void> test1(@NotBlank(message = "{not.null}") String str) {
+    public Result<String> test1(@NotBlank(message = "{not.null}") String str) {
         return Result.success(str);
     }
 
@@ -54,8 +54,8 @@ public class TestI18nController {
      */
     @Operation(summary = "Bean 校验国际化")
     @GetMapping("/test2")
-    public Result<TestI18nBo> test2(@Validated TestI18nBo bo) {
-        return Result.success(bo);
+    public Result<TestI18nBo> test2(@Validated TestI18nBo dto) {
+        return Result.success(dto);
     }
 
     @Data

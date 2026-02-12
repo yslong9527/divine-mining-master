@@ -132,7 +132,7 @@ public class VelocityUtils {
         List<String> templates = new ArrayList<String>();
         templates.add("vm/java/domain.java.vm");
         templates.add("vm/java/vo.java.vm");
-        templates.add("vm/java/bo.java.vm");
+        templates.add("vm/java/dto.java.vm");
         templates.add("vm/java/mapper.java.vm");
         templates.add("vm/java/serviceImpl.java.vm");
         templates.add("vm/java/controller.java.vm");
@@ -175,8 +175,8 @@ public class VelocityUtils {
         if (template.contains("vo.java.vm")) {
             fileName = StringUtils.format("{}/domain/vo/{}Vo.java", javaPath, className);
         }
-        if (template.contains("bo.java.vm")) {
-            fileName = StringUtils.format("{}/domain/bo/{}Bo.java", javaPath, className);
+        if (template.contains("dto.java.vm")) {
+            fileName = StringUtils.format("{}/domain/dto/{}dto.java", javaPath, className);
         }
         if (template.contains("sub-domain.java.vm") && StringUtils.equals(GenConstants.TPL_SUB, genTable.getTplCategory())) {
             fileName = StringUtils.format("{}/domain/{}.java", javaPath, genTable.getSubTable().getClassName());

@@ -14,9 +14,7 @@ import com.divine.common.core.domain.vo.RoleVO;
 import com.divine.common.core.enums.DeviceType;
 import com.divine.common.core.enums.LoginType;
 import com.divine.common.core.enums.UserStatus;
-import com.divine.common.core.exception.user.CaptchaException;
-import com.divine.common.core.exception.user.CaptchaExpireException;
-import com.divine.common.core.exception.user.UserException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.*;
 import com.divine.common.log.event.LogininforEvent;
 import com.divine.common.redis.utils.RedisUtils;
@@ -34,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 import java.util.function.Supplier;
@@ -70,7 +69,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      * @return 结果
      */
     @Override
-    public String   login(String username, String password, String code, String uuid) {
+    public String login(String username, String password, String code, String uuid) {
         boolean captchaEnabled = captchaProperties.getEnable();
         // 验证码开关
         if (captchaEnabled) {
@@ -185,7 +184,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         String code = RedisUtils.getCacheObject(CacheConstants.CAPTCHA_CODE_KEY + phonenumber);
         if (StringUtils.isBlank(code)) {
             recordLogininfor(phonenumber, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.expire"));
-            throw new CaptchaExpireException();
+            throw new BusinessException("验证码错误");
         }
         return code.equals(smsCode);
     }
@@ -197,7 +196,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         String code = RedisUtils.getCacheObject(CacheConstants.CAPTCHA_CODE_KEY + email);
         if (StringUtils.isBlank(code)) {
             recordLogininfor(email, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.expire"));
-            throw new CaptchaExpireException();
+            throw new BusinessException("验证码错误");
         }
         return code.equals(emailCode);
     }
@@ -216,11 +215,11 @@ public class SysLoginServiceImpl implements SysLoginService {
         RedisUtils.deleteObject(verifyKey);
         if (captcha == null) {
             recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.expire"));
-            throw new CaptchaExpireException();
+            throw new BusinessException("验证码错误");
         }
         if (!code.equalsIgnoreCase(captcha)) {
             recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error"));
-            throw new CaptchaException();
+            throw new BusinessException("验证码错误");
         }
     }
 
@@ -228,10 +227,10 @@ public class SysLoginServiceImpl implements SysLoginService {
         SysUserVo user = userMapper.selectVoOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, username));
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", username);
-            throw new UserException("user.not.exists", username);
+            throw new BusinessException("用户不存在");
         } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
-            throw new UserException("user.blocked", username);
+            throw new BusinessException("当前用户已被停用");
         }
         return user;
     }
@@ -240,10 +239,10 @@ public class SysLoginServiceImpl implements SysLoginService {
         SysUserVo user = userMapper.selectVoOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getPhonenumber, phonenumber));
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", phonenumber);
-            throw new UserException("user.not.exists", phonenumber);
+            throw new BusinessException("用户不存在");
         } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", phonenumber);
-            throw new UserException("user.blocked", phonenumber);
+            throw new BusinessException("当前用户已被停用");
         }
         return user;
     }
@@ -252,10 +251,10 @@ public class SysLoginServiceImpl implements SysLoginService {
         SysUserVo user = userMapper.selectVoOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getEmail, email));
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", email);
-            throw new UserException("user.not.exists", email);
+            throw new BusinessException("用户不存在");
         } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", email);
-            throw new UserException("user.blocked", email);
+            throw new BusinessException("当前用户已被停用");
         }
         return user;
     }
@@ -317,7 +316,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     private void checkLogin(LoginType loginType, String username, Supplier<Boolean> supplier) {
         String clientIP = ServletUtils.getClientIP();
-        String errorKey = CacheConstants.PWD_ERR_CNT_KEY + username+":"+clientIP;
+        String errorKey = CacheConstants.PWD_ERR_CNT_KEY + username + ":" + clientIP;
         String loginFail = Constants.LOGIN_FAIL;
 
         // 获取用户登录错误次数，默认为0 (可自定义限制策略 例如: key + username + ip)
@@ -325,7 +324,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         // 锁定时间内登录 则踢出
         if (errorNumber >= maxRetryCount) {
             recordLogininfor(username, loginFail, MessageUtils.message(loginType.getRetryLimitExceed(), maxRetryCount, lockTime));
-            throw new UserException(loginType.getRetryLimitExceed(), maxRetryCount, lockTime);
+            throw new BusinessException("账户已被锁定，请" + lockTime + "分钟之后再试");
         }
 
         if (supplier.get()) {
@@ -334,12 +333,13 @@ public class SysLoginServiceImpl implements SysLoginService {
             RedisUtils.setCacheObject(errorKey, errorNumber, Duration.ofMinutes(lockTime));
             // 达到规定错误次数 则锁定登录
             if (errorNumber >= maxRetryCount) {
+                long timeToLive = RedisUtils.getTimeToLive(errorKey);
                 recordLogininfor(username, loginFail, MessageUtils.message(loginType.getRetryLimitExceed(), maxRetryCount, lockTime));
-                throw new UserException(loginType.getRetryLimitExceed(), maxRetryCount, lockTime);
+                throw new BusinessException("账户已被锁定，请" + timeToLive + "分钟后再试");
             } else {
                 // 未达到规定错误次数
                 recordLogininfor(username, loginFail, MessageUtils.message(loginType.getRetryLimitCount(), errorNumber));
-                throw new UserException(loginType.getRetryLimitCount(), errorNumber);
+                throw new BusinessException("密码输入错误" + errorNumber + "次,错误" + maxRetryCount + "次后账号将会锁定" + lockTime + "分钟");
             }
         }
 

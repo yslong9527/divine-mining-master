@@ -18,7 +18,7 @@ import com.divine.common.core.validate.EditGroup;
 import com.divine.common.log.enums.BusinessType;
 import utils.com.divine.common.excel.ExcelUtil;
 import ${packageName}.domain.vo.${ClassName}Vo;
-import ${packageName}.domain.bo.${ClassName}Bo;
+import ${packageName}.domain.dto.${ClassName}Dto;
 import ${packageName}.service.${ClassName}Service;
 #if($table.crud || $table.sub)
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -45,12 +45,12 @@ public class ${ClassName}Controller extends BaseController {
     @SaCheckPermission("${permissionPrefix}:list")
     @GetMapping("/list")
 #if($table.crud || $table.sub)
-    public PageInfoRes<${ClassName}Vo> list(${ClassName}Bo bo, BasePage basePage) {
-        return ${className}Service.queryPageList(bo, basePage);
+    public PageInfoRes<${ClassName}Vo> list(${ClassName}Dto dto, BasePage basePage) {
+        return ${className}Service.queryPageList(dto, basePage);
     }
 #elseif($table.tree)
-    public Result<List<${ClassName}Vo>> list(${ClassName}Bo bo) {
-        List<${ClassName}Vo> list = ${className}Service.queryList(bo);
+    public Result<List<${ClassName}Vo>> list(${ClassName}Dto dto) {
+        List<${ClassName}Vo> list = ${className}Service.queryList(dto);
         return Result.success(list);
     }
 #end
@@ -61,8 +61,8 @@ public class ${ClassName}Controller extends BaseController {
     @SaCheckPermission("${permissionPrefix}:export")
     @Log(title = "${functionName}", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(${ClassName}Bo bo, HttpServletResponse response) {
-        List<${ClassName}Vo> list = ${className}Service.queryList(bo);
+    public void export(${ClassName}Dto dto, HttpServletResponse response) {
+        List<${ClassName}Vo> list = ${className}Service.queryList(dto);
         ExcelUtil.exportExcel(list, "${functionName}", ${ClassName}Vo.class, response);
     }
 
@@ -85,8 +85,8 @@ public class ${ClassName}Controller extends BaseController {
     @Log(title = "${functionName}", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ${ClassName}Bo bo) {
-        ${className}Service.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ${ClassName}Dto dto) {
+        ${className}Service.insertByBo(dto);
         return Result.success();
     }
 
@@ -97,8 +97,8 @@ public class ${ClassName}Controller extends BaseController {
     @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ${ClassName}Bo bo) {
-        ${className}Service.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ${ClassName}Dto dto) {
+        ${className}Service.updateByBo(dto);
         return Result.success();
     }
 

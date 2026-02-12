@@ -32,7 +32,7 @@ public class PriorityQueueController {
 
     @Operation(summary = "添加队列数据")
     @GetMapping("/add")
-    public Result<Void> add(@Schema(description = "队列名") String queueName) {
+    public Result<String> add(@Schema(description = "队列名") String queueName) {
         // 用完了一定要销毁 否则会一直存在
         boolean b = QueueUtils.destroyPriorityQueue(queueName);
         log.info("通道: {} , 删除: {}", queueName, b);
@@ -53,7 +53,7 @@ public class PriorityQueueController {
 
     @Operation(summary = "删除队列数据")
     @GetMapping("/remove")
-    public Result<Void> remove(@Schema(description = "队列名") String queueName,
+    public Result<String> remove(@Schema(description = "队列名") String queueName,
                                @Schema(description = "对象名") String name,
                                @Schema(description = "排序号") Integer orderNum) {
         PriorityDemo data = new PriorityDemo();
@@ -69,7 +69,7 @@ public class PriorityQueueController {
 
     @Operation(summary = "获取队列数据")
     @GetMapping("/get")
-    public Result<Void> get(@Schema(description = "队列名") String queueName) {
+    public Result<String> get(@Schema(description = "队列名") String queueName) {
         PriorityDemo data;
         do {
             data = QueueUtils.getPriorityQueueObject(queueName);

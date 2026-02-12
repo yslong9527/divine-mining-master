@@ -3,6 +3,7 @@ package com.divine.common.mybatis.handler;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.mybatis.helper.DataPermissionHelper;
 import com.divine.common.mybatis.annotation.DataColumn;
 import com.divine.common.mybatis.annotation.DataPermission;
@@ -16,7 +17,6 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import org.apache.ibatis.io.Resources;
 import com.divine.common.core.domain.vo.RoleVO;
 import com.divine.common.core.domain.dto.LoginUser;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.SpringUtils;
 import com.divine.common.core.utils.StreamUtils;
 import com.divine.common.core.utils.StringUtils;
@@ -98,7 +98,7 @@ public class PlusDataPermissionHandler {
                 return parenthesis;
             }
         } catch (JSQLParserException e) {
-            throw new ServiceException("数据权限解析异常 => " + e.getMessage());
+            throw new BusinessException("数据权限解析异常 => " + e.getMessage());
         }
     }
 
@@ -118,7 +118,7 @@ public class PlusDataPermissionHandler {
             // 获取角色权限泛型
             DataScopeType type = DataScopeType.findCode(role.getDataScope());
             if (ObjectUtil.isNull(type)) {
-                throw new ServiceException("角色数据范围异常 => " + role.getDataScope());
+                throw new BusinessException("角色数据范围异常 => " + role.getDataScope());
             }
             // 全部数据权限直接返回
             if (type == DataScopeType.ALL) {
@@ -127,7 +127,7 @@ public class PlusDataPermissionHandler {
             boolean isSuccess = false;
             for (DataColumn dataColumn : dataColumns) {
                 if (dataColumn.key().length != dataColumn.value().length) {
-                    throw new ServiceException("角色数据范围异常 => key与value长度不匹配");
+                    throw new BusinessException("角色数据范围异常 => key与value长度不匹配");
                 }
                 // 不包含 key 变量 则不处理
                 if (!StringUtils.containsAny(type.getSqlTemplate(),

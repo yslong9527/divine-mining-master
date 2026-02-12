@@ -45,8 +45,8 @@ public class MerchantController extends BaseController {
     @Operation(summary = "查询往来单位列表")
     @SaCheckPermission("wms:merchant:list")
     @GetMapping("/list")
-    public PageInfoRes<MerchantVo> list(MerchantDto bo, BasePage basePage) {
-        return merchantService.queryPageList(bo, basePage);
+    public PageInfoRes<MerchantVo> list(MerchantDto dto, BasePage basePage) {
+        return merchantService.queryPageList(dto, basePage);
     }
 
     /**
@@ -55,8 +55,8 @@ public class MerchantController extends BaseController {
     @Operation(summary = "查询往来单位列表")
     @SaCheckPermission("wms:merchant:list")
     @GetMapping("/listNoPage")
-    public Result<List<MerchantVo>> listNoPage(MerchantDto bo) {
-        return Result.success(merchantService.queryList(bo));
+    public Result<List<MerchantVo>> listNoPage(MerchantDto dto) {
+        return Result.success(merchantService.queryList(dto));
     }
 
     /**
@@ -66,8 +66,8 @@ public class MerchantController extends BaseController {
     @SaCheckPermission("wms:merchant:list")
     @Log(title = "往来单位", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(MerchantDto bo, HttpServletResponse response) {
-        List<MerchantVo> list = merchantService.queryList(bo);
+    public void export(MerchantDto dto, HttpServletResponse response) {
+        List<MerchantVo> list = merchantService.queryList(dto);
         ExcelUtil.exportExcel(list, "往来单位", MerchantVo.class, response);
     }
 
@@ -92,8 +92,8 @@ public class MerchantController extends BaseController {
     @Log(title = "往来单位", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody MerchantDto bo) {
-        merchantService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody MerchantDto dto) {
+        merchantService.insertByBo(dto);
         return Result.success();
     }
 
@@ -105,8 +105,8 @@ public class MerchantController extends BaseController {
     @Log(title = "往来单位", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody MerchantDto bo) {
-        merchantService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody MerchantDto dto) {
+        merchantService.updateByBo(dto);
         return Result.success();
     }
 

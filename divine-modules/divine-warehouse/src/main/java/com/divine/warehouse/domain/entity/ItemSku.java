@@ -70,12 +70,12 @@ public class ItemSku extends BaseEntity {
     private BigDecimal netWeight;
 
     /**
-     * 成本价(元)
+     * 成本价($)
      */
     private BigDecimal costPrice;
 
     /**
-     * 销售价(元)
+     * 销售价($)
      */
     private BigDecimal sellingPrice;
 }

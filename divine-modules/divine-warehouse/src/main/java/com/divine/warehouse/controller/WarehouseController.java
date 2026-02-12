@@ -39,8 +39,8 @@ public class WarehouseController extends BaseController {
     @Operation(summary = "查询仓库列表")
     @SaCheckPermission("wms:warehouse:list")
     @GetMapping("/list")
-    public PageInfoRes<WarehouseVo> list(WarehouseDto bo, BasePage basePage) {
-        return warehouseService.queryPageList(bo, basePage);
+    public PageInfoRes<WarehouseVo> list(WarehouseDto dto, BasePage basePage) {
+        return warehouseService.queryPageList(dto, basePage);
     }
 
     /**
@@ -49,8 +49,8 @@ public class WarehouseController extends BaseController {
     @Operation(summary = "查询仓库列表")
     @SaCheckPermission("wms:warehouse:list")
     @GetMapping("/listNoPage")
-    public Result<List<WarehouseVo>> listNoPage(WarehouseDto bo) {
-        return Result.success(warehouseService.queryList(bo));
+    public Result<List<WarehouseVo>> listNoPage(WarehouseDto dto) {
+        return Result.success(warehouseService.queryList(dto));
     }
 
     /**
@@ -60,8 +60,8 @@ public class WarehouseController extends BaseController {
     @SaCheckPermission("wms:warehouse:list")
     @Log(title = "仓库", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(WarehouseDto bo, HttpServletResponse response) {
-        List<WarehouseVo> list = warehouseService.queryList(bo);
+    public void export(WarehouseDto dto, HttpServletResponse response) {
+        List<WarehouseVo> list = warehouseService.queryList(dto);
         ExcelUtil.exportExcel(list, "仓库", WarehouseVo.class, response);
     }
 
@@ -86,8 +86,8 @@ public class WarehouseController extends BaseController {
     @Log(title = "仓库", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody WarehouseDto bo) {
-        warehouseService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody WarehouseDto dto) {
+        warehouseService.insertByBo(dto);
         return Result.success();
     }
 
@@ -99,8 +99,8 @@ public class WarehouseController extends BaseController {
     @Log(title = "仓库", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody WarehouseDto bo) {
-        warehouseService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody WarehouseDto dto) {
+        warehouseService.updateByBo(dto);
         return Result.success();
     }
 

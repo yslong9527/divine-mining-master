@@ -99,18 +99,18 @@ public interface SysDeptService {
     /**
      * 新增保存部门信息
      *
-     * @param bo 部门信息
+     * @param dto 部门信息
      * @return 结果
      */
-    int insertDept(SysDeptDto bo);
+    int insertDept(SysDeptDto dto);
 
     /**
      * 修改保存部门信息
      *
-     * @param bo 部门信息
+     * @param dto 部门信息
      * @return 结果
      */
-    int updateDept(SysDeptDto bo);
+    int updateDept(SysDeptDto dto);
 
     /**
      * 修改子元素关系

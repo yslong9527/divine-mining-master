@@ -12,6 +12,7 @@ import com.divine.common.log.enums.BusinessType;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
+import com.divine.warehouse.domain.vo.BoardListVO;
 import com.divine.warehouse.domain.vo.InventoryVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +47,8 @@ public class InventoryController extends BaseController {
     @Operation(summary = "查询库存列表商品维度")
     @SaCheckPermission("wms:inventory:all")
     @GetMapping(value = {"/boardList/item"})
-    public PageInfoRes<InventoryVo> queryItemBoardList(InventoryDto bo, BasePage basePage) {
-        return inventoryService.queryItemBoardList(bo, basePage);
+    public PageInfoRes<BoardListVO> queryItemBoardList(InventoryDto dto, BasePage basePage) {
+        return inventoryService.queryItemBoardList(dto, basePage);
     }
 
     /**
@@ -56,8 +57,8 @@ public class InventoryController extends BaseController {
     @Operation(summary = "查询库存列表仓库维度")
     @SaCheckPermission("wms:inventory:all")
     @GetMapping("/boardList/warehouse")
-    public PageInfoRes<InventoryVo> queryWarehouseBoardList(InventoryDto bo, BasePage basePage) {
-        return inventoryService.queryWarehouseBoardList(bo, basePage);
+    public PageInfoRes<BoardListVO> queryWarehouseBoardList(InventoryDto dto, BasePage basePage) {
+        return inventoryService.queryWarehouseBoardList(dto, basePage);
     }
 
     /**
@@ -66,8 +67,8 @@ public class InventoryController extends BaseController {
     @Operation(summary = "查询库存列表商品维度")
     @SaCheckPermission("wms:inventory:all")
     @GetMapping(value = {"/listNoPage"})
-    public Result<List<InventoryVo>> listNoPage(InventoryDto bo) {
-        return Result.success(inventoryService.queryList(bo));
+    public Result<List<InventoryVo>> listNoPage(InventoryDto dto) {
+        return Result.success(inventoryService.queryList(dto));
     }
 
     /**
@@ -77,8 +78,8 @@ public class InventoryController extends BaseController {
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(InventoryDto bo, HttpServletResponse response) {
-        List<InventoryVo> list = inventoryService.queryList(bo);
+    public void export(InventoryDto dto, HttpServletResponse response) {
+        List<InventoryVo> list = inventoryService.queryList(dto);
         ExcelUtil.exportExcel(list, "库存", InventoryVo.class, response);
     }
 
@@ -103,8 +104,8 @@ public class InventoryController extends BaseController {
     @Log(title = "库存", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody InventoryDto bo) {
-        inventoryService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody InventoryDto dto) {
+        inventoryService.insertByBo(dto);
         return Result.success();
     }
 
@@ -116,8 +117,8 @@ public class InventoryController extends BaseController {
     @Log(title = "库存", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody InventoryDto bo) {
-        inventoryService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody InventoryDto dto) {
+        inventoryService.updateByBo(dto);
         return Result.success();
     }
 

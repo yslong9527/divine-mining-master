@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.divine.common.core.constant.CacheNames;
 import com.divine.common.core.constant.UserConstants;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.service.DeptService;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.SpringUtils;
@@ -212,7 +212,7 @@ public class SysDeptServiceImpl implements SysDeptService,DeptService {
             dept.setDeptId(deptId);
             List<SysDeptVo> depts = this.selectDeptList(MapstructUtils.convert(dept, SysDeptDto.class));
             if (CollUtil.isEmpty(depts)) {
-                throw new ServiceException("没有权限访问部门数据！");
+                throw new BusinessException("没有权限访问部门数据！");
             }
         }
     }
@@ -220,17 +220,17 @@ public class SysDeptServiceImpl implements SysDeptService,DeptService {
     /**
      * 新增保存部门信息
      *
-     * @param bo 部门信息
+     * @param dto 部门信息
      * @return 结果
      */
     @Override
-    public int insertDept(SysDeptDto bo) {
-        SysDept info = deptMapper.selectById(bo.getParentId());
+    public int insertDept(SysDeptDto dto) {
+        SysDept info = deptMapper.selectById(dto.getParentId());
         // 如果父节点不为正常状态,则不允许新增子节点
         if (!UserConstants.DEPT_NORMAL.equals(info.getStatus())) {
-            throw new ServiceException("部门停用，不允许新增");
+            throw new BusinessException("部门停用，不允许新增");
         }
-        SysDept dept = MapstructUtils.convert(bo, SysDept.class);
+        SysDept dept = MapstructUtils.convert(dto, SysDept.class);
         dept.setAncestors(info.getAncestors() + StringUtils.SEPARATOR + dept.getParentId());
         return deptMapper.insert(dept);
     }
@@ -238,13 +238,13 @@ public class SysDeptServiceImpl implements SysDeptService,DeptService {
     /**
      * 修改保存部门信息
      *
-     * @param bo 部门信息
+     * @param dto 部门信息
      * @return 结果
      */
     @Override
     @CacheEvict(cacheNames = CacheNames.SYS_DEPT, key = "#dept.deptId")
-    public int updateDept(SysDeptDto bo) {
-        SysDept dept = MapstructUtils.convert(bo, SysDept.class);
+    public int updateDept(SysDeptDto dto) {
+        SysDept dept = MapstructUtils.convert(dto, SysDept.class);
         SysDept newParentDept = deptMapper.selectById(dept.getParentId());
         SysDept oldDept = deptMapper.selectById(dept.getDeptId());
         if (ObjectUtil.isNotNull(newParentDept) && ObjectUtil.isNotNull(oldDept)) {

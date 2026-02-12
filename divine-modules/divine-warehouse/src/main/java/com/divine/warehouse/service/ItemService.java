@@ -25,26 +25,26 @@ public interface ItemService {
     /**
      * 查询物料列表
      */
-    PageInfoRes<ItemVo> queryPageList(ItemDto bo, BasePage basePage) ;
+    PageInfoRes<ItemVo> queryPageList(ItemDto dto, BasePage basePage) ;
 
     /**
      * 查询物料列表
      */
-    List<ItemVo> queryList(ItemDto bo);
+    List<ItemVo> queryList(ItemDto dto);
 
     /**
      * 新增物料
      *
-     * @param bo
+     * @param dto
      */
-    void insertByForm(ItemDto bo) ;
+    void insertByForm(ItemDto dto) ;
 
     /**
      * 修改物料
      *
-     * @param bo
+     * @param dto
      */
-    void updateByForm(ItemDto bo) ;
+    void updateByForm(ItemDto dto) ;
 
     /**
      * 批量删除物料

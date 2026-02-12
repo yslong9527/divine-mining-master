@@ -23,23 +23,23 @@ public interface ITestTreeService {
     /**
      * 查询列表
      */
-    List<TestTreeVo> queryList(TestTreeDto bo);
+    List<TestTreeVo> queryList(TestTreeDto dto);
 
     /**
      * 根据新增业务对象插入测试树表
      *
-     * @param bo 测试树表新增业务对象
+     * @param dto 测试树表新增业务对象
      * @return
      */
-    Boolean insertByBo(TestTreeDto bo);
+    Boolean insertByBo(TestTreeDto dto);
 
     /**
      * 根据编辑业务对象修改测试树表
      *
-     * @param bo 测试树表编辑业务对象
+     * @param dto 测试树表编辑业务对象
      * @return
      */
-    Boolean updateByBo(TestTreeDto bo);
+    Boolean updateByBo(TestTreeDto dto);
 
     /**
      * 校验并删除数据

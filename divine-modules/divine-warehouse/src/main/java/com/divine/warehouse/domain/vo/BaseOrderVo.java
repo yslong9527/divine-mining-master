@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ExcelIgnoreUnannotated
-public class BaseOrderVo<T extends BaseOrderDetailVo> extends BaseVo {
+public class BaseOrderVo<T extends BaseOrderDetailVO> extends BaseVo {
     /**
      *
      */
@@ -35,7 +35,7 @@ public class BaseOrderVo<T extends BaseOrderDetailVo> extends BaseVo {
      * 订单金额
      */
     @ExcelProperty(value = "订单总金额")
-    private BigDecimal totalAmount;
+    private BigDecimal totalPrice;
 
     /**
      * 入库状态

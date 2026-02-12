@@ -1,7 +1,7 @@
 package com.divine.weighing.service.impl;
 
 import com.divine.common.core.service.UserService;
-import com.divine.weighing.domain.vo.OptionVO;
+import com.divine.common.core.domain.vo.OptionVO;
 import com.divine.weighing.service.CarService;
 import com.divine.weighing.service.OptionsService;
 import org.springframework.beans.factory.annotation.Autowired;

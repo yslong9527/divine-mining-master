@@ -1,0 +1,10 @@
+package com.divine.common.core.constant;
+
+/**
+ * @Author: Yisl
+ * @Description:
+ * @Date: 2026/2/10 16:23
+ */
+public class RedisKeyConstants {
+    public static final String NO_KEY = "no:";
+}

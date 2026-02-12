@@ -23,17 +23,17 @@ public interface SysOssConfigService {
 
     SysOssConfigVo queryById(Long ossConfigId);
 
-    PageInfoRes<SysOssConfigVo> queryPageList(SysOssConfigDto bo, BasePage basePage);
+    PageInfoRes<SysOssConfigVo> queryPageList(SysOssConfigDto dto, BasePage basePage);
 
-    Boolean insertByBo(SysOssConfigDto bo);
+    Boolean insertByBo(SysOssConfigDto dto);
 
-    Boolean updateByBo(SysOssConfigDto bo);
+    Boolean updateByBo(SysOssConfigDto dto);
 
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     /**
      * 启用禁用状态
      */
-    int updateOssConfigStatus(SysOssConfigDto bo);
+    int updateOssConfigStatus(SysOssConfigDto dto);
 
 }

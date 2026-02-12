@@ -43,8 +43,8 @@ public class ItemCategoryController extends BaseController {
     @Operation(summary = "查询物料类型列表")
     @GetMapping("/list")
     @SaCheckPermission("wms:item:list")
-    public PageInfoRes<ItemCategoryVo> list(ItemCategoryDto bo, BasePage basePage) {
-        return itemCategoryService.queryPageList(bo, basePage);
+    public PageInfoRes<ItemCategoryVo> list(ItemCategoryDto dto, BasePage basePage) {
+        return itemCategoryService.queryPageList(dto, basePage);
     }
 
     /**
@@ -53,8 +53,8 @@ public class ItemCategoryController extends BaseController {
     @Operation(summary = "查询物料类型列表")
     @GetMapping("/listNoPage")
     @SaCheckPermission("wms:item:list")
-    public Result<List<ItemCategoryVo>> listNoPage(ItemCategoryDto bo) {
-        return Result.success(itemCategoryService.queryList(bo));
+    public Result<List<ItemCategoryVo>> listNoPage(ItemCategoryDto dto) {
+        return Result.success(itemCategoryService.queryList(dto));
     }
 
     /**
@@ -75,8 +75,8 @@ public class ItemCategoryController extends BaseController {
     @Log(title = "物料类型", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @SaCheckPermission("wms:item:list")
-    public void export(ItemCategoryDto bo, HttpServletResponse response) {
-        List<ItemCategoryVo> list = itemCategoryService.queryList(bo);
+    public void export(ItemCategoryDto dto, HttpServletResponse response) {
+        List<ItemCategoryVo> list = itemCategoryService.queryList(dto);
         ExcelUtil.exportExcel(list, "物料类型", ItemCategoryVo.class, response);
     }
 
@@ -101,8 +101,8 @@ public class ItemCategoryController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     @SaCheckPermission("wms:item:edit")
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ItemCategoryDto bo) {
-        itemCategoryService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ItemCategoryDto dto) {
+        itemCategoryService.insertByBo(dto);
         return Result.success();
     }
 
@@ -114,8 +114,8 @@ public class ItemCategoryController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     @SaCheckPermission("wms:item:edit")
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ItemCategoryDto bo) {
-        itemCategoryService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ItemCategoryDto dto) {
+        itemCategoryService.updateByBo(dto);
         return Result.success();
     }
 

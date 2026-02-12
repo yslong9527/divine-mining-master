@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.MovementOrderDto;
 import com.divine.warehouse.domain.entity.MovementOrder;
 import com.divine.warehouse.domain.entity.MovementOrderDetail;
@@ -14,8 +15,6 @@ import com.divine.warehouse.service.InventoryService;
 import com.divine.warehouse.service.MovementOrderDetailService;
 import com.divine.warehouse.service.MovementOrderService;
 import com.divine.common.core.constant.ServiceConstants;
-import com.divine.common.core.exception.ServiceException;
-import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
@@ -54,7 +53,7 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     public MovementOrderVo queryById(Long id) {
         MovementOrderVo movementOrderVo = movementOrderMapper.selectVoById(id);
         if (movementOrderVo == null) {
-            throw new BusinessException("移库单不存在");
+            throw new com.divine.common.core.exception.base.BusinessException("移库单不存在");
         }
         movementOrderVo.setDetails(movementOrderDetailService.queryByMovementOrderId(id));
         return movementOrderVo;
@@ -64,8 +63,8 @@ public class MovementOrderServiceImpl implements MovementOrderService {
      * 查询移库单列表
      */
     @Override
-    public PageInfoRes<MovementOrderVo> queryPageList(MovementOrderDto bo, BasePage basePage) {
-        LambdaQueryWrapper<MovementOrder> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<MovementOrderVo> queryPageList(MovementOrderDto dto, BasePage basePage) {
+        LambdaQueryWrapper<MovementOrder> lqw = buildQueryWrapper(dto);
         Page<MovementOrderVo> result = movementOrderMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
@@ -74,19 +73,19 @@ public class MovementOrderServiceImpl implements MovementOrderService {
      * 查询移库单列表
      */
     @Override
-    public List<MovementOrderVo> queryList(MovementOrderDto bo) {
-        LambdaQueryWrapper<MovementOrder> lqw = buildQueryWrapper(bo);
+    public List<MovementOrderVo> queryList(MovementOrderDto dto) {
+        LambdaQueryWrapper<MovementOrder> lqw = buildQueryWrapper(dto);
         return movementOrderMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<MovementOrder> buildQueryWrapper(MovementOrderDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<MovementOrder> buildQueryWrapper(MovementOrderDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<MovementOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getOrderNo()), MovementOrder::getOrderNo, bo.getOrderNo());
-        lqw.eq(bo.getSourceWarehouseId() != null, MovementOrder::getSourceWarehouseId, bo.getSourceWarehouseId());
-        lqw.eq(bo.getTargetWarehouseId() != null, MovementOrder::getTargetWarehouseId, bo.getTargetWarehouseId());
-        lqw.eq(bo.getOrderStatus() != null, MovementOrder::getOrderStatus, bo.getOrderStatus());
-        lqw.eq(bo.getTotalQuantity() != null, MovementOrder::getTotalQuantity, bo.getTotalQuantity());
+        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), MovementOrder::getOrderNo, dto.getOrderNo());
+        lqw.eq(dto.getSourceWarehouseId() != null, MovementOrder::getSourceWarehouseId, dto.getSourceWarehouseId());
+        lqw.eq(dto.getTargetWarehouseId() != null, MovementOrder::getTargetWarehouseId, dto.getTargetWarehouseId());
+        lqw.eq(dto.getOrderStatus() != null, MovementOrder::getOrderStatus, dto.getOrderStatus());
+        lqw.eq(dto.getTotalQuantity() != null, MovementOrder::getTotalQuantity, dto.getTotalQuantity());
         lqw.orderByDesc(BaseEntity::getCreateTime);
         return lqw;
     }
@@ -96,17 +95,17 @@ public class MovementOrderServiceImpl implements MovementOrderService {
      */
     @Override
     @Transactional
-    public void insertByBo(MovementOrderDto bo) {
+    public void insertByBo(MovementOrderDto dto) {
         // 1.校验移库单号唯一性
-        validateMovementOrderNo(bo.getOrderNo());
+        validateMovementOrderNo(dto.getOrderNo());
         // 2.创建移库单
-        MovementOrder add = MapstructUtils.convert(bo, MovementOrder.class);
+        MovementOrder add = MapstructUtils.convert(dto, MovementOrder.class);
         movementOrderMapper.insert(add);
-        bo.setId(add.getId());
+        dto.setId(add.getId());
         // 3.创建移库单明细
-        List<MovementOrderDetail> addDetailList = MapstructUtils.convert(bo.getDetails(), MovementOrderDetail.class);
+        List<MovementOrderDetail> addDetailList = MapstructUtils.convert(dto.getDetails(), MovementOrderDetail.class);
         addDetailList.forEach(it -> {
-            it.setOrderId(add.getId());
+            it.setMovementId(add.getId());
         });
         movementOrderDetailService.saveDetails(addDetailList);
     }
@@ -115,7 +114,7 @@ public class MovementOrderServiceImpl implements MovementOrderService {
         LambdaQueryWrapper<MovementOrder> lambdaQueryWrapper = Wrappers.lambdaQuery();
         lambdaQueryWrapper.eq(MovementOrder::getOrderNo, movementOrderNo);
         if (movementOrderMapper.exists(lambdaQueryWrapper)) {
-            throw new BusinessException("移库单号重复，请手动修改");
+            throw new com.divine.common.core.exception.base.BusinessException("移库单号重复，请手动修改");
         }
     }
 
@@ -124,18 +123,19 @@ public class MovementOrderServiceImpl implements MovementOrderService {
      */
     @Override
     @Transactional
-    public void updateByBo(MovementOrderDto bo) {
+    public void updateByBo(MovementOrderDto dto) {
         // 1.更新移库单
-        MovementOrder update = MapstructUtils.convert(bo, MovementOrder.class);
+        MovementOrder update = MapstructUtils.convert(dto, MovementOrder.class);
         movementOrderMapper.updateById(update);
         // 2.保存移库单明细
-        List<MovementOrderDetail> detailList = MapstructUtils.convert(bo.getDetails(), MovementOrderDetail.class);
-        detailList.forEach(it -> it.setOrderId(bo.getId()));
+        List<MovementOrderDetail> detailList = MapstructUtils.convert(dto.getDetails(), MovementOrderDetail.class);
+        detailList.forEach(it -> it.setMovementId(dto.getId()));
         movementOrderDetailService.saveDetails(detailList);
     }
 
     /**
      * 删除移库单
+     *
      * @param id
      */
     @Override
@@ -147,10 +147,10 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     private void validateIdBeforeDelete(Long id) {
         MovementOrderVo movementOrderVo = queryById(id);
         if (movementOrderVo == null) {
-            throw new BusinessException("移库单不存在");
+            throw new com.divine.common.core.exception.base.BusinessException("移库单不存在");
         }
         if (ServiceConstants.MovementOrderStatus.FINISH.equals(movementOrderVo.getOrderStatus())) {
-            throw new ServiceException("移库单【" + movementOrderVo.getOrderNo() + "】已移库，无法删除！");
+            throw new BusinessException("移库单【" + movementOrderVo.getOrderNo() + "】已移库，无法删除！");
         }
     }
 
@@ -164,51 +164,52 @@ public class MovementOrderServiceImpl implements MovementOrderService {
 
     /**
      * 移库
-     * @param bo
+     *
+     * @param dto
      */
     @Override
     @Transactional
-    public void move(MovementOrderDto bo) {
+    public void move(MovementOrderDto dto) {
 
 
         // 1.校验商品明细不能为空！
-        validateBeforeMove(bo);
+        validateBeforeMove(dto);
 
         // 3.保存移库单核移库单明细
-        if (Objects.isNull(bo.getId())) {
-            insertByBo(bo);
+        if (Objects.isNull(dto.getId())) {
+            insertByBo(dto);
         } else {
-            updateByBo(bo);
+            updateByBo(dto);
         }
         // 4.更新库存Inventory
-        MovementOrderDto shipmentBo = getShipmentBo(bo);
+        MovementOrderDto shipmentBo = getShipmentBo(dto);
         inventoryService.subtract(shipmentBo.getDetails());
 
-        MovementOrderDto receiptBo = getReceiptBo(bo);
-        inventoryService.add(receiptBo.getDetails());
+        MovementOrderDto receiptDto = getReceiptDto(dto);
+//        inventoryService.add(receiptDto.getDetails(), dto.getTargetWarehouseId());
 
 
         // 6.创建库存记录流水
-        inventoryHistoryService.saveInventoryHistory(shipmentBo, ServiceConstants.InventoryHistoryOrderType.MOVEMENT,false);
-        inventoryHistoryService.saveInventoryHistory(receiptBo, ServiceConstants.InventoryHistoryOrderType.MOVEMENT,true);
+//        inventoryHistoryService.saveInventoryHistory(shipmentBo, ServiceConstants.InventoryHistoryOrderType.MOVEMENT, false);
+//        inventoryHistoryService.saveInventoryHistory(receiptDto, ServiceConstants.InventoryHistoryOrderType.MOVEMENT, true);
     }
 
-    private MovementOrderDto getReceiptBo(MovementOrderDto bo) {
+    private MovementOrderDto getReceiptDto(MovementOrderDto dto) {
 
-        MovementOrderDto receiptBo = SerializationUtils.clone(bo);
+        MovementOrderDto receiptBo = SerializationUtils.clone(dto);
         receiptBo.getDetails().forEach(detail -> detail.setWarehouseId(detail.getTargetWarehouseId()));
         return receiptBo;
     }
 
-    private MovementOrderDto getShipmentBo(MovementOrderDto bo) {
-        MovementOrderDto shipmentBo = SerializationUtils.clone(bo);
+    private MovementOrderDto getShipmentBo(MovementOrderDto dto) {
+        MovementOrderDto shipmentBo = SerializationUtils.clone(dto);
         shipmentBo.getDetails().forEach(detail -> detail.setWarehouseId(detail.getSourceWarehouseId()));
         return shipmentBo;
     }
 
-    private void validateBeforeMove(MovementOrderDto bo) {
-        if (CollUtil.isEmpty(bo.getDetails())) {
-            throw new BusinessException("商品明细不能为空！");
+    private void validateBeforeMove(MovementOrderDto dto) {
+        if (CollUtil.isEmpty(dto.getDetails())) {
+            throw new com.divine.common.core.exception.base.BusinessException("商品明细不能为空！");
         }
     }
 }

@@ -39,8 +39,8 @@ public class ItemController extends BaseController {
     @Operation(summary = "查询物料列表")
     @GetMapping("/list")
     @SaCheckPermission("wms:item:list")
-    public PageInfoRes<ItemVo> list(ItemDto bo, BasePage basePage) {
-        return itemService.queryPageList(bo, basePage);
+    public PageInfoRes<ItemVo> list(ItemDto dto, BasePage basePage) {
+        return itemService.queryPageList(dto, basePage);
     }
 
     /**
@@ -49,8 +49,8 @@ public class ItemController extends BaseController {
     @Operation(summary = "查询物料列表")
     @GetMapping("/listNoPage")
     @SaCheckPermission("wms:item:list")
-    public Result<List<ItemVo>> list(ItemDto bo) {
-        return Result.success(itemService.queryList(bo));
+    public Result<List<ItemVo>> list(ItemDto dto) {
+        return Result.success(itemService.queryList(dto));
     }
 
     /**
@@ -60,8 +60,8 @@ public class ItemController extends BaseController {
     @Log(title = "物料", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @SaCheckPermission("wms:item:list")
-    public void export(ItemDto bo, HttpServletResponse response) {
-        List<ItemVo> list = itemService.queryList(bo);
+    public void export(ItemDto dto, HttpServletResponse response) {
+        List<ItemVo> list = itemService.queryList(dto);
         ExcelUtil.exportExcel(list, "物料", ItemVo.class, response);
     }
 

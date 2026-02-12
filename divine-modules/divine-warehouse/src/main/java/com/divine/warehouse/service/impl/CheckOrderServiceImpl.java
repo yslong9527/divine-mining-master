@@ -3,6 +3,7 @@ package com.divine.warehouse.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.CheckOrderDetailDto;
 import com.divine.warehouse.domain.dto.CheckOrderDto;
 import com.divine.warehouse.domain.entity.CheckOrder;
@@ -14,8 +15,6 @@ import com.divine.warehouse.service.CheckOrderService;
 import com.divine.warehouse.service.InventoryHistoryService;
 import com.divine.warehouse.service.InventoryService;
 import com.divine.common.core.constant.ServiceConstants;
-import com.divine.common.core.exception.ServiceException;
-import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
@@ -29,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -54,7 +52,7 @@ public class CheckOrderServiceImpl implements CheckOrderService {
     public CheckOrderVo queryById(Long id){
         CheckOrderVo checkOrderVo = checkOrderMapper.selectVoById(id);
         if (checkOrderVo == null) {
-            throw new BusinessException("盘库单不存在");
+            throw new com.divine.common.core.exception.base.BusinessException("盘库单不存在");
         }
         checkOrderVo.setDetails(checkOrderDetailService.queryByCheckOrderId(id));
         return checkOrderVo;
@@ -74,18 +72,17 @@ public class CheckOrderServiceImpl implements CheckOrderService {
      * 查询库存盘点单据列表
      */
     @Override
-    public List<CheckOrderVo> queryList(CheckOrderDto bo) {
-        LambdaQueryWrapper<CheckOrder> lqw = buildQueryWrapper(bo);
+    public List<CheckOrderVo> queryList(CheckOrderDto dto) {
+        LambdaQueryWrapper<CheckOrder> lqw = buildQueryWrapper(dto);
         return checkOrderMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<CheckOrder> buildQueryWrapper(CheckOrderDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<CheckOrder> buildQueryWrapper(CheckOrderDto dto) {
         LambdaQueryWrapper<CheckOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getOrderNo()), CheckOrder::getOrderNo, bo.getOrderNo());
-        lqw.eq(bo.getOrderStatus() != null, CheckOrder::getOrderStatus, bo.getOrderStatus());
-        lqw.eq(bo.getTotalQuantity() != null, CheckOrder::getTotalQuantity, bo.getTotalQuantity());
-        lqw.eq(bo.getWarehouseId() != null, CheckOrder::getWarehouseId, bo.getWarehouseId());
+        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), CheckOrder::getOrderNo, dto.getOrderNo());
+        lqw.eq(dto.getOrderStatus() != null, CheckOrder::getOrderStatus, dto.getOrderStatus());
+        lqw.eq(dto.getTotalQuantity() != null, CheckOrder::getTotalQuantity, dto.getTotalQuantity());
+        lqw.eq(dto.getWarehouseId() != null, CheckOrder::getWarehouseId, dto.getWarehouseId());
         lqw.orderByDesc(BaseEntity::getCreateTime);
         return lqw;
     }
@@ -95,15 +92,15 @@ public class CheckOrderServiceImpl implements CheckOrderService {
      */
     @Override
     @Transactional
-    public void insertByBo(CheckOrderDto bo) {
+    public void insertByBo(CheckOrderDto dto) {
         // 校验盘库单号唯一性
-        validateCheckOrderNo(bo.getOrderNo());
+        validateCheckOrderNo(dto.getOrderNo());
         // 创建盘库单
-        CheckOrder add = MapstructUtils.convert(bo, CheckOrder.class);
+        CheckOrder add = MapstructUtils.convert(dto, CheckOrder.class);
         checkOrderMapper.insert(add);
         // 创建盘库单明细
-        List<CheckOrderDetail> addDetailList = MapstructUtils.convert(bo.getDetails(), CheckOrderDetail.class);
-        addDetailList.forEach(it -> it.setOrderId(add.getId()));
+        List<CheckOrderDetail> addDetailList = MapstructUtils.convert(dto.getDetails(), CheckOrderDetail.class);
+        addDetailList.forEach(it -> it.setCheckId(add.getId()));
         checkOrderDetailService.saveDetails(addDetailList);
     }
 
@@ -111,7 +108,7 @@ public class CheckOrderServiceImpl implements CheckOrderService {
         LambdaQueryWrapper<CheckOrder> lambdaQueryWrapper = Wrappers.lambdaQuery();
         lambdaQueryWrapper.eq(CheckOrder::getOrderNo, checkOrderNo);
         if (checkOrderMapper.exists(lambdaQueryWrapper)) {
-            throw new BusinessException("盘库单号重复，请手动修改");
+            throw new com.divine.common.core.exception.base.BusinessException("盘库单号重复，请手动修改");
         }
     }
 
@@ -120,13 +117,13 @@ public class CheckOrderServiceImpl implements CheckOrderService {
      */
     @Override
     @Transactional
-    public void updateByBo(CheckOrderDto bo) {
+    public void updateByBo(CheckOrderDto dto) {
         // 更新盘库单
-        CheckOrder update = MapstructUtils.convert(bo, CheckOrder.class);
+        CheckOrder update = MapstructUtils.convert(dto, CheckOrder.class);
         checkOrderMapper.updateById(update);
         // 保存盘库单明细
-        List<CheckOrderDetail> detailList = MapstructUtils.convert(bo.getDetails(), CheckOrderDetail.class);
-        detailList.forEach(it -> it.setOrderId(bo.getId()));
+        List<CheckOrderDetail> detailList = MapstructUtils.convert(dto.getDetails(), CheckOrderDetail.class);
+        detailList.forEach(it -> it.setCheckId(dto.getId()));
         checkOrderDetailService.saveDetails(detailList);
     }
 
@@ -139,10 +136,10 @@ public class CheckOrderServiceImpl implements CheckOrderService {
     private void validateIdBeforeDelete(Long id) {
         CheckOrderVo checkOrderVo = queryById(id);
         if (checkOrderVo == null) {
-            throw new BusinessException("盘库单不存在");
+            throw new com.divine.common.core.exception.base.BusinessException("盘库单不存在");
         }
         if (ServiceConstants.CheckOrderStatus.FINISH.equals(checkOrderVo.getOrderStatus())) {
-            throw new ServiceException("盘库单【" + checkOrderVo.getOrderNo() + "】已盘库完成，无法删除！");
+            throw new BusinessException("盘库单【" + checkOrderVo.getOrderNo() + "】已盘库完成，无法删除！");
         }
     }
 
@@ -155,27 +152,27 @@ public class CheckOrderServiceImpl implements CheckOrderService {
     }
 
     /**
-     * @param bo
+     * @param dto
      */
     @Override
     @Transactional
-    public void check(CheckOrderDto bo) {
-        List<CheckOrderDetailDto> details = bo.getDetails();
+    public void check(CheckOrderDto dto) {
+        List<CheckOrderDetailDto> details = dto.getDetails();
         // 保存盘库单 check order
-        if (Objects.isNull(bo.getId())) {
-            insertByBo(bo);
+        if (Objects.isNull(dto.getId())) {
+            insertByBo(dto);
         } else {
-            updateByBo(bo);
+            updateByBo(dto);
         }
         // 保存库存 inventory
         inventoryService.updateInventory(details);
         // 新增库存记录 inventory history
-        CheckOrderDto filterBo = this.filterCheckOrderDetail(bo);
+        CheckOrderDto filterBo = this.filterCheckOrderDetail(dto);
         inventoryHistoryService.saveInventoryHistory(filterBo, ServiceConstants.InventoryHistoryOrderType.CHECK, true);
     }
 
-    private CheckOrderDto filterCheckOrderDetail(CheckOrderDto bo) {
-        CheckOrderDto filterBo = SerializationUtils.clone(bo);
+    private CheckOrderDto filterCheckOrderDetail(CheckOrderDto dto) {
+        CheckOrderDto filterBo = SerializationUtils.clone(dto);
         List<CheckOrderDetailDto> details = filterBo.getDetails().stream().filter(detail -> {
             BigDecimal result = detail.getCheckQuantity().subtract(detail.getQuantity());
             return result.signum() != 0;

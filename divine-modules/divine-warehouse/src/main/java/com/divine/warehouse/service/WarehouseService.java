@@ -24,22 +24,22 @@ public interface WarehouseService {
     /**
      * 查询仓库列表
      */
-    PageInfoRes<WarehouseVo> queryPageList(WarehouseDto bo, BasePage basePage);
+    PageInfoRes<WarehouseVo> queryPageList(WarehouseDto dto, BasePage basePage);
 
     /**
      * 查询仓库列表
      */
-    List<WarehouseVo> queryList(WarehouseDto bo);
+    List<WarehouseVo> queryList(WarehouseDto dto);
 
     /**
      * 新增仓库
      */
-    void insertByBo(WarehouseDto bo) ;
+    void insertByBo(WarehouseDto dto) ;
 
     /**
      * 修改仓库
      */
-    void updateByBo(WarehouseDto bo) ;
+    void updateByBo(WarehouseDto dto) ;
 
     /**
      * 删除仓库

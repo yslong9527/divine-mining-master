@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.divine.warehouse.domain.dto.CheckOrderDetailDto;
 import com.divine.warehouse.domain.entity.CheckOrderDetail;
-import com.divine.warehouse.domain.vo.CheckOrderDetailVo;
+import com.divine.warehouse.domain.vo.CheckOrderDetailVO;
 import com.divine.warehouse.mapper.CheckOrderDetailMapper;
 import com.divine.warehouse.service.CheckOrderDetailService;
 import com.divine.warehouse.service.ItemSkuService;
@@ -39,7 +39,7 @@ public class CheckOrderDetailServiceImpl extends ServiceImpl<CheckOrderDetailMap
      * 查询库存盘点单据详情
      */
     @Override
-    public CheckOrderDetailVo queryById(Long id) {
+    public CheckOrderDetailVO queryById(Long id) {
         return checkOrderDetailMapper.selectVoById(id);
     }
 
@@ -47,9 +47,9 @@ public class CheckOrderDetailServiceImpl extends ServiceImpl<CheckOrderDetailMap
      * 查询库存盘点单据详情列表
      */
     @Override
-    public PageInfoRes<CheckOrderDetailVo> queryPageList(CheckOrderDetailDto bo, BasePage basePage) {
-        LambdaQueryWrapper<CheckOrderDetail> lqw = buildQueryWrapper(bo);
-        Page<CheckOrderDetailVo> result = checkOrderDetailMapper.selectVoPage(basePage.build(), lqw);
+    public PageInfoRes<CheckOrderDetailVO> queryPageList(CheckOrderDetailDto dto, BasePage basePage) {
+        LambdaQueryWrapper<CheckOrderDetail> lqw = buildQueryWrapper(dto);
+        Page<CheckOrderDetailVO> result = checkOrderDetailMapper.selectVoPage(basePage.build(), lqw);
         if (CollUtil.isEmpty(result.getRecords())) {
             return PageInfoRes.build(result);
         }
@@ -61,20 +61,20 @@ public class CheckOrderDetailServiceImpl extends ServiceImpl<CheckOrderDetailMap
      * 查询库存盘点单据详情列表
      */
     @Override
-    public List<CheckOrderDetailVo> queryList(CheckOrderDetailDto bo) {
-        LambdaQueryWrapper<CheckOrderDetail> lqw = buildQueryWrapper(bo);
+    public List<CheckOrderDetailVO> queryList(CheckOrderDetailDto dto) {
+        LambdaQueryWrapper<CheckOrderDetail> lqw = buildQueryWrapper(dto);
         return checkOrderDetailMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<CheckOrderDetail> buildQueryWrapper(CheckOrderDetailDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<CheckOrderDetail> buildQueryWrapper(CheckOrderDetailDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<CheckOrderDetail> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getOrderId() != null, CheckOrderDetail::getOrderId, bo.getOrderId());
-        lqw.eq(bo.getSkuId() != null, CheckOrderDetail::getSkuId, bo.getSkuId());
-        lqw.eq(bo.getQuantity() != null, CheckOrderDetail::getQuantity, bo.getQuantity());
-        lqw.eq(bo.getCheckQuantity() != null, CheckOrderDetail::getCheckQuantity, bo.getCheckQuantity());
-        lqw.eq(bo.getWarehouseId() != null, CheckOrderDetail::getWarehouseId, bo.getWarehouseId());
-        lqw.apply(bo.getHaveProfitAndLoss() != null && bo.getHaveProfitAndLoss(), "quantity != check_quantity");
+        lqw.eq(dto.getOrderId() != null, CheckOrderDetail::getCheckId, dto.getOrderId());
+        lqw.eq(dto.getSkuId() != null, CheckOrderDetail::getSkuId, dto.getSkuId());
+//        lqw.eq(dto.getQuantity() != null, CheckOrderDetail::getQuantity, dto.getQuantity());
+        lqw.eq(dto.getCheckQuantity() != null, CheckOrderDetail::getCheckQuantity, dto.getCheckQuantity());
+        lqw.eq(dto.getWarehouseId() != null, CheckOrderDetail::getWarehouseId, dto.getWarehouseId());
+        lqw.apply(dto.getHaveProfitAndLoss() != null && dto.getHaveProfitAndLoss(), "quantity != check_quantity");
         return lqw;
     }
 
@@ -82,8 +82,8 @@ public class CheckOrderDetailServiceImpl extends ServiceImpl<CheckOrderDetailMap
      * 新增库存盘点单据详情
      */
     @Override
-    public void insertByBo(CheckOrderDetailDto bo) {
-        CheckOrderDetail add = MapstructUtils.convert(bo, CheckOrderDetail.class);
+    public void insertByBo(CheckOrderDetailDto dto) {
+        CheckOrderDetail add = MapstructUtils.convert(dto, CheckOrderDetail.class);
         checkOrderDetailMapper.insert(add);
     }
 
@@ -91,8 +91,8 @@ public class CheckOrderDetailServiceImpl extends ServiceImpl<CheckOrderDetailMap
      * 修改库存盘点单据详情
      */
     @Override
-    public void updateByBo(CheckOrderDetailDto bo) {
-        CheckOrderDetail update = MapstructUtils.convert(bo, CheckOrderDetail.class);
+    public void updateByBo(CheckOrderDetailDto dto) {
+        CheckOrderDetail update = MapstructUtils.convert(dto, CheckOrderDetail.class);
         checkOrderDetailMapper.updateById(update);
     }
 
@@ -114,10 +114,10 @@ public class CheckOrderDetailServiceImpl extends ServiceImpl<CheckOrderDetailMap
     }
 
     @Override
-    public List<CheckOrderDetailVo> queryByCheckOrderId(Long checkOrderId) {
-        CheckOrderDetailDto bo = new CheckOrderDetailDto();
-        bo.setOrderId(checkOrderId);
-        List<CheckOrderDetailVo> details = queryList(bo);
+    public List<CheckOrderDetailVO> queryByCheckOrderId(Long checkOrderId) {
+        CheckOrderDetailDto dto = new CheckOrderDetailDto();
+        dto.setOrderId(checkOrderId);
+        List<CheckOrderDetailVO> details = queryList(dto);
         itemSkuService.setItemSkuMap(details);
         return details;
     }

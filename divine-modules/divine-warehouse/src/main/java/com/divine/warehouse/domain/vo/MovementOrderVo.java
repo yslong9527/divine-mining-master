@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @ExcelIgnoreUnannotated
 @AutoMapper(target = MovementOrder.class)
-public class MovementOrderVo extends BaseOrderVo<MovementOrderDetailVo>{
+public class MovementOrderVo extends BaseOrderVo<MovementOrderDetailVO>{
 
     /**
      * 源仓库

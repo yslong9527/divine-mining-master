@@ -5,6 +5,7 @@ import com.baomidou.lock.LockTemplate;
 import com.baomidou.lock.annotation.Lock4j;
 import com.baomidou.lock.executor.RedissonLockExecutor;
 import com.divine.common.core.domain.Result;
+import com.divine.common.core.exception.base.BusinessException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,7 @@ public class RedisLockController {
     public Result<String> testLock4jLockTemplate(String key, String value) {
         final LockInfo lockInfo = lockTemplate.lock(key, 30000L, 5000L, RedissonLockExecutor.class);
         if (null == lockInfo) {
-            throw new RuntimeException("业务处理中,请稍后再试");
+            throw new BusinessException("业务处理中,请稍后再试");
         }
         // 获取锁成功，处理业务
         try {

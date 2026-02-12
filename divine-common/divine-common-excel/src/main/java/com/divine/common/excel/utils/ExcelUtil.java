@@ -10,6 +10,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.excel.convert.ExcelBigNumberConvert;
 import com.divine.common.excel.core.*;
 import jakarta.servlet.ServletOutputStream;
@@ -87,7 +88,7 @@ public class ExcelUtil {
             ServletOutputStream os = response.getOutputStream();
             exportExcel(list, sheetName, clazz, false, os, null);
         } catch (IOException e) {
-            throw new RuntimeException("导出Excel异常");
+            throw new BusinessException("导出Excel异常");
         }
     }
 
@@ -106,7 +107,7 @@ public class ExcelUtil {
             ServletOutputStream os = response.getOutputStream();
             exportExcel(list, sheetName, clazz, false, os, options);
         } catch (IOException e) {
-            throw new RuntimeException("导出Excel异常");
+            throw new BusinessException("导出Excel异常");
         }
     }
 
@@ -125,7 +126,7 @@ public class ExcelUtil {
             ServletOutputStream os = response.getOutputStream();
             exportExcel(list, sheetName, clazz, merge, os, null);
         } catch (IOException e) {
-            throw new RuntimeException("导出Excel异常");
+            throw new BusinessException("导出Excel异常");
         }
     }
 
@@ -145,7 +146,7 @@ public class ExcelUtil {
             ServletOutputStream os = response.getOutputStream();
             exportExcel(list, sheetName, clazz, merge, os, options);
         } catch (IOException e) {
-            throw new RuntimeException("导出Excel异常");
+            throw new BusinessException("导出Excel异常");
         }
     }
 
@@ -217,7 +218,7 @@ public class ExcelUtil {
             ServletOutputStream os = response.getOutputStream();
             exportTemplate(data, templatePath, os);
         } catch (IOException e) {
-            throw new RuntimeException("导出Excel异常");
+            throw new BusinessException("导出Excel异常");
         }
     }
 
@@ -265,7 +266,7 @@ public class ExcelUtil {
             ServletOutputStream os = response.getOutputStream();
             exportTemplateMultiList(data, templatePath, os);
         } catch (IOException e) {
-            throw new RuntimeException("导出Excel异常");
+            throw new BusinessException("导出Excel异常");
         }
     }
 
@@ -285,7 +286,7 @@ public class ExcelUtil {
             ServletOutputStream os = response.getOutputStream();
             exportTemplateMultiSheet(data, templatePath, os);
         } catch (IOException e) {
-            throw new RuntimeException("导出Excel异常");
+            throw new BusinessException("导出Excel异常");
         }
     }
 

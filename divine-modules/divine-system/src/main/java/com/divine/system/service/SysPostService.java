@@ -91,16 +91,16 @@ public interface SysPostService {
     /**
      * 新增保存岗位信息
      *
-     * @param bo 岗位信息
+     * @param dto 岗位信息
      * @return 结果
      */
-    int insertPost(SysPostDto bo);
+    int insertPost(SysPostDto dto);
 
     /**
      * 修改保存岗位信息
      *
-     * @param bo 岗位信息
+     * @param dto 岗位信息
      * @return 结果
      */
-    int updatePost(SysPostDto bo);
+    int updatePost(SysPostDto dto);
 }

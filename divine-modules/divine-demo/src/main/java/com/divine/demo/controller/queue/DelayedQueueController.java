@@ -34,7 +34,7 @@ public class DelayedQueueController {
 
     @Operation(summary = "订阅队列")
     @GetMapping("/subscribe")
-    public Result<Void> subscribe(@Schema(description = "队列名") String queueName) {
+    public Result<String> subscribe(@Schema(description = "队列名") String queueName) {
         log.info("通道: {} 监听中......", queueName);
         // 项目初始化设置一次即可
         QueueUtils.subscribeBlockingQueue(queueName, (String orderNum) -> {
@@ -46,7 +46,7 @@ public class DelayedQueueController {
 
     @Operation(summary = "添加队列数据")
     @GetMapping("/add")
-    public Result<Void> add(@Schema(description = "队列名") String queueName,
+    public Result<String> add(@Schema(description = "队列名") String queueName,
                             @Schema(description = "订单号") String orderNum,
                             @Schema(description = "延迟时间(秒)") Long time) {
         QueueUtils.addDelayedQueueObject(queueName, orderNum, time, TimeUnit.SECONDS);
@@ -57,7 +57,7 @@ public class DelayedQueueController {
 
     @Operation(summary = "删除队列数据")
     @GetMapping("/remove")
-    public Result<Void> remove(@Schema(description = "队列名") String queueName,
+    public Result<String> remove(@Schema(description = "队列名") String queueName,
                                @Schema(description = "订单号") String orderNum) {
         if (QueueUtils.removeDelayedQueueObject(queueName, orderNum)) {
             log.info("通道: {} , 删除数据: {}", queueName, orderNum);
@@ -69,7 +69,7 @@ public class DelayedQueueController {
 
     @Operation(summary = "销毁队列")
     @GetMapping("/destroy")
-    public Result<Void> destroy(@Schema(description = "队列名") String queueName) {
+    public Result<String> destroy(@Schema(description = "队列名") String queueName) {
         // 用完了一定要销毁 否则会一直存在
         QueueUtils.destroyDelayedQueue(queueName);
         return Result.success("操作成功");

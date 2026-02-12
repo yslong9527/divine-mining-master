@@ -37,8 +37,8 @@ public class TestTreeController extends BaseController {
     @Operation(summary = "查询测试树表列表")
     @SaCheckPermission("demo:tree:list")
     @GetMapping("/list")
-    public Result<List<TestTreeVo>> list(@Validated(QueryGroup.class) TestTreeDto bo) {
-        List<TestTreeVo> list = iTestTreeService.queryList(bo);
+    public Result<List<TestTreeVo>> list(@Validated(QueryGroup.class) TestTreeDto dto) {
+        List<TestTreeVo> list = iTestTreeService.queryList(dto);
         return Result.success(list);
     }
 
@@ -46,8 +46,8 @@ public class TestTreeController extends BaseController {
     @SaCheckPermission("demo:tree:export")
     @Log(title = "测试树表", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public void export(@Validated TestTreeDto bo, HttpServletResponse response) {
-        List<TestTreeVo> list = iTestTreeService.queryList(bo);
+    public void export(@Validated TestTreeDto dto, HttpServletResponse response) {
+        List<TestTreeVo> list = iTestTreeService.queryList(dto);
         ExcelUtil.exportExcel(list, "测试树表", TestTreeVo.class, response);
     }
 
@@ -64,8 +64,8 @@ public class TestTreeController extends BaseController {
     @Log(title = "测试树表", businessType = BusinessType.INSERT)
     @RepeatSubmit
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody TestTreeDto bo) {
-        return toAjax(iTestTreeService.insertByBo(bo));
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody TestTreeDto dto) {
+        return toAjax(iTestTreeService.insertByBo(dto));
     }
 
     @Operation(summary = "修改测试树表")
@@ -73,8 +73,8 @@ public class TestTreeController extends BaseController {
     @Log(title = "测试树表", businessType = BusinessType.UPDATE)
     @RepeatSubmit
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody TestTreeDto bo) {
-        return toAjax(iTestTreeService.updateByBo(bo));
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody TestTreeDto dto) {
+        return toAjax(iTestTreeService.updateByBo(dto));
     }
 
     @Operation(summary = "删除测试树表")

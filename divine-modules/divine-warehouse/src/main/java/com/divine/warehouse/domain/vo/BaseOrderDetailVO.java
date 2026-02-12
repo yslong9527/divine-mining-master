@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 @ExcelIgnoreUnannotated
-public class BaseOrderDetailVo implements Serializable {
+public class BaseOrderDetailVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     /**

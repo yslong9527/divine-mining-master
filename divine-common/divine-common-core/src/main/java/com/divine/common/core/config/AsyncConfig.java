@@ -1,7 +1,7 @@
 package com.divine.common.core.config;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.SpringUtils;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -43,7 +43,7 @@ public class AsyncConfig implements AsyncConfigurer {
             if (ArrayUtil.isNotEmpty(objects)) {
                 sb.append(", Parameter value - ").append(Arrays.toString(objects));
             }
-            throw new ServiceException(sb.toString());
+            throw new BusinessException(sb.toString());
         };
     }
 

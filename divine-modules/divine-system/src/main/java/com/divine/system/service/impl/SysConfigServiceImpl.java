@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.divine.common.core.constant.CacheNames;
 import com.divine.common.core.constant.UserConstants;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.service.ConfigService;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.SpringUtils;
@@ -88,12 +88,12 @@ public class SysConfigServiceImpl implements SysConfigService,ConfigService {
         return configMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<SysConfig> buildQueryWrapper(SysConfigDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<SysConfig> buildQueryWrapper(SysConfigDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<SysConfig> lqw = Wrappers.lambdaQuery();
-        lqw.like(StringUtils.isNotBlank(bo.getConfigName()), SysConfig::getConfigName, bo.getConfigName());
-        lqw.eq(StringUtils.isNotBlank(bo.getConfigType()), SysConfig::getConfigType, bo.getConfigType());
-        lqw.like(StringUtils.isNotBlank(bo.getConfigKey()), SysConfig::getConfigKey, bo.getConfigKey());
+        lqw.like(StringUtils.isNotBlank(dto.getConfigName()), SysConfig::getConfigName, dto.getConfigName());
+        lqw.eq(StringUtils.isNotBlank(dto.getConfigType()), SysConfig::getConfigType, dto.getConfigType());
+        lqw.like(StringUtils.isNotBlank(dto.getConfigKey()), SysConfig::getConfigKey, dto.getConfigKey());
         lqw.between(params.get("beginTime") != null && params.get("endTime") != null,
             SysConfig::getCreateTime, params.get("beginTime"), params.get("endTime"));
         lqw.orderByAsc(SysConfig::getConfigId);
@@ -103,31 +103,31 @@ public class SysConfigServiceImpl implements SysConfigService,ConfigService {
     /**
      * 新增参数配置
      *
-     * @param bo 参数配置信息
+     * @param dto 参数配置信息
      * @return 结果
      */
     @Override
-    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#bo.configKey")
-    public String insertConfig(SysConfigDto bo) {
-        SysConfig config = MapstructUtils.convert(bo, SysConfig.class);
+    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#dto.configKey")
+    public String insertConfig(SysConfigDto dto) {
+        SysConfig config = MapstructUtils.convert(dto, SysConfig.class);
         int row = configMapper.insert(config);
         if (row > 0) {
             return config.getConfigValue();
         }
-        throw new ServiceException("操作失败");
+        throw new BusinessException("操作失败");
     }
 
     /**
      * 修改参数配置
      *
-     * @param bo 参数配置信息
+     * @param dto 参数配置信息
      * @return 结果
      */
     @Override
-    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#bo.configKey")
-    public String updateConfig(SysConfigDto bo) {
+    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#dto.configKey")
+    public String updateConfig(SysConfigDto dto) {
         int row = 0;
-        SysConfig config = MapstructUtils.convert(bo, SysConfig.class);
+        SysConfig config = MapstructUtils.convert(dto, SysConfig.class);
         if (config.getConfigId() != null) {
             SysConfig temp = configMapper.selectById(config.getConfigId());
             if (!StringUtils.equals(temp.getConfigKey(), config.getConfigKey())) {
@@ -141,7 +141,7 @@ public class SysConfigServiceImpl implements SysConfigService,ConfigService {
         if (row > 0) {
             return config.getConfigValue();
         }
-        throw new ServiceException("操作失败");
+        throw new BusinessException("操作失败");
     }
 
     /**
@@ -154,7 +154,7 @@ public class SysConfigServiceImpl implements SysConfigService,ConfigService {
         for (Long configId : configIds) {
             SysConfig config = configMapper.selectById(configId);
             if (StringUtils.equals(UserConstants.YES, config.getConfigType())) {
-                throw new ServiceException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
+                throw new BusinessException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
             }
             CacheUtils.evict(CacheNames.SYS_CONFIG, config.getConfigKey());
         }

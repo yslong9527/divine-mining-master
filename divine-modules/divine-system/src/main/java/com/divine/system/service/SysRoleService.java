@@ -110,15 +110,15 @@ public interface SysRoleService {
      * @param role 角色信息
      * @return 结果
      */
-    int insertRole(SysRoleDto bo);
+    int insertRole(SysRoleDto dto);
 
     /**
      * 修改保存角色信息
      *
-     * @param bo 角色信息
+     * @param dto 角色信息
      * @return 结果
      */
-    int updateRole(SysRoleDto bo);
+    int updateRole(SysRoleDto dto);
 
     /**
      * 修改角色状态
@@ -132,10 +132,10 @@ public interface SysRoleService {
     /**
      * 修改数据权限信息
      *
-     * @param bo 角色信息
+     * @param dto 角色信息
      * @return 结果
      */
-    int authDataScope(SysRoleDto bo);
+    int authDataScope(SysRoleDto dto);
 
     /**
      * 新增角色菜单信息

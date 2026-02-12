@@ -1,7 +1,7 @@
 package com.divine.warehouse.mapper;
 
 import com.divine.warehouse.domain.entity.MovementOrderDetail;
-import com.divine.warehouse.domain.vo.MovementOrderDetailVo;
+import com.divine.warehouse.domain.vo.MovementOrderDetailVO;
 import com.divine.common.mybatis.core.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2024-08-09
  */
 @Mapper
-public interface MovementOrderDetailMapper extends BaseMapperPlus<MovementOrderDetail, MovementOrderDetailVo> {
+public interface MovementOrderDetailMapper extends BaseMapperPlus<MovementOrderDetail, MovementOrderDetailVO> {
 
 }

@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @ExcelIgnoreUnannotated
 @AutoMapper(target = MovementOrderDetail.class)
-public class MovementOrderDetailVo extends BaseOrderDetailVo {
+public class MovementOrderDetailVO extends BaseOrderDetailVO {
 
 
 

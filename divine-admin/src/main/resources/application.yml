@@ -1,13 +1,50 @@
 # 项目相关配置
 divine:
   # 名称
-  name: divine-mining-service
+  name: Divine
   # 版本
   version: 1.0.0  # 也可以使用 ${revision}，但需要在pom.xml中配置资源过滤
   # 版权年份
   copyrightYear: 2026
   # 缓存懒加载
   cacheLazy: false
+
+# Spring配置
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ${divine.name}
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 10MB
+      # 设置总上传的文件大小
+      max-request-size: 20MB
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
+  jackson:
+    # 日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      # 格式化输出
+      indent_output: false
+      # 忽略无法转换的对象
+      fail_on_empty_beans: false
+    deserialization:
+      # 允许对象忽略json中不存在的属性
+      fail_on_unknown_properties: false
 
 captcha:
   enable: true
@@ -57,43 +94,6 @@ user:
     maxRetryCount: 5
     # 密码锁定时间（默认10分钟）
     lockTime: 10
-
-# Spring配置
-spring:
-  application:
-    name: ${divine.name}
-  # 资源信息
-  messages:
-    # 国际化资源文件路径
-    basename: i18n/messages
-  profiles:
-    active: dev
-  # 文件上传
-  servlet:
-    multipart:
-      # 单个文件大小
-      max-file-size: 10MB
-      # 设置总上传的文件大小
-      max-request-size: 20MB
-  # 服务模块
-  devtools:
-    restart:
-      # 热部署开关
-      enabled: true
-  mvc:
-    format:
-      date-time: yyyy-MM-dd HH:mm:ss
-  jackson:
-    # 日期格式化
-    date-format: yyyy-MM-dd HH:mm:ss
-    serialization:
-      # 格式化输出
-      indent_output: false
-      # 忽略无法转换的对象
-      fail_on_empty_beans: false
-    deserialization:
-      # 允许对象忽略json中不存在的属性
-      fail_on_unknown_properties: false
 
 # Sa-Token配置
 sa-token:
@@ -205,9 +205,9 @@ springdoc:
   #    persistAuthorization: true
   info:
     # 标题
-    title: '标题：${divine.name}后台管理系统_接口文档'
+    title: '${divine.name}后台管理系统_接口文档'
     # 描述
-    description: '描述：用于管理集团旗下公司的人员信息,具体包括XXX,XXX模块...'
+    description: '用于管理集团旗下公司的人员信息'
     # 版本
     version: '版本号: ${divine.version}'
     # 作者信息

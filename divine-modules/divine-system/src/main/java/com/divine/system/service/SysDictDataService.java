@@ -43,18 +43,18 @@ public interface SysDictDataService {
     /**
      * 新增保存字典数据信息
      *
-     * @param bo 字典数据信息
+     * @param dto 字典数据信息
      * @return 结果
      */
-    List<SysDictDataVo> insertDictData(SysDictDataDto bo);
+    List<SysDictDataVo> insertDictData(SysDictDataDto dto);
 
     /**
      * 修改保存字典数据信息
      *
-     * @param bo 字典数据信息
+     * @param dto 字典数据信息
      * @return 结果
      */
-    List<SysDictDataVo> updateDictData(SysDictDataDto bo);
+    List<SysDictDataVo> updateDictData(SysDictDataDto dto);
 
     boolean checkDictDataUnique(SysDictDataDto dict);
 

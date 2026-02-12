@@ -40,8 +40,8 @@ public class ItemSkuController extends BaseController {
     @Operation(summary = "查询sku信息列表")
     @GetMapping("/list")
     @SaCheckPermission("wms:item:list")
-    public PageInfoRes<ItemSkuMapVo> list(ItemSkuDto bo, BasePage basePage) {
-        return itemSkuService.queryPageList(bo, basePage);
+    public PageInfoRes<ItemSkuMapVo> list(ItemSkuDto dto, BasePage basePage) {
+        return itemSkuService.queryPageList(dto, basePage);
     }
     /**
      * 查询sku信息列表
@@ -49,8 +49,8 @@ public class ItemSkuController extends BaseController {
     @Operation(summary = "查询sku信息列表")
     @GetMapping("/listNoPage")
     @SaCheckPermission("wms:item:list")
-    public Result<List<ItemSkuVo>> list(ItemSkuDto bo) {
-        return Result.success(itemSkuService.queryList(bo));
+    public Result<List<ItemSkuVo>> list(ItemSkuDto dto) {
+        return Result.success(itemSkuService.queryList(dto));
     }
 
     /**
@@ -60,8 +60,8 @@ public class ItemSkuController extends BaseController {
     @Log(title = "sku信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @SaCheckPermission("wms:item:list")
-    public void export(ItemSkuDto bo, HttpServletResponse response) {
-        List<ItemSkuVo> list = itemSkuService.queryList(bo);
+    public void export(ItemSkuDto dto, HttpServletResponse response) {
+        List<ItemSkuVo> list = itemSkuService.queryList(dto);
         ExcelUtil.exportExcel(list, "sku信息", ItemSkuVo.class, response);
     }
 
@@ -86,8 +86,8 @@ public class ItemSkuController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     @SaCheckPermission("wms:item:edit")
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ItemSkuDto bo) {
-        return toAjax(itemSkuService.insertByBo(bo));
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ItemSkuDto dto) {
+        return toAjax(itemSkuService.insertByBo(dto));
     }
 
     /**
@@ -98,8 +98,8 @@ public class ItemSkuController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     @SaCheckPermission("wms:item:edit")
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ItemSkuDto bo) {
-        return toAjax(itemSkuService.updateByBo(bo));
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ItemSkuDto dto) {
+        return toAjax(itemSkuService.updateByBo(dto));
     }
 
     /**

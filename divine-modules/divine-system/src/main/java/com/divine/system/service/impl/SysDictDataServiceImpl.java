@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.divine.common.core.constant.CacheNames;
-import com.divine.common.core.exception.ServiceException;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.page.BasePage;
@@ -52,11 +52,11 @@ public class SysDictDataServiceImpl implements SysDictDataService {
         return dictDataMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<SysDictData> buildQueryWrapper(SysDictDataDto bo) {
+    private LambdaQueryWrapper<SysDictData> buildQueryWrapper(SysDictDataDto dto) {
         LambdaQueryWrapper<SysDictData> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getDictSort() != null, SysDictData::getDictSort, bo.getDictSort());
-        lqw.like(StringUtils.isNotBlank(bo.getDictLabel()), SysDictData::getDictLabel, bo.getDictLabel());
-        lqw.eq(StringUtils.isNotBlank(bo.getDictType()), SysDictData::getDictType, bo.getDictType());
+        lqw.eq(dto.getDictSort() != null, SysDictData::getDictSort, dto.getDictSort());
+        lqw.like(StringUtils.isNotBlank(dto.getDictLabel()), SysDictData::getDictLabel, dto.getDictLabel());
+        lqw.eq(StringUtils.isNotBlank(dto.getDictType()), SysDictData::getDictType, dto.getDictType());
         lqw.orderByAsc(SysDictData::getDictSort);
         return lqw;
     }
@@ -89,35 +89,35 @@ public class SysDictDataServiceImpl implements SysDictDataService {
     /**
      * 新增保存字典数据信息
      *
-     * @param bo 字典数据信息
+     * @param dto 字典数据信息
      * @return 结果
      */
     @Override
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
-    public List<SysDictDataVo> insertDictData(SysDictDataDto bo) {
-        SysDictData data = MapstructUtils.convert(bo, SysDictData.class);
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#dto.dictType")
+    public List<SysDictDataVo> insertDictData(SysDictDataDto dto) {
+        SysDictData data = MapstructUtils.convert(dto, SysDictData.class);
         int row = dictDataMapper.insert(data);
         if (row > 0) {
             return dictDataMapper.selectDictDataByType(data.getDictType());
         }
-        throw new ServiceException("操作失败");
+        throw new BusinessException("操作失败");
     }
 
     /**
      * 修改保存字典数据信息
      *
-     * @param bo 字典数据信息
+     * @param dto 字典数据信息
      * @return 结果
      */
     @Override
-    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#bo.dictType")
-    public List<SysDictDataVo> updateDictData(SysDictDataDto bo) {
-        SysDictData data = MapstructUtils.convert(bo, SysDictData.class);
+    @CachePut(cacheNames = CacheNames.SYS_DICT, key = "#dto.dictType")
+    public List<SysDictDataVo> updateDictData(SysDictDataDto dto) {
+        SysDictData data = MapstructUtils.convert(dto, SysDictData.class);
         int row = dictDataMapper.updateById(data);
         if (row > 0) {
             return dictDataMapper.selectDictDataByType(data.getDictType());
         }
-        throw new ServiceException("操作失败");
+        throw new BusinessException("操作失败");
     }
 
     @Override

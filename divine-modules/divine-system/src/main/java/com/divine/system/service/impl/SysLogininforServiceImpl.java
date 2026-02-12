@@ -112,11 +112,11 @@ public class SysLogininforServiceImpl implements SysLogininforService {
     /**
      * 新增系统登录日志
      *
-     * @param bo 访问日志对象
+     * @param dto 访问日志对象
      */
     @Override
-    public void insertLogininfor(SysLogininforDto bo) {
-        SysLogininfor logininfor = MapstructUtils.convert(bo, SysLogininfor.class);
+    public void insertLogininfor(SysLogininforDto dto) {
+        SysLogininfor logininfor = MapstructUtils.convert(dto, SysLogininfor.class);
         logininfor.setLoginTime(LocalDateTime.now());
         logininforMapper.insert(logininfor);
     }

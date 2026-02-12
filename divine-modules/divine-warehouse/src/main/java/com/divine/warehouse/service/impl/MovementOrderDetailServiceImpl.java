@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.divine.warehouse.domain.dto.MovementOrderDetailDto;
 import com.divine.warehouse.domain.entity.MovementOrderDetail;
-import com.divine.warehouse.domain.vo.MovementOrderDetailVo;
+import com.divine.warehouse.domain.vo.MovementOrderDetailVO;
 import com.divine.warehouse.mapper.MovementOrderDetailMapper;
 import com.divine.warehouse.service.ItemSkuService;
 import com.divine.warehouse.service.MovementOrderDetailService;
@@ -40,7 +40,7 @@ public class MovementOrderDetailServiceImpl extends ServiceImpl<MovementOrderDet
      * 查询库存移动详情
      */
     @Override
-    public MovementOrderDetailVo queryById(Long id){
+    public MovementOrderDetailVO queryById(Long id){
         return movementOrderDetailMapper.selectVoById(id);
     }
 
@@ -48,9 +48,9 @@ public class MovementOrderDetailServiceImpl extends ServiceImpl<MovementOrderDet
      * 查询库存移动详情列表
      */
     @Override
-    public PageInfoRes<MovementOrderDetailVo> queryPageList(MovementOrderDetailDto bo, BasePage basePage) {
-        LambdaQueryWrapper<MovementOrderDetail> lqw = buildQueryWrapper(bo);
-        Page<MovementOrderDetailVo> result = movementOrderDetailMapper.selectVoPage(basePage.build(), lqw);
+    public PageInfoRes<MovementOrderDetailVO> queryPageList(MovementOrderDetailDto dto, BasePage basePage) {
+        LambdaQueryWrapper<MovementOrderDetail> lqw = buildQueryWrapper(dto);
+        Page<MovementOrderDetailVO> result = movementOrderDetailMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
 
@@ -58,19 +58,19 @@ public class MovementOrderDetailServiceImpl extends ServiceImpl<MovementOrderDet
      * 查询库存移动详情列表
      */
     @Override
-    public List<MovementOrderDetailVo> queryList(MovementOrderDetailDto bo) {
-        LambdaQueryWrapper<MovementOrderDetail> lqw = buildQueryWrapper(bo);
+    public List<MovementOrderDetailVO> queryList(MovementOrderDetailDto dto) {
+        LambdaQueryWrapper<MovementOrderDetail> lqw = buildQueryWrapper(dto);
         return movementOrderDetailMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<MovementOrderDetail> buildQueryWrapper(MovementOrderDetailDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<MovementOrderDetail> buildQueryWrapper(MovementOrderDetailDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<MovementOrderDetail> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getOrderId() != null, MovementOrderDetail::getOrderId, bo.getOrderId());
-        lqw.eq(bo.getSkuId() != null, MovementOrderDetail::getSkuId, bo.getSkuId());
-        lqw.eq(bo.getQuantity() != null, MovementOrderDetail::getQuantity, bo.getQuantity());
-        lqw.eq(bo.getSourceWarehouseId() != null, MovementOrderDetail::getSourceWarehouseId, bo.getSourceWarehouseId());
-        lqw.eq(bo.getTargetWarehouseId() != null, MovementOrderDetail::getTargetWarehouseId, bo.getTargetWarehouseId());
+        lqw.eq(dto.getOrderId() != null, MovementOrderDetail::getMovementId, dto.getOrderId());
+        lqw.eq(dto.getSkuId() != null, MovementOrderDetail::getSkuId, dto.getSkuId());
+        lqw.eq(dto.getQuantity() != null, MovementOrderDetail::getQuantity, dto.getQuantity());
+        lqw.eq(dto.getSourceWarehouseId() != null, MovementOrderDetail::getSourceWarehouseId, dto.getSourceWarehouseId());
+        lqw.eq(dto.getTargetWarehouseId() != null, MovementOrderDetail::getTargetWarehouseId, dto.getTargetWarehouseId());
         return lqw;
     }
 
@@ -78,8 +78,8 @@ public class MovementOrderDetailServiceImpl extends ServiceImpl<MovementOrderDet
      * 新增库存移动详情
      */
     @Override
-    public void insertByBo(MovementOrderDetailDto bo) {
-        MovementOrderDetail add = MapstructUtils.convert(bo, MovementOrderDetail.class);
+    public void insertByBo(MovementOrderDetailDto dto) {
+        MovementOrderDetail add = MapstructUtils.convert(dto, MovementOrderDetail.class);
         movementOrderDetailMapper.insert(add);
     }
 
@@ -87,8 +87,8 @@ public class MovementOrderDetailServiceImpl extends ServiceImpl<MovementOrderDet
      * 修改库存移动详情
      */
     @Override
-    public void updateByBo(MovementOrderDetailDto bo) {
-        MovementOrderDetail update = MapstructUtils.convert(bo, MovementOrderDetail.class);
+    public void updateByBo(MovementOrderDetailDto dto) {
+        MovementOrderDetail update = MapstructUtils.convert(dto, MovementOrderDetail.class);
         movementOrderDetailMapper.updateById(update);
     }
 
@@ -115,10 +115,10 @@ public class MovementOrderDetailServiceImpl extends ServiceImpl<MovementOrderDet
      * @return
      */
     @Override
-    public List<MovementOrderDetailVo> queryByMovementOrderId(Long movementOrderId) {
-        MovementOrderDetailDto bo = new MovementOrderDetailDto();
-        bo.setOrderId(movementOrderId);
-        List<MovementOrderDetailVo> details = queryList(bo);
+    public List<MovementOrderDetailVO> queryByMovementOrderId(Long movementOrderId) {
+        MovementOrderDetailDto dto = new MovementOrderDetailDto();
+        dto.setOrderId(movementOrderId);
+        List<MovementOrderDetailVO> details = queryList(dto);
         if (CollUtil.isEmpty(details)) {
             return Collections.emptyList();
         }

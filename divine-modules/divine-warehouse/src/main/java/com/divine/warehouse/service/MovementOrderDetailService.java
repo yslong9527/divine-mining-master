@@ -2,7 +2,7 @@ package com.divine.warehouse.service;
 
 import com.divine.warehouse.domain.dto.MovementOrderDetailDto;
 import com.divine.warehouse.domain.entity.MovementOrderDetail;
-import com.divine.warehouse.domain.vo.MovementOrderDetailVo;
+import com.divine.warehouse.domain.vo.MovementOrderDetailVO;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 
@@ -20,27 +20,27 @@ public interface MovementOrderDetailService{
     /**
      * 查询库存移动详情
      */
-    MovementOrderDetailVo queryById(Long id);
+    MovementOrderDetailVO queryById(Long id);
 
     /**
      * 查询库存移动详情列表
      */
-    PageInfoRes<MovementOrderDetailVo> queryPageList(MovementOrderDetailDto bo, BasePage basePage);
+    PageInfoRes<MovementOrderDetailVO> queryPageList(MovementOrderDetailDto dto, BasePage basePage);
 
     /**
      * 查询库存移动详情列表
      */
-    List<MovementOrderDetailVo> queryList(MovementOrderDetailDto bo);
+    List<MovementOrderDetailVO> queryList(MovementOrderDetailDto dto);
 
     /**
      * 新增库存移动详情
      */
-    void insertByBo(MovementOrderDetailDto bo);
+    void insertByBo(MovementOrderDetailDto dto);
 
     /**
      * 修改库存移动详情
      */
-    void updateByBo(MovementOrderDetailDto bo);
+    void updateByBo(MovementOrderDetailDto dto);
 
     /**
      * 批量删除库存移动详情
@@ -54,5 +54,5 @@ public interface MovementOrderDetailService{
      * @param movementOrderId
      * @return
      */
-    List<MovementOrderDetailVo> queryByMovementOrderId(Long movementOrderId);
+    List<MovementOrderDetailVO> queryByMovementOrderId(Long movementOrderId);
 }

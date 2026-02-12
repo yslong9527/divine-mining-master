@@ -5,10 +5,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.system.domain.dto.SysUserDto;
 import com.divine.system.domain.vo.SysUserImportVo;
 import com.divine.system.domain.vo.SysUserVo;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.SpringUtils;
 import com.divine.common.core.utils.ValidatorUtils;
 import com.divine.common.excel.core.ExcelListener;
@@ -98,7 +98,7 @@ public class SysUserImportListener extends AnalysisEventListener<SysUserImportVo
             public String getAnalysis() {
                 if (failureNum > 0) {
                     failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
-                    throw new ServiceException(failureMsg.toString());
+                    throw new BusinessException(failureMsg.toString());
                 } else {
                     successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
                 }

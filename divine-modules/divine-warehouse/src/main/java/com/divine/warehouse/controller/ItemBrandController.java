@@ -45,8 +45,8 @@ public class ItemBrandController extends BaseController {
     @Operation(summary = "查询商品品牌列表")
     @SaCheckPermission("wms:itemBrand:list")
     @GetMapping("/list")
-    public PageInfoRes<ItemBrandVo> list(ItemBrandDto bo, BasePage basePage) {
-        return itemBrandService.queryPageList(bo, basePage);
+    public PageInfoRes<ItemBrandVo> list(ItemBrandDto dto, BasePage basePage) {
+        return itemBrandService.queryPageList(dto, basePage);
     }
 
     /**
@@ -55,8 +55,8 @@ public class ItemBrandController extends BaseController {
     @Operation(summary = "查询商品品牌列表")
     @SaCheckPermission("wms:itemBrand:list")
     @GetMapping("/listNoPage")
-    public Result<List<ItemBrandVo>> listNoPage(ItemBrandDto bo) {
-        return Result.success(itemBrandService.queryList(bo));
+    public Result<List<ItemBrandVo>> listNoPage(ItemBrandDto dto) {
+        return Result.success(itemBrandService.queryList(dto));
     }
 
     /**
@@ -66,8 +66,8 @@ public class ItemBrandController extends BaseController {
     @SaCheckPermission("wms:itemBrand:list")
     @Log(title = "商品品牌", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(ItemBrandDto bo, HttpServletResponse response) {
-        List<ItemBrandVo> list = itemBrandService.queryList(bo);
+    public void export(ItemBrandDto dto, HttpServletResponse response) {
+        List<ItemBrandVo> list = itemBrandService.queryList(dto);
         ExcelUtil.exportExcel(list, "商品品牌", ItemBrandVo.class, response);
     }
 
@@ -92,8 +92,8 @@ public class ItemBrandController extends BaseController {
     @Log(title = "商品品牌", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ItemBrandDto bo) {
-        itemBrandService.insertByBo(bo);
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody ItemBrandDto dto) {
+        itemBrandService.insertByBo(dto);
         return Result.success();
     }
 
@@ -105,8 +105,8 @@ public class ItemBrandController extends BaseController {
     @Log(title = "商品品牌", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ItemBrandDto bo) {
-        itemBrandService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ItemBrandDto dto) {
+        itemBrandService.updateByBo(dto);
         return Result.success();
     }
 

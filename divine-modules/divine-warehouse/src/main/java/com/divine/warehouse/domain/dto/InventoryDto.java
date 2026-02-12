@@ -59,11 +59,10 @@ public class InventoryDto extends BaseEntity {
     private String remark;
 
     /**
-     * 最小数量
+     * 最大数量
      */
-    @Schema(description = "最小数量")
-    private BigDecimal minQuantity;
-
+    @Schema(description = "最大数量")
+    private Long minQuantity;
 
     @Schema(description = "物品名称")
     private String itemName;

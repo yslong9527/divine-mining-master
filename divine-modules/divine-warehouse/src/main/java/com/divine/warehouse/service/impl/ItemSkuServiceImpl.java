@@ -6,16 +6,16 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.ItemSkuDto;
 import com.divine.warehouse.domain.entity.ItemSku;
-import com.divine.warehouse.domain.vo.BaseOrderDetailVo;
+import com.divine.warehouse.domain.vo.BaseOrderDetailVO;
 import com.divine.warehouse.domain.vo.ItemSkuMapVo;
 import com.divine.warehouse.domain.vo.ItemSkuVo;
 import com.divine.warehouse.mapper.ItemSkuMapper;
 import com.divine.warehouse.service.InventoryService;
 import com.divine.warehouse.service.ItemSkuService;
 import com.divine.common.core.constant.HttpStatus;
-import com.divine.common.core.exception.ServiceException;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -59,9 +59,9 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
      * 查询sku信息列表，用于出入库的选择组件
      */
     @Override
-    public PageInfoRes<ItemSkuMapVo> queryPageList(ItemSkuDto bo, BasePage basePage) {
+    public PageInfoRes<ItemSkuMapVo> queryPageList(ItemSkuDto dto, BasePage basePage) {
         //开始查sku
-        IPage<ItemSkuMapVo> result = itemSkuMapper.selectByBo(basePage.build(), bo);
+        IPage<ItemSkuMapVo> result = itemSkuMapper.selectByBo(basePage.build(), dto);
         return PageInfoRes.build(result);
     }
 
@@ -69,17 +69,17 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
      * 查询sku信息列表
      */
     @Override
-    public List<ItemSkuVo> queryList(ItemSkuDto bo) {
-        LambdaQueryWrapper<ItemSku> lqw = buildQueryWrapper(bo);
+    public List<ItemSkuVo> queryList(ItemSkuDto dto) {
+        LambdaQueryWrapper<ItemSku> lqw = buildQueryWrapper(dto);
         return itemSkuMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<ItemSku> buildQueryWrapper(ItemSkuDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<ItemSku> buildQueryWrapper(ItemSkuDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<ItemSku> lqw = Wrappers.lambdaQuery();
-        lqw.like(StrUtil.isNotBlank(bo.getSkuName()), ItemSku::getSkuName, bo.getSkuName());
-        lqw.eq(bo.getItemId() != null, ItemSku::getItemId, bo.getItemId());
-        lqw.eq(StrUtil.isNotBlank(bo.getBarcode()), ItemSku::getBarcode, bo.getBarcode());
+        lqw.like(StrUtil.isNotBlank(dto.getSkuName()), ItemSku::getSkuName, dto.getSkuName());
+        lqw.eq(dto.getItemId() != null, ItemSku::getItemId, dto.getItemId());
+        lqw.eq(StrUtil.isNotBlank(dto.getBarcode()), ItemSku::getBarcode, dto.getBarcode());
         lqw.orderByDesc(ItemSku::getItemId);
         return lqw;
     }
@@ -88,8 +88,8 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
      * 新增sku信息
      */
     @Override
-    public Boolean insertByBo(ItemSkuDto bo) {
-        ItemSku add = MapstructUtils.convert(bo, ItemSku.class);
+    public Boolean insertByBo(ItemSkuDto dto) {
+        ItemSku add = MapstructUtils.convert(dto, ItemSku.class);
         return itemSkuMapper.insert(add) > 0;
     }
 
@@ -97,8 +97,8 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
      * 修改sku信息
      */
     @Override
-    public Boolean updateByBo(ItemSkuDto bo) {
-        ItemSku update = MapstructUtils.convert(bo, ItemSku.class);
+    public Boolean updateByBo(ItemSkuDto dto) {
+        ItemSku update = MapstructUtils.convert(dto, ItemSku.class);
         return itemSkuMapper.updateById(update) > 0;
     }
 
@@ -113,17 +113,17 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
         ItemSku itemSku = itemSkuMapper.selectById(id);
 
         if(queryByItemId(itemSku.getItemId()).size() <= 1){
-            throw new ServiceException("删除失败", HttpStatus.CONFLICT,"至少包含一个商品规格！");
+            throw new BusinessException("至少包含一个商品规格！");
         }
         // 校验库存是否已关联
         if (inventoryService.existsBySkuIds(List.of(id))) {
-            throw new ServiceException("删除失败", HttpStatus.CONFLICT,"该规格已有业务关联，无法删除！");
+            throw new BusinessException("该规格已有业务关联，无法删除！");
         }
     }
 
     private void validateSkuIdsBeforeDelete(Collection<Long> skuIds) {
         if (inventoryService.existsBySkuIds(skuIds)) {
-            throw new ServiceException("删除失败", HttpStatus.CONFLICT,"该商品已有业务关联，无法删除！");
+            throw new BusinessException("该商品已有业务关联，无法删除！");
         }
     }
     /**
@@ -175,11 +175,11 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
     }
 
     @Override
-    public void setItemSkuMap(List<? extends BaseOrderDetailVo> details){
+    public void setItemSkuMap(List<? extends BaseOrderDetailVO> details){
         if (CollUtil.isNotEmpty(details)) {
             Set<Long> skuIds = details
                 .stream()
-                .map(BaseOrderDetailVo::getSkuId)
+                .map(BaseOrderDetailVO::getSkuId)
                 .collect(Collectors.toSet());
 
             Map<Long, ItemSkuMapVo> itemSkuMap = this.queryItemSkuMapVosByIds(skuIds);

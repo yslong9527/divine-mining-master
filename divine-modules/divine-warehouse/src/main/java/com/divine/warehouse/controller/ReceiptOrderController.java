@@ -1,7 +1,6 @@
 package com.divine.warehouse.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import com.divine.common.core.constant.ServiceConstants;
 import com.divine.common.core.domain.Result;
 import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
@@ -46,8 +45,8 @@ public class ReceiptOrderController extends BaseController {
     @Operation(summary = "查询入库单列表")
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/list")
-    public PageInfoRes<ReceiptOrderVo> list(ReceiptOrderDto bo, BasePage basePage) {
-        return receiptOrderService.queryPageList(bo, basePage);
+    public PageInfoRes<ReceiptOrderVo> list(ReceiptOrderDto dto, BasePage basePage) {
+        return receiptOrderService.queryPageList(dto, basePage);
     }
 
     /**
@@ -57,8 +56,8 @@ public class ReceiptOrderController extends BaseController {
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(ReceiptOrderDto bo, HttpServletResponse response) {
-        List<ReceiptOrderVo> list = receiptOrderService.queryList(bo);
+    public void export(ReceiptOrderDto dto, HttpServletResponse response) {
+        List<ReceiptOrderVo> list = receiptOrderService.queryList(dto);
         ExcelUtil.exportExcel(list, "入库单", ReceiptOrderVo.class, response);
     }
 
@@ -90,10 +89,8 @@ public class ReceiptOrderController extends BaseController {
     @Log(title = "入库单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Long> add(@Validated(AddGroup.class) @RequestBody ReceiptOrderDto bo) {
-        bo.setOrderStatus(ServiceConstants.ReceiptOrderStatus.PENDING);
-        Long id = receiptOrderService.insertByBo(bo);
-        return Result.success(id);
+    public Result<Long> add(@Validated(AddGroup.class) @RequestBody ReceiptOrderDto dto) {
+        return Result.success(receiptOrderService.insertByBo(dto));
     }
 
     /**
@@ -104,9 +101,8 @@ public class ReceiptOrderController extends BaseController {
     @Log(title = "入库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PostMapping("/warehousing")
-    public Result<Void> doWarehousing(@Validated(AddGroup.class) @RequestBody ReceiptOrderDto bo) {
-        bo.setOrderStatus(ServiceConstants.ReceiptOrderStatus.FINISH);
-        receiptOrderService.receive(bo);
+    public Result<Void> warehousing(@Validated(AddGroup.class) @RequestBody ReceiptOrderDto dto) {
+        receiptOrderService.warehousing(dto);
         return Result.success();
     }
 
@@ -118,8 +114,8 @@ public class ReceiptOrderController extends BaseController {
     @Log(title = "入库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ReceiptOrderDto bo) {
-        receiptOrderService.updateByBo(bo);
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody ReceiptOrderDto dto) {
+        receiptOrderService.updateByBo(dto);
         return Result.success();
     }
 

@@ -36,8 +36,8 @@ public class SysOssConfigController extends BaseController {
     @Operation(summary = "查询对象存储配置列表")
     @SaCheckPermission("system:oss:list")
     @GetMapping("/list")
-    public PageInfoRes<SysOssConfigVo> list(@Validated(QueryGroup.class) SysOssConfigDto bo, BasePage basePage) {
-        return sysOssConfigService.queryPageList(bo, basePage);
+    public PageInfoRes<SysOssConfigVo> list(@Validated(QueryGroup.class) SysOssConfigDto dto, BasePage basePage) {
+        return sysOssConfigService.queryPageList(dto, basePage);
     }
 
     @Operation(summary = "获取对象存储配置详细信息")
@@ -53,8 +53,8 @@ public class SysOssConfigController extends BaseController {
     @Log(title = "对象存储配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public Result<Void> add(@Validated(AddGroup.class) @RequestBody SysOssConfigDto bo) {
-        return toAjax(sysOssConfigService.insertByBo(bo));
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody SysOssConfigDto dto) {
+        return toAjax(sysOssConfigService.insertByBo(dto));
     }
 
     @Operation(summary = "修改对象存储配置")
@@ -62,8 +62,8 @@ public class SysOssConfigController extends BaseController {
     @Log(title = "对象存储配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody SysOssConfigDto bo) {
-        return toAjax(sysOssConfigService.updateByBo(bo));
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody SysOssConfigDto dto) {
+        return toAjax(sysOssConfigService.updateByBo(dto));
     }
 
     /**
@@ -84,7 +84,7 @@ public class SysOssConfigController extends BaseController {
     @SaCheckPermission("system:oss:edit")
     @Log(title = "对象存储状态修改", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
-    public Result<Void> changeStatus(@RequestBody SysOssConfigDto bo) {
-        return toAjax(sysOssConfigService.updateOssConfigStatus(bo));
+    public Result<Void> changeStatus(@RequestBody SysOssConfigDto dto) {
+        return toAjax(sysOssConfigService.updateOssConfigStatus(dto));
     }
 }

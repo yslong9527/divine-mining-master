@@ -2,7 +2,7 @@ package com.divine.warehouse.service;
 
 import com.divine.warehouse.domain.dto.CheckOrderDetailDto;
 import com.divine.warehouse.domain.entity.CheckOrderDetail;
-import com.divine.warehouse.domain.vo.CheckOrderDetailVo;
+import com.divine.warehouse.domain.vo.CheckOrderDetailVO;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 
@@ -21,29 +21,29 @@ public interface CheckOrderDetailService {
     /**
      * 查询库存盘点单据详情
      */
-    CheckOrderDetailVo queryById(Long id);
+    CheckOrderDetailVO queryById(Long id);
 
     /**
      * 查询库存盘点单据详情列表
      */
-    PageInfoRes<CheckOrderDetailVo> queryPageList(CheckOrderDetailDto bo, BasePage basePage);
+    PageInfoRes<CheckOrderDetailVO> queryPageList(CheckOrderDetailDto dto, BasePage basePage);
 
 
     /**
      * 查询库存盘点单据详情列表
      */
-    List<CheckOrderDetailVo> queryList(CheckOrderDetailDto bo);
+    List<CheckOrderDetailVO> queryList(CheckOrderDetailDto dto);
 
 
     /**
      * 新增库存盘点单据详情
      */
-    void insertByBo(CheckOrderDetailDto bo);
+    void insertByBo(CheckOrderDetailDto dto);
 
     /**
      * 修改库存盘点单据详情
      */
-    void updateByBo(CheckOrderDetailDto bo);
+    void updateByBo(CheckOrderDetailDto dto);
 
     /**
      * 批量删除库存盘点单据详情
@@ -52,5 +52,5 @@ public interface CheckOrderDetailService {
 
     void saveDetails(List<CheckOrderDetail> list);
 
-    List<CheckOrderDetailVo> queryByCheckOrderId(Long checkOrderId);
+    List<CheckOrderDetailVO> queryByCheckOrderId(Long checkOrderId);
 }

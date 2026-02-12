@@ -3,6 +3,7 @@ package com.divine.warehouse.service;
 import com.divine.warehouse.domain.dto.BaseOrderDetailDto;
 import com.divine.warehouse.domain.dto.CheckOrderDetailDto;
 import com.divine.warehouse.domain.dto.InventoryDto;
+import com.divine.warehouse.domain.vo.BoardListVO;
 import com.divine.warehouse.domain.vo.InventoryVo;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -27,18 +28,18 @@ public interface InventoryService {
     /**
      * 查询库存列表
      */
-    List<InventoryVo> queryList(InventoryDto bo);
+    List<InventoryVo> queryList(InventoryDto dto);
 
 
     /**
      * 新增库存
      */
-    void insertByBo(InventoryDto bo);
+    void insertByBo(InventoryDto dto);
 
     /**
      * 修改库存
      */
-    void updateByBo(InventoryDto bo);
+    void updateByBo(InventoryDto dto);
 
     /**
      * 批量删除库存
@@ -53,9 +54,9 @@ public interface InventoryService {
      */
     boolean existsBySkuIds(@NotEmpty Collection<Long> skuIds);
 
-    PageInfoRes<InventoryVo> queryWarehouseBoardList(InventoryDto bo, BasePage basePage);
+    PageInfoRes<BoardListVO> queryWarehouseBoardList(InventoryDto dto, BasePage basePage);
 
-    PageInfoRes<InventoryVo> queryItemBoardList(InventoryDto bo, BasePage basePage);
+    PageInfoRes<BoardListVO> queryItemBoardList(InventoryDto dto, BasePage basePage);
 
     void updateInventory(List<CheckOrderDetailDto> details);
 

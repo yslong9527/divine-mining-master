@@ -46,8 +46,8 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
      * 查询物料类型列表
      */
     @Override
-    public PageInfoRes<ItemCategoryVo> queryPageList(ItemCategoryDto bo, BasePage basePage) {
-        LambdaQueryWrapper<ItemCategory> lqw = buildQueryWrapper(bo);
+    public PageInfoRes<ItemCategoryVo> queryPageList(ItemCategoryDto dto, BasePage basePage) {
+        LambdaQueryWrapper<ItemCategory> lqw = buildQueryWrapper(dto);
         Page<ItemCategoryVo> result = itemCategoryMapper.selectVoPage(basePage.build(), lqw);
         return PageInfoRes.build(result);
     }
@@ -56,19 +56,19 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
      * 查询物料类型列表
      */
     @Override
-    public List<ItemCategoryVo> queryList(ItemCategoryDto bo) {
-        LambdaQueryWrapper<ItemCategory> lqw = buildQueryWrapper(bo);
+    public List<ItemCategoryVo> queryList(ItemCategoryDto dto) {
+        LambdaQueryWrapper<ItemCategory> lqw = buildQueryWrapper(dto);
         lqw.orderByAsc(ItemCategory::getOrderNum);
         return itemCategoryMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<ItemCategory> buildQueryWrapper(ItemCategoryDto bo) {
-        Map<String, Object> params = bo.getParams();
+    private LambdaQueryWrapper<ItemCategory> buildQueryWrapper(ItemCategoryDto dto) {
+        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<ItemCategory> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getParentId() != null, ItemCategory::getParentId, bo.getParentId());
-        lqw.like(StrUtil.isNotBlank(bo.getCategoryName()), ItemCategory::getCategoryName, bo.getCategoryName());
-        lqw.eq(bo.getOrderNum() != null, ItemCategory::getOrderNum, bo.getOrderNum());
-        lqw.eq(StrUtil.isNotBlank(bo.getStatus()), ItemCategory::getStatus, bo.getStatus());
+        lqw.eq(dto.getParentId() != null, ItemCategory::getParentId, dto.getParentId());
+        lqw.like(StrUtil.isNotBlank(dto.getCategoryName()), ItemCategory::getCategoryName, dto.getCategoryName());
+        lqw.eq(dto.getOrderNum() != null, ItemCategory::getOrderNum, dto.getOrderNum());
+        lqw.eq(StrUtil.isNotBlank(dto.getStatus()), ItemCategory::getStatus, dto.getStatus());
         return lqw;
     }
 
@@ -76,12 +76,12 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
      * 新增物料类型
      */
     @Override
-    public void insertByBo(ItemCategoryDto bo) {
-        validateItemTypeName(bo);
-        ItemCategory add = MapstructUtils.convert(bo, ItemCategory.class);
+    public void insertByBo(ItemCategoryDto dto) {
+        validateItemTypeName(dto);
+        ItemCategory add = MapstructUtils.convert(dto, ItemCategory.class);
         LambdaQueryWrapper<ItemCategory> wrapper = new LambdaQueryWrapper<>();
-        if (bo.getParentId() != null) {
-            wrapper.eq(ItemCategory::getParentId, bo.getParentId());
+        if (dto.getParentId() != null) {
+            wrapper.eq(ItemCategory::getParentId, dto.getParentId());
         } else {
             wrapper.eq(ItemCategory::getParentId, 0L);
         }
@@ -97,16 +97,16 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
      * 修改物料类型
      */
     @Override
-    public void updateByBo(ItemCategoryDto bo) {
-        validateItemTypeName(bo);
-        ItemCategory update = MapstructUtils.convert(bo, ItemCategory.class);
+    public void updateByBo(ItemCategoryDto dto) {
+        validateItemTypeName(dto);
+        ItemCategory update = MapstructUtils.convert(dto, ItemCategory.class);
         itemCategoryMapper.updateById(update);
     }
 
-    private void validateItemTypeName(ItemCategoryDto bo) {
+    private void validateItemTypeName(ItemCategoryDto dto) {
         LambdaQueryWrapper<ItemCategory> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(ItemCategory::getCategoryName, bo.getCategoryName());
-        queryWrapper.ne(bo.getId() != null, ItemCategory::getId, bo.getId());
+        queryWrapper.eq(ItemCategory::getCategoryName, dto.getCategoryName());
+        queryWrapper.ne(dto.getId() != null, ItemCategory::getId, dto.getId());
         Assert.isTrue(itemCategoryMapper.selectCount(queryWrapper) == 0, "分类名重复");
     }
 

@@ -16,6 +16,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @ExcelIgnoreUnannotated
 @AutoMapper(target = ReceiptOrderDetail.class)
-public class ReceiptOrderDetailVo extends BaseOrderDetailVo{
+public class ReceiptOrderDetailVO extends BaseOrderDetailVO {
 
 }
