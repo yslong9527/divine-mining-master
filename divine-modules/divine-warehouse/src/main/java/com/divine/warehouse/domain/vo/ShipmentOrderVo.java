@@ -26,10 +26,10 @@ public class ShipmentOrderVo extends BaseOrderVo<ShipmentOrderDetailVO>{
     private Long optType;
 
     /**
-     * 供应商
+     * 领用人
      */
-    @ExcelProperty(value = "对接商家id")
-    private Long merchantId;
+    @ExcelProperty(value = "领用人")
+    private String recipient;
 
     /**
      * 订单号

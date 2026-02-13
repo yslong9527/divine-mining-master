@@ -94,21 +94,21 @@ public class ItemSkuDto extends BaseEntity {
     private BigDecimal sellingPrice;
 
     /**
-     * 商品名称
+     * 物品名称
      */
-    @Schema(description = "商品名称")
+    @Schema(description = "物品名称")
     private String itemName;
 
     /**
-     * 商品编码
+     * 物品编码
      */
-    @Schema(description = "商品编码")
+    @Schema(description = "物品编码")
     private String itemCode;
 
     /**
-     * 商品分类
+     * 物品分类
      */
-    @Schema(description = "商品分类")
+    @Schema(description = "物品分类")
     private String itemCategory;
 
     @Schema(description = "")

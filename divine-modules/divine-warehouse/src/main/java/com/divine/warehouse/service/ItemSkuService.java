@@ -50,8 +50,8 @@ public interface ItemSkuService{
     void deleteByIds(Collection<Long> ids);
 
     /**
-     * 批量保存商品sku
-     * @param sku    商品sku
+     * 批量保存物品sku
+     * @param sku    物品sku
      */
     @Transactional
     void saveOrUpdateBatchByBo(List<ItemSkuDto> sku) ;
@@ -61,7 +61,7 @@ public interface ItemSkuService{
     /**
      * 查询sku列表
      *
-     * @param id 商品id
+     * @param id 物品id
      */
     List<ItemSkuVo> queryByItemId(Long id) ;
 

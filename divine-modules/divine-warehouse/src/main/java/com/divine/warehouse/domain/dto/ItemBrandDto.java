@@ -12,7 +12,7 @@ import io.github.linpeilie.annotations.AutoMapper;
 
 
 /**
- * 商品品牌业务对象 wms_item_brand
+ * 物品品牌业务对象 wms_item_brand
  *
  * @author zcc
  * @date 2024-07-30

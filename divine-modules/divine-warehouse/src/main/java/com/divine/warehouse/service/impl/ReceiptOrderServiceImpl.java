@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.enums.InventoryStatusEnum;
+import com.divine.common.core.enums.InventoryTypeEnum;
 import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.ReceiptOrderDetailDto;
 import com.divine.warehouse.domain.dto.ReceiptOrderDto;
@@ -18,12 +20,7 @@ import com.divine.warehouse.domain.vo.BaseOrderDetailVO;
 import com.divine.warehouse.domain.vo.ReceiptOrderDetailVO;
 import com.divine.warehouse.domain.vo.ReceiptOrderVo;
 import com.divine.warehouse.mapper.ReceiptOrderMapper;
-import com.divine.warehouse.service.InventoryHistoryService;
-import com.divine.warehouse.service.InventoryService;
-import com.divine.warehouse.service.ReceiptOrderDetailService;
-import com.divine.warehouse.service.ReceiptOrderService;
-import com.divine.common.core.constant.HttpStatus;
-import com.divine.common.core.constant.ServiceConstants;
+import com.divine.warehouse.service.*;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
@@ -50,6 +47,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     private final ReceiptOrderDetailService receiptOrderDetailService;
     private final InventoryService inventoryService;
     private final InventoryHistoryService inventoryHistoryService;
+    private final CommonService commonService;
 
     /**
      * 查询入库单
@@ -89,12 +87,12 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
 
     private LambdaQueryWrapper<ReceiptOrder> buildQueryWrapper(ReceiptOrderDto dto) {
         LambdaQueryWrapper<ReceiptOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ReceiptOrder::getOrderNo, dto.getOrderNo());
+//        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ReceiptOrder::getOrderNo, dto.getOrderNo());
         lqw.eq(dto.getOptType() != null, ReceiptOrder::getOptType, dto.getOptType());
         lqw.eq(dto.getMerchantId() != null, ReceiptOrder::getMerchantId, dto.getMerchantId());
-        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ReceiptOrder::getOrderNo, dto.getOrderNo());
-        lqw.eq(dto.getOrderNo() != null, ReceiptOrder::getTotalPrice, dto.getOrderNo());
-        lqw.eq(dto.getOrderStatus() != null, ReceiptOrder::getOrderStatus, dto.getOrderStatus());
+//        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ReceiptOrder::getOrderNo, dto.getOrderNo());
+//        lqw.eq(dto.getOrderNo() != null, ReceiptOrder::getTotalPrice, dto.getOrderNo());
+//        lqw.eq(dto.getOrderStatus() != null, ReceiptOrder::getOrderStatus, dto.getOrderStatus());
         lqw.orderByDesc(BaseEntity::getCreateTime);
         return lqw;
     }
@@ -106,17 +104,17 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     @Transactional
     public Long insertByBo(ReceiptOrderDto dto) {
         // 创建入库单
-        ReceiptOrder add = MapstructUtils.convert(dto, ReceiptOrder.class);
-        receiptOrderMapper.insert(add);
-        dto.setId(add.getId());
+        String receiptNo = commonService.getNo(InventoryTypeEnum.CHECK.getCode());
+        dto.setBusinessNo(receiptNo);
+        ReceiptOrder receiptOrder = MapstructUtils.convert(dto, ReceiptOrder.class);
+        receiptOrder.setReceiptNo(receiptNo);
+        receiptOrderMapper.insert(receiptOrder);
         List<ReceiptOrderDetailDto> detailBoList = dto.getDetails();
         List<ReceiptOrderDetail> addDetailList = MapstructUtils.convert(detailBoList, ReceiptOrderDetail.class);
-        addDetailList.forEach(it -> {
-            it.setReceiptId(add.getId());
-        });
+        addDetailList.forEach(it -> it.setReceiptId(receiptOrder.getId()));
         // 创建入库单明细
         receiptOrderDetailService.saveDetails(addDetailList);
-        return add.getId();
+        return receiptOrder.getId();
     }
 
     /**
@@ -130,8 +128,6 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     @Override
     @Transactional
     public void warehousing(ReceiptOrderDto dto) {
-        // 1.校验
-        validateBeforeReceive(dto);
         // 2. 保存入库单和入库单明细
         if (Objects.isNull(dto.getId())) {
             insertByBo(dto);
@@ -141,7 +137,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
         // 3.增加库存
         inventoryService.add(dto.getDetails());
         // 4.保存库存记录
-        inventoryHistoryService.saveInventoryHistory(dto, ServiceConstants.InventoryHistoryOrderType.RECEIPT, true);
+        inventoryHistoryService.saveInventoryHistory(dto, InventoryTypeEnum.RECEIPT.getType(), true);
     }
 
     private void validateBeforeReceive(ReceiptOrderDto dto) {
@@ -183,7 +179,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     public void editToInvalid(Long id) {
         LambdaUpdateWrapper<ReceiptOrder> wrapper = Wrappers.lambdaUpdate();
         wrapper.eq(ReceiptOrder::getId, id);
-        wrapper.set(ReceiptOrder::getOrderStatus, ServiceConstants.ReceiptOrderStatus.INVALID);
+        wrapper.set(ReceiptOrder::getReceiptStatus, InventoryStatusEnum.INVALID.getCode());
         receiptOrderMapper.update(null, wrapper);
     }
 
@@ -199,7 +195,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     private void validateIdBeforeDelete(Long id) {
         ReceiptOrderVo receiptOrderVo = queryById(id);
         Assert.notNull(receiptOrderVo, "入库单不存在");
-        if (ServiceConstants.ReceiptOrderStatus.FINISH.equals(receiptOrderVo.getOrderStatus())) {
+        if (InventoryStatusEnum.FINISH.getCode().equals(receiptOrderVo.getOrderStatus())) {
             throw new BusinessException("入库单【" + receiptOrderVo.getOrderNo() + "】已入库，无法删除！");
         }
     }

@@ -5,7 +5,7 @@ package com.divine.common.core.enums;
  *
  * @author Yisl
  */
-public enum OperatorType {
+public enum OperatorTypeEnum {
     /**
      * 其它
      */

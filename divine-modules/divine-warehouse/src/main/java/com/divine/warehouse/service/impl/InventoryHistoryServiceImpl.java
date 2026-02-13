@@ -42,7 +42,7 @@ public class InventoryHistoryServiceImpl extends ServiceImpl<InventoryHistoryMap
         dto.getDetails().forEach(detail -> {
             InventoryHistory inventoryHistory = new InventoryHistory();
             inventoryHistory.setOrderId(dto.getId());
-            inventoryHistory.setOrderNo(dto.getOrderNo());
+            inventoryHistory.setOrderNo(dto.getBusinessNo());
             inventoryHistory.setOrderType(orderType);
             inventoryHistory.setSkuId(detail.getSkuId());
             if(isAdd){

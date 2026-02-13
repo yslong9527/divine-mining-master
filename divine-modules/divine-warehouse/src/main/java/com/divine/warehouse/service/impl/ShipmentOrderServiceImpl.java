@@ -6,20 +6,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.enums.InventoryStatusEnum;
+import com.divine.common.core.enums.InventoryTypeEnum;
 import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.ShipmentOrderDetailDto;
 import com.divine.warehouse.domain.dto.ShipmentOrderDto;
+import com.divine.warehouse.domain.entity.BaseOrderDetail;
 import com.divine.warehouse.domain.entity.ShipmentOrder;
 import com.divine.warehouse.domain.entity.ShipmentOrderDetail;
+import com.divine.warehouse.domain.vo.BaseOrderDetailVO;
 import com.divine.warehouse.domain.vo.ShipmentOrderDetailVO;
 import com.divine.warehouse.domain.vo.ShipmentOrderVo;
 import com.divine.warehouse.mapper.ShipmentOrderMapper;
-import com.divine.warehouse.service.InventoryHistoryService;
-import com.divine.warehouse.service.InventoryService;
-import com.divine.warehouse.service.ShipmentOrderDetailService;
-import com.divine.warehouse.service.ShipmentOrderService;
-import com.divine.common.core.constant.HttpStatus;
-import com.divine.common.core.constant.ServiceConstants;
+import com.divine.warehouse.service.*;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
@@ -48,12 +47,13 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
     private final ShipmentOrderDetailService shipmentOrderDetailService;
     private final InventoryService inventoryService;
     private final InventoryHistoryService inventoryHistoryService;
+    private final CommonService commonService;
 
     /**
      * 查询出库单
      */
     @Override
-    public ShipmentOrderVo queryById(Long id){
+    public ShipmentOrderVo queryById(Long id) {
         ShipmentOrderVo shipmentOrderVo = shipmentOrderMapper.selectVoById(id);
         if (shipmentOrderVo == null) {
             throw new com.divine.common.core.exception.base.BusinessException("出库单不存在");
@@ -83,13 +83,13 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
 
     private LambdaQueryWrapper<ShipmentOrder> buildQueryWrapper(ShipmentOrderDto dto) {
         LambdaQueryWrapper<ShipmentOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ShipmentOrder::getOrderNo, dto.getOrderNo());
+//        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ShipmentOrder::getOrderNo, dto.getOrderNo());
         lqw.eq(dto.getOptType() != null, ShipmentOrder::getOptType, dto.getOptType());
-        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ShipmentOrder::getOrderNo, dto.getOrderNo());
-        lqw.eq(dto.getMerchantId() != null, ShipmentOrder::getMerchantId, dto.getMerchantId());
+//        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), ShipmentOrder::getOrderNo, dto.getOrderNo());
+        lqw.eq(dto.getRecipient() != null, ShipmentOrder::getRecipient, dto.getRecipient());
         lqw.eq(dto.getTotalPrice() != null, ShipmentOrder::getTotalPrice, dto.getTotalPrice());
         lqw.eq(dto.getTotalQuantity() != null, ShipmentOrder::getTotalQuantity, dto.getTotalQuantity());
-        lqw.eq(dto.getOrderStatus() != null, ShipmentOrder::getOrderStatus, dto.getOrderStatus());
+//        lqw.eq(dto.getOrderStatus() != null, ShipmentOrder::getOrderStatus, dto.getOrderStatus());
         lqw.orderByDesc(BaseEntity::getCreateTime);
         return lqw;
     }
@@ -101,14 +101,18 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
     @Transactional
     public Long insertByBo(ShipmentOrderDto dto) {
         // 创建出库单
-        ShipmentOrder add = MapstructUtils.convert(dto, ShipmentOrder.class);
-        shipmentOrderMapper.insert(add);
-        dto.setId(add.getId());
+        String shipmentNo = commonService.getNo(InventoryTypeEnum.SHIPMENT.getCode());
+        dto.setBusinessNo(shipmentNo);
+        //组装数据保存
+        ShipmentOrder shipmentOrder = MapstructUtils.convert(dto, ShipmentOrder.class);
+        shipmentOrder.setShipmentNo(shipmentNo);
+        shipmentOrder.setShipmentStatus(InventoryStatusEnum.FINISH.getCode());
+        shipmentOrderMapper.insert(shipmentOrder);
         List<ShipmentOrderDetailDto> detailBoList = dto.getDetails();
         List<ShipmentOrderDetail> addDetailList = MapstructUtils.convert(detailBoList, ShipmentOrderDetail.class);
-        addDetailList.forEach(it -> it.setShipmentId(add.getId()));
+        addDetailList.forEach(it -> it.setShipmentId(shipmentOrder.getId()));
         shipmentOrderDetailService.saveDetails(addDetailList);
-        return add.getId();
+        return shipmentOrder.getId();
     }
 
     /**
@@ -118,17 +122,18 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
     @Transactional
     public void updateByBo(ShipmentOrderDto dto) {
         // 更新出库单
-        ShipmentOrder update = MapstructUtils.convert(dto, ShipmentOrder.class);
-        shipmentOrderMapper.updateById(update);
+        ShipmentOrder shipmentOrder = MapstructUtils.convert(dto, ShipmentOrder.class);
+        shipmentOrder.setShipmentStatus(InventoryStatusEnum.FINISH.getCode());
+        shipmentOrderMapper.updateById(shipmentOrder);
         // 保存出库单明细
         List<ShipmentOrderDetail> detailList = MapstructUtils.convert(dto.getDetails(), ShipmentOrderDetail.class);
 
         //需要考虑detail删除
         List<ShipmentOrderDetailVO> dbList = shipmentOrderDetailService.queryByShipmentOrderId(dto.getId());
-        Set<Long> ids = detailList.stream().filter(it -> it.getId() != null).map(it -> it.getId()).collect(Collectors.toSet());
+        Set<Long> ids = detailList.stream().map(BaseOrderDetail::getId).filter(Objects::nonNull).collect(Collectors.toSet());
         List<ShipmentOrderDetailVO> delList = dbList.stream().filter(it -> !ids.contains(it.getId())).collect(Collectors.toList());
         if (CollectionUtil.isNotEmpty(delList)) {
-            shipmentOrderDetailService.deleteByIds(delList.stream().map(it->it.getId()).collect(Collectors.toList()));
+            shipmentOrderDetailService.deleteByIds(delList.stream().map(BaseOrderDetailVO::getId).collect(Collectors.toList()));
         }
         detailList.forEach(it -> it.setShipmentId(dto.getId()));
         shipmentOrderDetailService.saveDetails(detailList);
@@ -149,19 +154,20 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
         if (shipmentOrderVo == null) {
             throw new com.divine.common.core.exception.base.BusinessException("出库单不存在");
         }
-        if (ServiceConstants.ShipmentOrderStatus.FINISH.equals(shipmentOrderVo.getOrderStatus())) {
+        if (InventoryStatusEnum.FINISH.getCode().equals(shipmentOrderVo.getOrderStatus())) {
             throw new BusinessException("出库单【" + shipmentOrderVo.getOrderNo() + "】已出库，无法删除！");
         }
     }
 
     /**
      * 出库
+     *
      * @param dto
      */
     @Override
     @Transactional
     public void shipment(ShipmentOrderDto dto) {
-        // 1.校验商品明细不能为空！
+        // 1.校验物品明细不能为空！
         validateBeforeShipment(dto);
         // 2. 保存入库单和入库单明细
         if (Objects.isNull(dto.getId())) {
@@ -173,19 +179,19 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
         inventoryService.subtract(dto.getDetails());
 
         // 4.创建库存记录
-        inventoryHistoryService.saveInventoryHistory(dto,ServiceConstants.InventoryHistoryOrderType.SHIPMENT,false);
+        inventoryHistoryService.saveInventoryHistory(dto, InventoryTypeEnum.SHIPMENT.getType(), false);
     }
 
 
     private void validateBeforeShipment(ShipmentOrderDto dto) {
         if (CollUtil.isEmpty(dto.getDetails())) {
-            throw new com.divine.common.core.exception.base.BusinessException("商品明细不能为空！");
+            throw new com.divine.common.core.exception.base.BusinessException("物品明细不能为空！");
         }
     }
 
     @Override
     public Long queryIdByOrderNo(String orderNo) {
-        ShipmentOrderVo shipmentOrder = shipmentOrderMapper.selectVoOne(new QueryWrapper<ShipmentOrder>().eq("order_no",orderNo));
+        ShipmentOrderVo shipmentOrder = shipmentOrderMapper.selectVoOne(new QueryWrapper<ShipmentOrder>().eq("order_no", orderNo));
         return shipmentOrder != null ? shipmentOrder.getId() : null;
     }
 }

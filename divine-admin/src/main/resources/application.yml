@@ -12,7 +12,7 @@ divine:
 # Spring配置
 spring:
   profiles:
-    active: dev
+    active: prod
   application:
     name: ${divine.name}
   # 资源信息

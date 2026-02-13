@@ -29,8 +29,8 @@ public class ShipmentOrderDto extends BaseOrderDto<ShipmentOrderDetailDto> {
     @Schema(description = "订单号")
     private String bizOrderNo;
 
-    @Schema(description = "对接商户")
-    private Long merchantId;
+    @Schema(description = "领用人")
+    private String recipient;
 
     @Schema(description = "仓库id")
     @NotNull(message = "仓库不能为空", groups = { AddGroup.class, EditGroup.class })

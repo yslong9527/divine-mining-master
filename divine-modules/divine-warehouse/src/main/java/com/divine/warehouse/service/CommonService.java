@@ -21,12 +21,6 @@ public interface CommonService {
     String getNo(String type);
 
     /**
-     * 回滚编号
-     * @param type
-     */
-    void rollbackNo(String type);
-
-    /**
      * 获取下拉框
      * @param type
      * @return

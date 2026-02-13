@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum UserStatus {
+public enum UserStatusEnum {
     /**
      * 正常
      */

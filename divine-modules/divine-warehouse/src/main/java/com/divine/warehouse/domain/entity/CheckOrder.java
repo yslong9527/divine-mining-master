@@ -16,6 +16,16 @@ import lombok.EqualsAndHashCode;
 public class CheckOrder extends BaseOrder {
 
     /**
+     * 盘库单编号
+     */
+    private String checkNo;
+
+    /**
+     * 盘库单状态
+     */
+    private Integer checkStatus;
+
+    /**
      * 仓库id
      */
     private Long warehouseId;

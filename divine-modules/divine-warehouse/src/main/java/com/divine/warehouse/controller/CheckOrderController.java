@@ -2,7 +2,6 @@ package com.divine.warehouse.controller;
 
 import cn.dev33.satoken.annotation .SaCheckPermission;
 import com.divine.warehouse.domain.dto.CheckOrderDto;
-import com.divine.common.core.constant.ServiceConstants;
 import com.divine.common.core.domain.Result;
 import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
@@ -84,7 +83,6 @@ public class CheckOrderController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public Result<Void> add(@Validated(AddGroup.class) @RequestBody CheckOrderDto dto) {
-        dto.setOrderStatus(ServiceConstants.CheckOrderStatus.PENDING);
         checkOrderService.insertByBo(dto);
         return Result.success();
     }
@@ -111,7 +109,6 @@ public class CheckOrderController extends BaseController {
     @RepeatSubmit()
     @PostMapping("/check")
     public Result<Void> check(@Validated(AddGroup.class) @RequestBody CheckOrderDto dto) {
-        dto.setOrderStatus(ServiceConstants.CheckOrderStatus.FINISH);
         checkOrderService.check(dto);
         return Result.success();
     }

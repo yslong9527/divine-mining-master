@@ -26,9 +26,9 @@ public class BaseOrderVo<T extends BaseOrderDetailVO> extends BaseVo {
     private String orderNo;
 
     /**
-     * 商品总数
+     * 物品总数
      */
-    @ExcelProperty(value = "商品总数")
+    @ExcelProperty(value = "物品总数")
     private BigDecimal totalQuantity;
 
     /**

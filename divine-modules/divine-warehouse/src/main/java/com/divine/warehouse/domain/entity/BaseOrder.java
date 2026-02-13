@@ -16,19 +16,12 @@ public class BaseOrder extends BaseEntity {
      */
     @TableId(value = "id")
     private Long id;
-    /**
-     * 业务单号
-     */
-    private String orderNo;
-    /**
-     * 业务状态
-     */
-    private Integer orderStatus;
 
     /**
-     * 商品总数
+     * 物品总数
      */
     private BigDecimal totalQuantity;
+
     /**
      * 订单总金额
      */

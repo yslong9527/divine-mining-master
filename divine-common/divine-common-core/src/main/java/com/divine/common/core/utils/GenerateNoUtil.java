@@ -5,7 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 public class GenerateNoUtil {
 
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static String generateTimePrefix() {
-        return  LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMdd"));
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMdd"));
     }
 }

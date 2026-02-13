@@ -16,6 +16,16 @@ import lombok.EqualsAndHashCode;
 public class ShipmentOrder extends BaseOrder {
 
     /**
+     * 出库单编号
+     */
+    private String shipmentNo;
+
+    /**
+     * 出库单状态
+     */
+    private Integer shipmentStatus;
+
+    /**
      * 仓库id
      */
     private Long warehouseId;
@@ -24,13 +34,15 @@ public class ShipmentOrder extends BaseOrder {
      * 入库类型
      */
     private Long optType;
+
     /**
      * 业务订单号
      */
     private String bizOrderNo;
+
     /**
-     * 供应商
+     * 领用人
      */
-    private Long merchantId;
+    private String recipient;
 
 }

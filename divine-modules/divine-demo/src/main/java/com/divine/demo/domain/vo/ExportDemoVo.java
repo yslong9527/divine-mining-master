@@ -4,7 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
-import com.divine.common.core.enums.UserStatus;
+import com.divine.common.core.enums.UserStatusEnum;
 import com.divine.common.excel.annotation.ExcelDictFormat;
 import com.divine.common.excel.annotation.ExcelEnumFormat;
 import com.divine.common.excel.convert.ExcelDictConvert;
@@ -36,7 +36,7 @@ public class ExportDemoVo {
 
     @Schema(description = "用户类型(使用ExcelEnumFormat注解需要进行下拉选的部分)")
     @ExcelProperty(value = "用户类型", index = 1, converter = ExcelEnumConvert.class)
-    @ExcelEnumFormat(enumClass = UserStatus.class, textField = "info")
+    @ExcelEnumFormat(enumClass = UserStatusEnum.class, textField = "info")
     @NotEmpty(message = "用户类型不能为空", groups = AddGroup.class)
     private String userStatus;
 

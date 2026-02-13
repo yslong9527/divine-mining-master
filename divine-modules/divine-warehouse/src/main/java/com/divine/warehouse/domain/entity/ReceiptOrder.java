@@ -16,6 +16,16 @@ import lombok.EqualsAndHashCode;
 public class ReceiptOrder extends BaseOrder {
 
     /**
+     * 入库单编号
+     */
+    private String receiptNo;
+
+    /**
+     * 入库单状态
+     */
+    private Integer receiptStatus;
+
+    /**
      * 仓库id
      */
     private Long warehouseId;

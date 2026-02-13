@@ -11,9 +11,9 @@ import com.divine.common.core.constant.Constants;
 import com.divine.common.core.domain.dto.LoginUser;
 import com.divine.common.core.domain.dto.XcxLoginUser;
 import com.divine.common.core.domain.vo.RoleVO;
-import com.divine.common.core.enums.DeviceType;
-import com.divine.common.core.enums.LoginType;
-import com.divine.common.core.enums.UserStatus;
+import com.divine.common.core.enums.DeviceTypeEnum;
+import com.divine.common.core.enums.LoginTypeEnum;
+import com.divine.common.core.enums.UserStatusEnum;
 import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.*;
 import com.divine.common.log.event.LogininforEvent;
@@ -32,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 import java.util.function.Supplier;
@@ -77,11 +76,11 @@ public class SysLoginServiceImpl implements SysLoginService {
         }
         // 框架登录不限制从什么表查询 只要最终构建出 LoginUser 即可
         SysUserVo user = loadUserByUsername(username);
-        checkLogin(LoginType.PASSWORD, username, () -> !BCrypt.checkpw(password, user.getPassword()));
+        checkLogin(LoginTypeEnum.PASSWORD, username, () -> !BCrypt.checkpw(password, user.getPassword()));
         // 此处可根据登录用户的数据不同 自行创建 loginUser 属性不够用继承扩展就行了
         LoginUser loginUser = buildLoginUser(user);
         // 生成token
-        LoginHelper.loginByDevice(loginUser, DeviceType.PC);
+        LoginHelper.loginByDevice(loginUser, DeviceTypeEnum.PC);
 
         recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
         recordLoginInfo(user.getUserId(), username);
@@ -93,11 +92,11 @@ public class SysLoginServiceImpl implements SysLoginService {
         // 通过手机号查找用户
         SysUserVo user = loadUserByPhonenumber(phonenumber);
 
-        checkLogin(LoginType.SMS, user.getUserName(), () -> !validateSmsCode(phonenumber, smsCode));
+        checkLogin(LoginTypeEnum.SMS, user.getUserName(), () -> !validateSmsCode(phonenumber, smsCode));
         // 此处可根据登录用户的数据不同 自行创建 loginUser 属性不够用继承扩展就行了
         LoginUser loginUser = buildLoginUser(user);
         // 生成token
-        LoginHelper.loginByDevice(loginUser, DeviceType.APP);
+        LoginHelper.loginByDevice(loginUser, DeviceTypeEnum.APP);
 
         recordLogininfor(user.getUserName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
         recordLoginInfo(user.getUserId(), user.getUserName());
@@ -109,11 +108,11 @@ public class SysLoginServiceImpl implements SysLoginService {
         // 通过手邮箱查找用户
         SysUserVo user = loadUserByEmail(email);
 
-        checkLogin(LoginType.EMAIL, user.getUserName(), () -> !validateEmailCode(email, emailCode));
+        checkLogin(LoginTypeEnum.EMAIL, user.getUserName(), () -> !validateEmailCode(email, emailCode));
         // 此处可根据登录用户的数据不同 自行创建 loginUser 属性不够用继承扩展就行了
         LoginUser loginUser = buildLoginUser(user);
         // 生成token
-        LoginHelper.loginByDevice(loginUser, DeviceType.APP);
+        LoginHelper.loginByDevice(loginUser, DeviceTypeEnum.APP);
 
         recordLogininfor(user.getUserName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
         recordLoginInfo(user.getUserId(), user.getUserName());
@@ -137,7 +136,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         loginUser.setUserType(user.getUserType());
         loginUser.setOpenid(openid);
         // 生成token
-        LoginHelper.loginByDevice(loginUser, DeviceType.XCX);
+        LoginHelper.loginByDevice(loginUser, DeviceTypeEnum.XCX);
 
         recordLogininfor(user.getUserName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"));
         recordLoginInfo(user.getUserId(), user.getUserName());
@@ -228,7 +227,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", username);
             throw new BusinessException("用户不存在");
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        } else if (UserStatusEnum.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
             throw new BusinessException("当前用户已被停用");
         }
@@ -240,7 +239,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", phonenumber);
             throw new BusinessException("用户不存在");
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        } else if (UserStatusEnum.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", phonenumber);
             throw new BusinessException("当前用户已被停用");
         }
@@ -252,7 +251,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", email);
             throw new BusinessException("用户不存在");
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        } else if (UserStatusEnum.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", email);
             throw new BusinessException("当前用户已被停用");
         }
@@ -266,7 +265,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", openid);
             // todo 用户不存在 业务逻辑自行实现
-        } else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
+        } else if (UserStatusEnum.DISABLE.getCode().equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", openid);
             // todo 用户已被停用 业务逻辑自行实现
         }
@@ -314,7 +313,7 @@ public class SysLoginServiceImpl implements SysLoginService {
     /**
      * 登录校验
      */
-    private void checkLogin(LoginType loginType, String username, Supplier<Boolean> supplier) {
+    private void checkLogin(LoginTypeEnum loginTypeEnum, String username, Supplier<Boolean> supplier) {
         String clientIP = ServletUtils.getClientIP();
         String errorKey = CacheConstants.PWD_ERR_CNT_KEY + username + ":" + clientIP;
         String loginFail = Constants.LOGIN_FAIL;
@@ -323,7 +322,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         int errorNumber = ObjectUtil.defaultIfNull(RedisUtils.getCacheObject(errorKey), 0);
         // 锁定时间内登录 则踢出
         if (errorNumber >= maxRetryCount) {
-            recordLogininfor(username, loginFail, MessageUtils.message(loginType.getRetryLimitExceed(), maxRetryCount, lockTime));
+            recordLogininfor(username, loginFail, MessageUtils.message(loginTypeEnum.getRetryLimitExceed(), maxRetryCount, lockTime));
             throw new BusinessException("账户已被锁定，请" + lockTime + "分钟之后再试");
         }
 
@@ -334,11 +333,11 @@ public class SysLoginServiceImpl implements SysLoginService {
             // 达到规定错误次数 则锁定登录
             if (errorNumber >= maxRetryCount) {
                 long timeToLive = RedisUtils.getTimeToLive(errorKey);
-                recordLogininfor(username, loginFail, MessageUtils.message(loginType.getRetryLimitExceed(), maxRetryCount, lockTime));
+                recordLogininfor(username, loginFail, MessageUtils.message(loginTypeEnum.getRetryLimitExceed(), maxRetryCount, lockTime));
                 throw new BusinessException("账户已被锁定，请" + timeToLive + "分钟后再试");
             } else {
                 // 未达到规定错误次数
-                recordLogininfor(username, loginFail, MessageUtils.message(loginType.getRetryLimitCount(), errorNumber));
+                recordLogininfor(username, loginFail, MessageUtils.message(loginTypeEnum.getRetryLimitCount(), errorNumber));
                 throw new BusinessException("密码输入错误" + errorNumber + "次,错误" + maxRetryCount + "次后账号将会锁定" + lockTime + "分钟");
             }
         }

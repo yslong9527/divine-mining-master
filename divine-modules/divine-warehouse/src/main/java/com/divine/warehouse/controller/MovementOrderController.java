@@ -2,7 +2,6 @@ package com.divine.warehouse.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.divine.warehouse.domain.dto.MovementOrderDto;
-import com.divine.common.core.constant.ServiceConstants;
 import com.divine.common.core.domain.Result;
 import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
@@ -84,7 +83,6 @@ public class MovementOrderController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public Result<Void> add(@Validated(AddGroup.class) @RequestBody MovementOrderDto dto) {
-        dto.setOrderStatus(ServiceConstants.MovementOrderStatus.PENDING);
         movementOrderService.insertByBo(dto);
         return Result.success();
     }
@@ -111,7 +109,6 @@ public class MovementOrderController extends BaseController {
     @RepeatSubmit()
     @PostMapping("/move")
     public Result<Void> move(@Validated(AddGroup.class) @RequestBody MovementOrderDto dto) {
-        dto.setOrderStatus(ServiceConstants.MovementOrderStatus.FINISH);
         movementOrderService.move(dto);
         return Result.success();
     }

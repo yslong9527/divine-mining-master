@@ -4,17 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.divine.common.core.enums.InventoryStatusEnum;
+import com.divine.common.core.enums.InventoryTypeEnum;
 import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.MovementOrderDto;
 import com.divine.warehouse.domain.entity.MovementOrder;
 import com.divine.warehouse.domain.entity.MovementOrderDetail;
 import com.divine.warehouse.domain.vo.MovementOrderVo;
 import com.divine.warehouse.mapper.MovementOrderMapper;
-import com.divine.warehouse.service.InventoryHistoryService;
-import com.divine.warehouse.service.InventoryService;
-import com.divine.warehouse.service.MovementOrderDetailService;
-import com.divine.warehouse.service.MovementOrderService;
-import com.divine.common.core.constant.ServiceConstants;
+import com.divine.warehouse.service.*;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
@@ -44,6 +42,7 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     private final MovementOrderDetailService movementOrderDetailService;
     private final InventoryService inventoryService;
     private final InventoryHistoryService inventoryHistoryService;
+    private final CommonService commonService;
 
 
     /**
@@ -81,10 +80,10 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     private LambdaQueryWrapper<MovementOrder> buildQueryWrapper(MovementOrderDto dto) {
         Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<MovementOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), MovementOrder::getOrderNo, dto.getOrderNo());
+//        lqw.eq(StringUtils.isNotBlank(dto.getOrderNo()), MovementOrder::getOrderNo, dto.getOrderNo());
         lqw.eq(dto.getSourceWarehouseId() != null, MovementOrder::getSourceWarehouseId, dto.getSourceWarehouseId());
         lqw.eq(dto.getTargetWarehouseId() != null, MovementOrder::getTargetWarehouseId, dto.getTargetWarehouseId());
-        lqw.eq(dto.getOrderStatus() != null, MovementOrder::getOrderStatus, dto.getOrderStatus());
+//        lqw.eq(dto.getOrderStatus() != null, MovementOrder::getOrderStatus, dto.getOrderStatus());
         lqw.eq(dto.getTotalQuantity() != null, MovementOrder::getTotalQuantity, dto.getTotalQuantity());
         lqw.orderByDesc(BaseEntity::getCreateTime);
         return lqw;
@@ -96,26 +95,18 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     @Override
     @Transactional
     public void insertByBo(MovementOrderDto dto) {
-        // 1.校验移库单号唯一性
-        validateMovementOrderNo(dto.getOrderNo());
         // 2.创建移库单
-        MovementOrder add = MapstructUtils.convert(dto, MovementOrder.class);
-        movementOrderMapper.insert(add);
-        dto.setId(add.getId());
+        MovementOrder movementOrder = MapstructUtils.convert(dto, MovementOrder.class);
+        movementOrder.setMoveNo(commonService.getNo(InventoryTypeEnum.MOVEMENT.getCode()));
+        movementOrder.setMoveStatus(InventoryStatusEnum.FINISH.getCode());
+        movementOrderMapper.insert(movementOrder);
+        dto.setId(movementOrder.getId());
         // 3.创建移库单明细
         List<MovementOrderDetail> addDetailList = MapstructUtils.convert(dto.getDetails(), MovementOrderDetail.class);
         addDetailList.forEach(it -> {
-            it.setMovementId(add.getId());
+            it.setMovementId(movementOrder.getId());
         });
         movementOrderDetailService.saveDetails(addDetailList);
-    }
-
-    private void validateMovementOrderNo(String movementOrderNo) {
-        LambdaQueryWrapper<MovementOrder> lambdaQueryWrapper = Wrappers.lambdaQuery();
-        lambdaQueryWrapper.eq(MovementOrder::getOrderNo, movementOrderNo);
-        if (movementOrderMapper.exists(lambdaQueryWrapper)) {
-            throw new com.divine.common.core.exception.base.BusinessException("移库单号重复，请手动修改");
-        }
     }
 
     /**
@@ -149,7 +140,7 @@ public class MovementOrderServiceImpl implements MovementOrderService {
         if (movementOrderVo == null) {
             throw new com.divine.common.core.exception.base.BusinessException("移库单不存在");
         }
-        if (ServiceConstants.MovementOrderStatus.FINISH.equals(movementOrderVo.getOrderStatus())) {
+        if (InventoryStatusEnum.FINISH.getCode().equals(movementOrderVo.getOrderStatus())) {
             throw new BusinessException("移库单【" + movementOrderVo.getOrderNo() + "】已移库，无法删除！");
         }
     }
@@ -171,10 +162,6 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     @Transactional
     public void move(MovementOrderDto dto) {
 
-
-        // 1.校验商品明细不能为空！
-        validateBeforeMove(dto);
-
         // 3.保存移库单核移库单明细
         if (Objects.isNull(dto.getId())) {
             insertByBo(dto);
@@ -184,14 +171,10 @@ public class MovementOrderServiceImpl implements MovementOrderService {
         // 4.更新库存Inventory
         MovementOrderDto shipmentBo = getShipmentBo(dto);
         inventoryService.subtract(shipmentBo.getDetails());
-
         MovementOrderDto receiptDto = getReceiptDto(dto);
-//        inventoryService.add(receiptDto.getDetails(), dto.getTargetWarehouseId());
-
-
+        inventoryService.add(receiptDto.getDetails());
         // 6.创建库存记录流水
-//        inventoryHistoryService.saveInventoryHistory(shipmentBo, ServiceConstants.InventoryHistoryOrderType.MOVEMENT, false);
-//        inventoryHistoryService.saveInventoryHistory(receiptDto, ServiceConstants.InventoryHistoryOrderType.MOVEMENT, true);
+        inventoryHistoryService.saveInventoryHistory(shipmentBo, InventoryTypeEnum.MOVEMENT.getType(), false);
     }
 
     private MovementOrderDto getReceiptDto(MovementOrderDto dto) {
@@ -209,7 +192,7 @@ public class MovementOrderServiceImpl implements MovementOrderService {
 
     private void validateBeforeMove(MovementOrderDto dto) {
         if (CollUtil.isEmpty(dto.getDetails())) {
-            throw new com.divine.common.core.exception.base.BusinessException("商品明细不能为空！");
+            throw new com.divine.common.core.exception.base.BusinessException("物品明细不能为空！");
         }
     }
 }

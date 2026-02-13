@@ -8,7 +8,7 @@ import cn.hutool.http.useragent.UserAgentUtil;
 import com.divine.common.core.constant.CacheConstants;
 import com.divine.common.core.domain.vo.UserOnlineVO;
 import com.divine.common.core.domain.dto.LoginUser;
-import com.divine.common.core.enums.UserType;
+import com.divine.common.core.enums.UserTypeEnum;
 import com.divine.common.core.utils.ServletUtils;
 import com.divine.common.core.utils.ip.AddressUtils;
 import com.divine.common.redis.utils.RedisUtils;
@@ -36,8 +36,8 @@ public class UserActionListener implements SaTokenListener {
      */
     @Override
     public void doLogin(String loginType, Object loginId, String tokenValue, SaLoginModel loginModel) {
-        UserType userType = UserType.getUserType(loginId.toString());
-        if (userType == UserType.SYS_USER) {
+        UserTypeEnum userTypeEnum = UserTypeEnum.getUserType(loginId.toString());
+        if (userTypeEnum == UserTypeEnum.SYS_USER) {
             UserAgent userAgent = UserAgentUtil.parse(ServletUtils.getRequest().getHeader("User-Agent"));
             String ip = ServletUtils.getClientIP();
             LoginUser user = LoginHelper.getLoginUser();
@@ -55,7 +55,7 @@ public class UserActionListener implements SaTokenListener {
             } else {
                 RedisUtils.setCacheObject(CacheConstants.ONLINE_TOKEN_KEY + tokenValue, dto, Duration.ofSeconds(tokenConfig.getTimeout()));
             }
-        } else if (userType == UserType.APP_USER) {
+        } else if (userTypeEnum == UserTypeEnum.APP_USER) {
             // app端 自行根据业务编写
         }
     }

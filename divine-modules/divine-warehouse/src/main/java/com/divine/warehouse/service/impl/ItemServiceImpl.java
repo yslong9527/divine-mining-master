@@ -153,13 +153,13 @@ public class ItemServiceImpl implements ItemService {
         LambdaQueryWrapper<Item> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(Item::getItemName, item.getItemName());
         queryWrapper.ne(item.getId() != null, Item::getId, item.getId());
-        Assert.isTrue(itemMapper.selectCount(queryWrapper) == 0, "商品名称重复");
+        Assert.isTrue(itemMapper.selectCount(queryWrapper) == 0, "物品名称重复");
     }
 
     private void validateItemSkuName(List<ItemSkuDto> skuVoList) {
          Assert.isTrue(
              skuVoList.stream().map(ItemSkuDto::getSkuName).distinct().count() == skuVoList.size(),
-             "商品规格重复"
+             "物品规格重复"
          );
     }
 

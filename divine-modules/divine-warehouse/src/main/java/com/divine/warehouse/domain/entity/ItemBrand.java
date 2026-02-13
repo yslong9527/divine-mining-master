@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 商品品牌对象 wms_item_brand
+ * 物品品牌对象 wms_item_brand
  *
  * @author zcc
  * @date 2024-07-30

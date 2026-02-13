@@ -2,7 +2,6 @@ package com.divine.warehouse.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.divine.warehouse.domain.dto.ShipmentOrderDto;
-import com.divine.common.core.constant.ServiceConstants;
 import com.divine.common.core.domain.Result;
 import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
@@ -117,7 +116,6 @@ public class ShipmentOrderController extends BaseController {
     @RepeatSubmit()
     @PutMapping("/shipment")
     public Result<Void> shipment(@Validated(AddGroup.class) @RequestBody ShipmentOrderDto dto) {
-        dto.setOrderStatus(ServiceConstants.ShipmentOrderStatus.FINISH);
         shipmentOrderService.shipment(dto);
         return Result.success();
     }

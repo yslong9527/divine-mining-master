@@ -2,7 +2,6 @@ package com.divine.warehouse.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.divine.common.core.domain.Result;
-import com.divine.warehouse.enums.NoTypeEnum;
 import com.divine.warehouse.enums.OptionTypeEnum;
 import com.divine.common.core.domain.vo.OptionVO;
 import com.divine.warehouse.service.CommonService;
@@ -30,33 +29,6 @@ public class CommonController {
 
     @Autowired
     private CommonService commonService;
-
-
-    @GetMapping("/getNo")
-    @Operation(summary = "获取编号")
-    @SaCheckPermission("wms:check:all")
-    public Result<String> getNo(@RequestParam
-                                @Parameter(
-                                    description = "编号类型",
-                                    required = true,
-                                    schema = @Schema(implementation = NoTypeEnum.class)
-                                ) String type) {
-        return Result.success(commonService.getNo(type));
-    }
-
-
-    @GetMapping("/rollbackNo")
-    @Operation(summary = "回滚编号(调用了新增,调用这个接口)")
-    @SaCheckPermission("wms:check:all")
-    public Result<String> rollbackNo(@RequestParam
-                                @Parameter(
-                                    description = "编号类型",
-                                    required = true,
-                                    schema = @Schema(implementation = NoTypeEnum.class)
-                                ) String type) {
-        commonService.rollbackNo(type);
-        return Result.success();
-    }
 
 
     @GetMapping("/getOption")

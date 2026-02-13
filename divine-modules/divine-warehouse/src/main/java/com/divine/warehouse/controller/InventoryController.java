@@ -41,19 +41,13 @@ public class InventoryController extends BaseController {
 
     private final InventoryService inventoryService;
 
-    /**
-     * 查询库存列表商品维度
-     */
-    @Operation(summary = "查询库存列表商品维度")
+    @Operation(summary = "查询库存列表物品维度")
     @SaCheckPermission("wms:inventory:all")
     @GetMapping(value = {"/boardList/item"})
     public PageInfoRes<BoardListVO> queryItemBoardList(InventoryDto dto, BasePage basePage) {
         return inventoryService.queryItemBoardList(dto, basePage);
     }
 
-    /**
-     * 查询库存列表仓库维度
-     */
     @Operation(summary = "查询库存列表仓库维度")
     @SaCheckPermission("wms:inventory:all")
     @GetMapping("/boardList/warehouse")
@@ -61,19 +55,13 @@ public class InventoryController extends BaseController {
         return inventoryService.queryWarehouseBoardList(dto, basePage);
     }
 
-    /**
-     * 查询库存列表商品维度
-     */
-    @Operation(summary = "查询库存列表商品维度")
+    @Operation(summary = "查询库存列表物品维度")
     @SaCheckPermission("wms:inventory:all")
     @GetMapping(value = {"/listNoPage"})
     public Result<List<InventoryVo>> listNoPage(InventoryDto dto) {
         return Result.success(inventoryService.queryList(dto));
     }
 
-    /**
-     * 导出库存列表
-     */
     @Operation(summary = "导出库存列表")
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.EXPORT)
@@ -83,11 +71,6 @@ public class InventoryController extends BaseController {
         ExcelUtil.exportExcel(list, "库存", InventoryVo.class, response);
     }
 
-    /**
-     * 获取库存详细信息
-     *
-     * @param id 主键
-     */
     @Operation(summary = "获取库存详细信息")
     @SaCheckPermission("wms:inventory:all")
     @GetMapping("/{id}")
@@ -96,9 +79,6 @@ public class InventoryController extends BaseController {
         return Result.success(inventoryService.queryById(id));
     }
 
-    /**
-     * 新增库存
-     */
     @Operation(summary = "新增库存")
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.INSERT)
@@ -109,9 +89,6 @@ public class InventoryController extends BaseController {
         return Result.success();
     }
 
-    /**
-     * 修改库存
-     */
     @Operation(summary = "修改库存")
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.UPDATE)
@@ -122,11 +99,6 @@ public class InventoryController extends BaseController {
         return Result.success();
     }
 
-    /**
-     * 删除库存
-     *
-     * @param ids 主键串
-     */
     @Operation(summary = "删除库存")
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.DELETE)

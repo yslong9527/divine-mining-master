@@ -113,7 +113,7 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
         ItemSku itemSku = itemSkuMapper.selectById(id);
 
         if(queryByItemId(itemSku.getItemId()).size() <= 1){
-            throw new BusinessException("至少包含一个商品规格！");
+            throw new BusinessException("至少包含一个物品规格！");
         }
         // 校验库存是否已关联
         if (inventoryService.existsBySkuIds(List.of(id))) {
@@ -123,7 +123,7 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
 
     private void validateSkuIdsBeforeDelete(Collection<Long> skuIds) {
         if (inventoryService.existsBySkuIds(skuIds)) {
-            throw new BusinessException("该商品已有业务关联，无法删除！");
+            throw new BusinessException("该物品已有业务关联，无法删除！");
         }
     }
     /**
@@ -138,8 +138,8 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
     }
 
     /**
-     * 批量保存商品sku
-     * @param sku    商品sku
+     * 批量保存物品sku
+     * @param sku    物品sku
      */
     @Override
     @Transactional
@@ -159,7 +159,7 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
     /**
      * 查询sku列表
      *
-     * @param id 商品id
+     * @param id 物品id
      */
     @Override
     public List<ItemSkuVo> queryByItemId(Long id) {

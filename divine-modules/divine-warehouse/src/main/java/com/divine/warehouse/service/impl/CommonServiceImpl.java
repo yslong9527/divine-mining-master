@@ -44,19 +44,6 @@ public class CommonServiceImpl implements CommonService {
         return type + dateStr + String.format("%03d", num);
     }
 
-    /**
-     * 回滚编号
-     * @param type
-     */
-    @Override
-    public void rollbackNo(String type) {
-        // 1. 当天日期（yyyyMMdd）
-        String dateStr = LocalDate.now().format(DATE_FORMATTER);
-        // 2. Redis Key（按公司 + 按天）
-        String redisKey = RedisKeyConstants.NO_KEY + type + ":" + dateStr;
-        RedisUtils.decrAtomicValue(redisKey);
-    }
-
 
     /**
      * 获取距离今天结束（23:59:59）的秒数

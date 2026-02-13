@@ -17,9 +17,15 @@ import java.io.Serial;
 @TableName("wms_movement_order")
 public class MovementOrder extends BaseOrder {
 
-    @Serial
-    private static final long serialVersionUID=1L;
+    /**
+     * 移库单编号
+     */
+    private String moveNo;
 
+    /**
+     * 移库单状态
+     */
+    private Integer moveStatus;
     /**
      * 源仓库
      */

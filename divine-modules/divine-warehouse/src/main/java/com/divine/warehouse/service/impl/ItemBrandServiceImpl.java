@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 商品品牌Service业务层处理
+ * 物品品牌Service业务层处理
  *
  * @author zcc
  * @date 2024-07-30
@@ -37,7 +37,7 @@ public class ItemBrandServiceImpl implements ItemBrandService {
     private final ItemMapper itemMapper;
 
     /**
-     * 查询商品品牌
+     * 查询物品品牌
      */
     @Override
     public ItemBrandVo queryById(Long id){
@@ -45,7 +45,7 @@ public class ItemBrandServiceImpl implements ItemBrandService {
     }
 
     /**
-     * 查询商品品牌列表
+     * 查询物品品牌列表
      */
     @Override
     public PageInfoRes<ItemBrandVo> queryPageList(ItemBrandDto dto, BasePage basePage) {
@@ -55,7 +55,7 @@ public class ItemBrandServiceImpl implements ItemBrandService {
     }
 
     /**
-     * 查询商品品牌列表
+     * 查询物品品牌列表
      */
     @Override
     public List<ItemBrandVo> queryList(ItemBrandDto dto) {
@@ -72,7 +72,7 @@ public class ItemBrandServiceImpl implements ItemBrandService {
     }
 
     /**
-     * 新增商品品牌
+     * 新增物品品牌
      */
     @Override
     public void insertByBo(ItemBrandDto dto) {
@@ -81,7 +81,7 @@ public class ItemBrandServiceImpl implements ItemBrandService {
     }
 
     /**
-     * 修改商品品牌
+     * 修改物品品牌
      */
     @Override
     public void updateByBo(ItemBrandDto dto) {
@@ -90,7 +90,7 @@ public class ItemBrandServiceImpl implements ItemBrandService {
     }
 
     /**
-     * 批量删除商品品牌
+     * 批量删除物品品牌
      */
     @Override
     public void deleteById(Long id) {

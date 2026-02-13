@@ -6,7 +6,7 @@ import com.divine.common.mybatis.core.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 商品品牌Mapper接口
+ * 物品品牌Mapper接口
  *
  * @author zcc
  * @date 2024-07-30

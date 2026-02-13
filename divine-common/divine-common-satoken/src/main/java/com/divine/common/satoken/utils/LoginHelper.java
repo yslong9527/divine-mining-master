@@ -9,8 +9,8 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import com.divine.common.core.constant.UserConstants;
 import com.divine.common.core.domain.dto.LoginUser;
-import com.divine.common.core.enums.DeviceType;
-import com.divine.common.core.enums.UserType;
+import com.divine.common.core.enums.DeviceTypeEnum;
+import com.divine.common.core.enums.UserTypeEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -47,13 +47,13 @@ public class LoginHelper {
      *
      * @param loginUser 登录用户信息
      */
-    public static void loginByDevice(LoginUser loginUser, DeviceType deviceType) {
+    public static void loginByDevice(LoginUser loginUser, DeviceTypeEnum deviceTypeEnum) {
         SaStorage storage = SaHolder.getStorage();
         storage.set(LOGIN_USER_KEY, loginUser);
         storage.set(USER_KEY, loginUser.getUserId());
         SaLoginModel model = new SaLoginModel();
-        if (ObjectUtil.isNotNull(deviceType)) {
-            model.setDevice(deviceType.getDevice());
+        if (ObjectUtil.isNotNull(deviceTypeEnum)) {
+            model.setDevice(deviceTypeEnum.getDevice());
         }
         // 自定义分配 不同用户体系 不同 token 授权时间 不设置默认走全局 yml 配置
         // 例如: 后台用户30分钟过期 app用户1天过期
@@ -129,9 +129,9 @@ public class LoginHelper {
     /**
      * 获取用户类型
      */
-    public static UserType getUserType() {
+    public static UserTypeEnum getUserType() {
         String loginType = StpUtil.getLoginIdAsString();
-        return UserType.getUserType(loginType);
+        return UserTypeEnum.getUserType(loginType);
     }
 
     /**

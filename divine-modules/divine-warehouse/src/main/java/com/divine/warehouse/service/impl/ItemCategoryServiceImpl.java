@@ -19,6 +19,7 @@ import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,10 +120,10 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
         LambdaQueryWrapper<ItemCategory> itemCategoryLqw = new LambdaQueryWrapper<>();
         itemCategoryLqw.in(ItemCategory::getParentId, ids);
         Assert.state(itemCategoryMapper.selectCount(itemCategoryLqw) == 0, "删除失败！请先删除该分类下的子分类！");
-        // 被商品应用了不能删
+        // 被物品应用了不能删
         LambdaQueryWrapper<Item> itemLqw = Wrappers.lambdaQuery();
         itemLqw.in(Item::getItemCategory, ids);
-        Assert.state(itemMapper.selectCount(itemLqw) == 0, "删除失败！分类已被商品使用！");
+        Assert.state(itemMapper.selectCount(itemLqw) == 0, "删除失败！分类已被物品使用！");
         // 删除
         LambdaQueryWrapper<ItemCategory> deleteWrapper = new LambdaQueryWrapper<>();
         deleteWrapper.in(ItemCategory::getId, ids);
@@ -199,6 +200,7 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateOrderNum(List<ItemTypeTreeSelectVo> tree) {
         List<ItemCategory> updateList = new ArrayList<>();
         for (int i = 0; i < tree.size(); i++) {

@@ -1,7 +1,7 @@
 package com.divine.demo.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.divine.common.core.enums.UserStatus;
+import com.divine.common.core.enums.UserStatusEnum;
 import com.divine.common.core.utils.StreamUtils;
 import com.divine.common.excel.core.DropDownOptions;
 import com.divine.common.excel.utils.ExcelUtil;
@@ -34,7 +34,7 @@ public class ExportExcelServiceImpl implements IExportExcelService {
             // 模拟数据库中的一条数据
             ExportDemoVo everyRowData = new ExportDemoVo();
             everyRowData.setNickName("用户-" + i);
-            everyRowData.setUserStatus(UserStatus.OK.getCode());
+            everyRowData.setUserStatus(UserStatusEnum.OK.getCode());
             everyRowData.setGender("1");
             everyRowData.setPhoneNumber(String.format("175%08d", i));
             everyRowData.setEmail(String.format("175%08d", i) + "@163.com");

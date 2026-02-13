@@ -4,7 +4,7 @@ import cn.dev33.satoken.secure.BCrypt;
 import com.divine.common.core.constant.CacheConstants;
 import com.divine.common.core.constant.Constants;
 import com.divine.common.core.domain.dto.RegisterBody;
-import com.divine.common.core.enums.UserType;
+import com.divine.common.core.enums.UserTypeEnum;
 import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.MessageUtils;
 import com.divine.common.core.utils.ServletUtils;
@@ -39,7 +39,7 @@ public class SysRegisterServiceImpl implements SysRegisterService {
         String username = registerBody.getUsername();
         String password = registerBody.getPassword();
         // 校验用户类型是否存在
-        String userType = UserType.getUserType(registerBody.getUserType()).getUserType();
+        String userType = UserTypeEnum.getUserType(registerBody.getUserType()).getUserType();
 
         boolean captchaEnabled = captchaProperties.getEnable();
         // 验证码开关

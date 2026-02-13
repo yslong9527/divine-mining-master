@@ -10,19 +10,19 @@ import java.util.Map;
  *
  * @author Yisl
  */
-public enum HttpMethod {
+public enum HttpMethodEnum {
     GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
 
-    private static final Map<String, HttpMethod> mappings = new HashMap<>(16);
+    private static final Map<String, HttpMethodEnum> mappings = new HashMap<>(16);
 
     static {
-        for (HttpMethod httpMethod : values()) {
-            mappings.put(httpMethod.name(), httpMethod);
+        for (HttpMethodEnum httpMethodEnum : values()) {
+            mappings.put(httpMethodEnum.name(), httpMethodEnum);
         }
     }
 
     @Nullable
-    public static HttpMethod resolve(@Nullable String method) {
+    public static HttpMethodEnum resolve(@Nullable String method) {
         return (method != null ? mappings.get(method) : null);
     }
 

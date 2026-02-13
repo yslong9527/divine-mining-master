@@ -16,7 +16,6 @@ import com.divine.warehouse.domain.vo.ItemSkuMapVo;
 import com.divine.warehouse.mapper.InventoryMapper;
 import com.divine.warehouse.service.InventoryService;
 import com.divine.warehouse.service.ItemSkuService;
-import com.divine.common.core.constant.HttpStatus;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -138,6 +137,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Page<BoardListVO> result = inventoryMapper.queryItemBoardList(basePage.build(), dto);
         return PageInfoRes.build(result);
     }
+
 
     @Override
     public void updateInventory(List<CheckOrderDetailDto> details) {

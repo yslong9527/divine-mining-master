@@ -39,9 +39,6 @@ public class ReceiptOrderController extends BaseController {
 
     private final ReceiptOrderService receiptOrderService;
 
-    /**
-     * 查询入库单列表
-     */
     @Operation(summary = "查询入库单列表")
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/list")
@@ -49,9 +46,6 @@ public class ReceiptOrderController extends BaseController {
         return receiptOrderService.queryPageList(dto, basePage);
     }
 
-    /**
-     * 导出入库单列表
-     */
     @Operation(summary = "导出入库单列表")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.EXPORT)
@@ -61,11 +55,6 @@ public class ReceiptOrderController extends BaseController {
         ExcelUtil.exportExcel(list, "入库单", ReceiptOrderVo.class, response);
     }
 
-    /**
-     * 获取入库单详细信息
-     *
-     * @param id 主键
-     */
     @Operation(summary = "获取入库单详细信息")
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/{id}")
@@ -81,9 +70,6 @@ public class ReceiptOrderController extends BaseController {
         return Result.success(receiptOrderService.queryIdByOrderNo(orderNo));
     }
 
-    /**
-     * 暂存入库单
-     */
     @Operation(summary = "暂存入库单")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.INSERT)
@@ -93,9 +79,6 @@ public class ReceiptOrderController extends BaseController {
         return Result.success(receiptOrderService.insertByBo(dto));
     }
 
-    /**
-     * 入库
-     */
     @Operation(summary = "入库")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.UPDATE)
@@ -106,9 +89,6 @@ public class ReceiptOrderController extends BaseController {
         return Result.success();
     }
 
-    /**
-     * 修改入库单
-     */
     @Operation(summary = "修改入库单")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.UPDATE)
@@ -119,11 +99,6 @@ public class ReceiptOrderController extends BaseController {
         return Result.success();
     }
 
-    /**
-     * 删除入库单
-     *
-     * @param id 主键串
-     */
     @Operation(summary = "删除入库单")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.DELETE)
