@@ -13,6 +13,7 @@ import com.divine.warehouse.domain.entity.Inventory;
 import com.divine.warehouse.domain.vo.BoardListVO;
 import com.divine.warehouse.domain.vo.InventoryVo;
 import com.divine.warehouse.domain.vo.ItemSkuMapVo;
+import com.divine.warehouse.domain.vo.StorageShelfVO;
 import com.divine.warehouse.mapper.InventoryMapper;
 import com.divine.warehouse.service.InventoryService;
 import com.divine.warehouse.service.ItemSkuService;
@@ -21,6 +22,7 @@ import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -117,25 +119,68 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     /**
      * 查询库存列表仓库维度
+     *
      * @param dto
      * @param basePage
      * @return
      */
     @Override
     public PageInfoRes<BoardListVO> queryWarehouseBoardList(InventoryDto dto, BasePage basePage) {
-        return PageInfoRes.build(inventoryMapper.queryWarehouseBoardList(basePage.build(), dto));
+        Page<BoardListVO> result = inventoryMapper.queryWarehouseBoardList(basePage.build(), dto);
+        // 2. 如果结果为空，直接返回
+        if (result.getRecords() == null || result.getRecords().isEmpty()) {
+            return PageInfoRes.build(result);
+        }
+        // 3. 解析 stock_info_text 为 List<StorageShelfVO>
+        result.getRecords().forEach(this::parseStockInfo);
+        return PageInfoRes.build(result);
     }
 
     /**
      * 查询库存列表物品维度
+     *
      * @param dto
      * @param basePage
      * @return
      */
     @Override
     public PageInfoRes<BoardListVO> queryItemBoardList(InventoryDto dto, BasePage basePage) {
+        // 1. 执行主查询（现在返回的是带 stock_info_text 的 VO）
         Page<BoardListVO> result = inventoryMapper.queryItemBoardList(basePage.build(), dto);
-        return PageInfoRes.build(result);
+        // 2. 如果结果为空，直接返回
+        if (result.getRecords() == null || result.getRecords().isEmpty()) {
+            return PageInfoRes.build(result);
+        }
+        // 3. 解析 stock_info_text 为 List<StorageShelfVO>
+        result.getRecords().forEach(this::parseStockInfo);
+            return PageInfoRes.build(result);
+    }
+
+    /**
+     * 解析库存信息字符串为对象列表
+     * 格式： "A-01:100;B-02:200;C-03:50"
+     */
+    private void parseStockInfo(BoardListVO vo) {
+        String stockInfoText = vo.getStockInfoText();
+        if (StringUtils.isBlank(stockInfoText)) {
+            vo.setStockInfo(new ArrayList<>());
+            return;
+        }
+        List<StorageShelfVO> stockList = Arrays.stream(stockInfoText.split(";"))
+            .map(item -> {
+                String[] parts = item.split(":");
+                if (parts.length == 2) {
+                    StorageShelfVO ss = new StorageShelfVO();
+                    ss.setStorageShelf(parts[0]);
+                    ss.setQuantity(Long.parseLong(parts[1]));
+                    return ss;
+                }
+                return null;
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+        vo.setStockInfo(stockList);
     }
 
 
@@ -146,28 +191,28 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
         details.forEach(detail -> {
             LambdaQueryWrapper<Inventory> wrapper = Wrappers.lambdaQuery();
-            if(detail.getInventoryId()!=null){
-                wrapper.eq(Inventory::getId,detail.getInventoryId());
+            if (detail.getInventoryId() != null) {
+                wrapper.eq(Inventory::getId, detail.getInventoryId());
                 Inventory inventory = inventoryMapper.selectOne(wrapper);
-                if(inventory.getQuantity().compareTo(detail.getQuantity())!=0){
+                if (inventory.getQuantity().compareTo(detail.getQuantity()) != 0) {
                     ItemSkuMapVo itemSkuMapVo = itemSkuService.queryItemSkuMapVo(detail.getSkuId());
-                    log.error("账面库存不匹配："+itemSkuMapVo.getItem().getItemName()+"（"+itemSkuMapVo.getItemSku().getSkuName()+"）,填写账面库存："+detail.getQuantity()+" 实际账面库存："+inventory.getQuantity());
+                    log.error("账面库存不匹配：" + itemSkuMapVo.getItem().getItemName() + "（" + itemSkuMapVo.getItemSku().getSkuName() + "）,填写账面库存：" + detail.getQuantity() + " 实际账面库存：" + inventory.getQuantity());
                     throw new BusinessException("账面库存不匹配");
-                }else {
-                    if(!inventory.getQuantity().equals(detail.getCheckQuantity())){
+                } else {
+                    if (!inventory.getQuantity().equals(detail.getCheckQuantity())) {
                         inventory.setQuantity(detail.getCheckQuantity());
                         updateInventoryList.add(inventory);
                     }
                 }
-            }else{
-                wrapper.eq(Inventory::getSkuId,detail.getSkuId());
-                wrapper.eq(Inventory::getWarehouseId,detail.getWarehouseId());
+            } else {
+                wrapper.eq(Inventory::getSkuId, detail.getSkuId());
+                wrapper.eq(Inventory::getWarehouseId, detail.getWarehouseId());
                 Inventory inventory = inventoryMapper.selectOne(wrapper);
-                if(inventory != null){
+                if (inventory != null) {
                     ItemSkuMapVo itemSkuMapVo = itemSkuService.queryItemSkuMapVo(detail.getSkuId());
-                    log.error("账面库存不匹配："+itemSkuMapVo.getItem().getItemName()+"（"+itemSkuMapVo.getItemSku().getSkuName()+"），填写账面库存：0, 实际账面库存："+inventory.getQuantity());
+                    log.error("账面库存不匹配：" + itemSkuMapVo.getItem().getItemName() + "（" + itemSkuMapVo.getItemSku().getSkuName() + "），填写账面库存：0, 实际账面库存：" + inventory.getQuantity());
                     throw new BusinessException("账面库存不匹配");
-                }else {
+                } else {
                     inventory = new Inventory();
                     inventory.setSkuId(detail.getSkuId());
                     inventory.setWarehouseId(detail.getWarehouseId());
@@ -176,7 +221,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 }
             }
         });
-        if(CollUtil.isNotEmpty(updateInventoryList)){
+        if (CollUtil.isNotEmpty(updateInventoryList)) {
             inventoryMapper.updateBatchById(updateInventoryList);
         }
         if (CollUtil.isNotEmpty(insertInventoryList)) {
@@ -195,15 +240,15 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             wrapper.eq(Inventory::getSkuId, orderDetailsBo.getSkuId());
             wrapper.eq(Inventory::getStorageShelf, orderDetailsBo.getStorageShelf());
             Inventory result = inventoryMapper.selectOne(wrapper);
-            if(result!=null){
-                BigDecimal before = result.getQuantity();
-                BigDecimal after = before.add(orderDetailsBo.getQuantity());
+            if (result != null) {
+                Long before = result.getQuantity();
+                Long after = before + orderDetailsBo.getQuantity();
                 result.setQuantity(after);
                 orderDetailsBo.setAfterQuantity(after);
                 orderDetailsBo.setBeforeQuantity(before);
                 updateList.add(result);
-            }else {
-                orderDetailsBo.setBeforeQuantity(BigDecimal.ZERO);
+            } else {
+                orderDetailsBo.setBeforeQuantity(0L);
                 orderDetailsBo.setAfterQuantity(orderDetailsBo.getQuantity());
                 Inventory inventory = MapstructUtils.convert(orderDetailsBo, Inventory.class);
                 addList.add(inventory);
@@ -231,16 +276,16 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             wrapper.eq(Inventory::getWarehouseId, shipmentOrderDetailBo.getWarehouseId());
             wrapper.eq(Inventory::getSkuId, shipmentOrderDetailBo.getSkuId());
             Inventory result = inventoryMapper.selectOne(wrapper);
-            if(result==null){
+            if (result == null) {
                 ItemSkuMapVo itemSkuMapVo = itemSkuService.queryItemSkuMapVo(shipmentOrderDetailBo.getSkuId());
-                log.error(itemSkuMapVo.getItem().getItemName()+"（"+itemSkuMapVo.getItemSku().getSkuName()+"）库存不足，当前库存：0");
+                log.error(itemSkuMapVo.getItem().getItemName() + "（" + itemSkuMapVo.getItemSku().getSkuName() + "）库存不足，当前库存：0");
                 throw new BusinessException("库存不足");
             }
-            BigDecimal beforeQuantity = result.getQuantity();
-            BigDecimal afterQuantity = beforeQuantity.subtract(shipmentOrderDetailBo.getQuantity());
-            if(afterQuantity.signum() == -1){
+            Long beforeQuantity = result.getQuantity();
+            Long afterQuantity = beforeQuantity - shipmentOrderDetailBo.getQuantity();
+            if (afterQuantity < 0) {
                 ItemSkuMapVo itemSkuMapVo = itemSkuService.queryItemSkuMapVo(shipmentOrderDetailBo.getSkuId());
-                log.error(itemSkuMapVo.getItem().getItemName()+"（"+itemSkuMapVo.getItemSku().getSkuName()+"）库存不足，当前库存："+ beforeQuantity);
+                log.error(itemSkuMapVo.getItem().getItemName() + "（" + itemSkuMapVo.getItemSku().getSkuName() + "）库存不足，当前库存：" + beforeQuantity);
                 throw new BusinessException("库存不足");
             }
             shipmentOrderDetailBo.setBeforeQuantity(beforeQuantity);

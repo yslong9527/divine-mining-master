@@ -37,7 +37,7 @@ public class InventoryHistoryServiceImpl extends ServiceImpl<InventoryHistoryMap
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveInventoryHistory(BaseOrderDto<? extends BaseOrderDetailDto> dto, Integer orderType, Boolean isAdd){
+    public void saveInventoryHistory(BaseOrderDto<? extends BaseOrderDetailDto> dto, Integer orderType, Boolean isAdd) {
         List<InventoryHistory> inventoryHistoryList = new LinkedList<>();
         dto.getDetails().forEach(detail -> {
             InventoryHistory inventoryHistory = new InventoryHistory();
@@ -45,10 +45,10 @@ public class InventoryHistoryServiceImpl extends ServiceImpl<InventoryHistoryMap
             inventoryHistory.setOrderNo(dto.getBusinessNo());
             inventoryHistory.setOrderType(orderType);
             inventoryHistory.setSkuId(detail.getSkuId());
-            if(isAdd){
+            if (isAdd) {
                 inventoryHistory.setQuantity(detail.getQuantity());
-            }else {
-                inventoryHistory.setQuantity(detail.getQuantity().negate());
+            } else {
+                inventoryHistory.setQuantity(-detail.getQuantity());
             }
             inventoryHistory.setWarehouseId(detail.getWarehouseId());
             inventoryHistory.setAmount(detail.getUnitPrice());

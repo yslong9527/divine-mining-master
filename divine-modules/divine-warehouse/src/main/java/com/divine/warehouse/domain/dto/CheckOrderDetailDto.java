@@ -24,13 +24,13 @@ public class CheckOrderDetailDto extends BaseOrderDetailDto {
      * 盘点数量
      */
     @Schema(description = "盘点数量")
-    private BigDecimal checkQuantity;
+    private Long checkQuantity;
 
     /**
      * 盈亏数
      */
     @Schema(description = "盈亏数")
-    private BigDecimal profitAndLoss;
+    private Long profitAndLoss;
 
     /**
      * 库存id

@@ -166,14 +166,13 @@ public class CheckOrderServiceImpl implements CheckOrderService {
     private CheckOrderDto filterCheckOrderDetail(CheckOrderDto dto) {
         CheckOrderDto filterBo = SerializationUtils.clone(dto);
         List<CheckOrderDetailDto> details = filterBo.getDetails().stream().filter(detail -> {
-            BigDecimal result = detail.getCheckQuantity().subtract(detail.getQuantity());
-            return result.signum() != 0;
-        }).map(detail -> {
-            BigDecimal result = detail.getCheckQuantity().subtract(detail.getQuantity());
+            long result = detail.getCheckQuantity() - detail.getQuantity();
+            return result == 0;
+        }).peek(detail -> {
+            long result = detail.getCheckQuantity() - detail.getQuantity();
             detail.setBeforeQuantity(detail.getQuantity());
             detail.setAfterQuantity(detail.getCheckQuantity());
             detail.setQuantity(result);
-            return detail;
         }).toList();
         filterBo.setDetails(details);
         return filterBo;

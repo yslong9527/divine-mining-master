@@ -43,13 +43,13 @@ public class BaseOrderDetailDto extends BaseEntity {
 
     @Schema(description = "数量")
     @NotNull(message = "数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private BigDecimal quantity;
+    private Long quantity;
 
     @Schema(description = "更新前数量")
-    private BigDecimal beforeQuantity;
+    private Long beforeQuantity;
 
     @Schema(description = "更新前数量")
-    private BigDecimal afterQuantity;
+    private Long afterQuantity;
 
     @Schema(description = "图片地址")
     private String imgUrl;

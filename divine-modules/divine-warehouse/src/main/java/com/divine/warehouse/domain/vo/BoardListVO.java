@@ -4,6 +4,8 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @Author: Yisl
  * @Description:
@@ -41,10 +43,11 @@ public class BoardListVO {
     @Schema(description = "sku编号")
     private String skuCode;
 
-    @Schema(description = "库存数量")
-    private Long quantity;
+    @Schema(description = "库存信息")
+    private String stockInfoText;
 
-    @Schema(description = "货架")
-    private String storageShelf;
+    @Schema(description = "库存信息")
+    private List<StorageShelfVO> stockInfo;
+
 
 }

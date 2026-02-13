@@ -4,63 +4,71 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.divine.warehouse.mapper.InventoryMapper">
 
-    <sql id="selectVoListByBo">
-        select
-        w.id warehouse_id,
-        w.warehouse_name,
-        item.id item_id,
+    <sql id="selectVoListByDto">
+        SELECT
+        sku.id AS sku_id,
+        sku.sku_code,
+        sku.sku_name,
+        item.id AS item_id,
         item.item_name,
         item.item_code,
-        sku.sku_name,
-        sku.id sku_id,
-        sku.sku_code,
-        inventory.quantity,
-        inventory.storage_shelf
-        from wms_inventory inventory
-        inner join wms_item_sku sku on inventory.sku_id = sku.id
-        inner join wms_item item on sku.item_id = item.id
-        inner join wms_warehouse w on inventory.warehouse_id = w.id
+        w.id AS warehouse_id,
+        w.warehouse_name,
+        GROUP_CONCAT(
+        CONCAT(inv.storage_shelf, ':', inv.quantity)
+        ORDER BY inv.storage_shelf
+        SEPARATOR ';'
+        ) AS stock_info_text,
+        SUM(inv.quantity) AS total_quantity
+        FROM wms_inventory inv
+        INNER JOIN wms_item_sku sku ON inv.sku_id = sku.id
+        INNER JOIN wms_item item ON sku.item_id = item.id
+        INNER JOIN wms_warehouse w ON inv.warehouse_id = w.id
         <where>
-            <if test="dto.itemName != null and dto.itemName != ''">
-                item.item_name like concat('%', #{dto.itemName}, '%')
-            </if>
-            <if test="dto.itemCode != null and dto.itemCode != ''">
-                and item.item_code like concat('%', #{dto.itemCode}, '%')
-            </if>
-            <if test="dto.skuName != null and dto.skuName != ''">
-                and sku.sku_name like concat('%', #{dto.skuName}, '%')
-            </if>
-            <if test="dto.skuCode != null and dto.skuCode != ''">
-                and sku.sku_code like concat('%', #{dto.skuCode}, '%')
-            </if>
-            <if test="dto.itemCategory != null">
-                and item.item_category=#{dto.itemCategory}
-            </if>
-            <if test="dto.itemId != null">
-                and item.id=#{dto.itemId}
-            </if>
             <if test="dto.warehouseId != null">
-                and inventory.warehouse_id=#{dto.warehouseId}
+                AND inv.warehouse_id = #{dto.warehouseId}
             </if>
-            <if test="dto.maxQuantity != null">
-                and inventory.sku_id in (
-                select
-                sku_id
-                from wms_inventory
-                group by sku_id
-                having sum(quantity) <![CDATA[ <= ]]> #{maxQuantity}
-                )
+
+            <if test="dto.itemName != null and dto.itemName != ''">
+                AND item.item_name LIKE CONCAT('%', #{dto.itemName}, '%')
+            </if>
+
+            <if test="dto.itemCode != null and dto.itemCode != ''">
+                AND item.item_code LIKE CONCAT('%', #{dto.itemCode}, '%')
+            </if>
+
+            <if test="dto.skuName != null and dto.skuName != ''">
+                AND sku.sku_name LIKE CONCAT('%', #{dto.skuName}, '%')
+            </if>
+
+            <if test="dto.skuCode != null and dto.skuCode != ''">
+                AND sku.sku_code LIKE CONCAT('%', #{dto.skuCode}, '%')
+            </if>
+
+            <if test="dto.itemCategory != null">
+                AND item.item_category = #{dto.itemCategory}
+            </if>
+
+            <if test="dto.itemId != null">
+                AND item.id = #{dto.itemId}
             </if>
         </where>
+        GROUP BY
+        sku.id, sku.sku_code, sku.sku_name,
+        item.id, item.item_name, item.item_code,
+        w.id, w.warehouse_name
+        <if test="dto.maxQuantity != null">
+            HAVING SUM(inv.quantity) <![CDATA[ <= ]]> #{dto.maxQuantity}
+        </if>
     </sql>
 
     <select id="queryWarehouseBoardList" resultType="com.divine.warehouse.domain.vo.BoardListVO">
-        <include refid="selectVoListByBo"/>
-        order by warehouse_id,item_id,sku_id
+        <include refid="selectVoListByDto"/>
+        ORDER BY warehouse_id, item_id, sku_id
     </select>
 
     <select id="queryItemBoardList" resultType="com.divine.warehouse.domain.vo.BoardListVO">
-        <include refid="selectVoListByBo"/>
-        order by item_id,sku_id,warehouse_id
+        <include refid="selectVoListByDto"/>
+        ORDER BY item_id, sku_id, warehouse_id
     </select>
 </mapper>
