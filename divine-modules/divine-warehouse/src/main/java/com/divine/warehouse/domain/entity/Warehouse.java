@@ -34,7 +34,7 @@ public class Warehouse extends BaseEntity {
     /**
      * 排序
      */
-    private Long orderNum;
+    private Integer sort;
 
     /**
      * 备注

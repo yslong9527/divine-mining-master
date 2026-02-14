@@ -51,5 +51,5 @@ public interface WarehouseService {
      */
     void deleteByIds(Collection<Long> ids);
 
-    void updateOrderNum(List<WarehouseDto> tree);
+    void updateSort(List<WarehouseDto> tree);
 }

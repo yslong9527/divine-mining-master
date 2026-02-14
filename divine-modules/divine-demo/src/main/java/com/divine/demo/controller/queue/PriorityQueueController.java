@@ -41,7 +41,7 @@ public class PriorityQueueController {
             int randomNum = RandomUtil.randomInt(10);
             PriorityDemo data = new PriorityDemo();
             data.setName("data-" + i);
-            data.setOrderNum(randomNum);
+            data.setSort(randomNum);
             if (QueueUtils.addPriorityQueueObject(queueName, data)) {
                 log.info("通道: {} , 发送数据: {}", queueName, data);
             } else {
@@ -55,10 +55,10 @@ public class PriorityQueueController {
     @GetMapping("/remove")
     public Result<String> remove(@Schema(description = "队列名") String queueName,
                                @Schema(description = "对象名") String name,
-                               @Schema(description = "排序号") Integer orderNum) {
+                               @Schema(description = "排序号") Integer sort) {
         PriorityDemo data = new PriorityDemo();
         data.setName(name);
-        data.setOrderNum(orderNum);
+        data.setSort(sort);
         if (QueueUtils.removePriorityQueueObject(queueName, data)) {
             log.info("通道: {} , 删除数据: {}", queueName, data);
         } else {

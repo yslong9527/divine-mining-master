@@ -39,7 +39,7 @@ public class SysDeptDto extends BaseEntity {
 
     @Schema(description = "显示顺序")
     @NotNull(message = "显示顺序不能为空")
-    private Integer orderNum;
+    private Integer sort;
 
     @Schema(description = "负责人")
     private String leader;

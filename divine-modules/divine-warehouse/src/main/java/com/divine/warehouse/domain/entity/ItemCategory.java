@@ -35,7 +35,7 @@ public class ItemCategory extends BaseEntity {
     /**
      * 显示顺序
      */
-    private Long orderNum;
+    private Integer sort;
 
     /**
      * 物料类型状态（0停用 1正常）

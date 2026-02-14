@@ -2,6 +2,7 @@ package com.divine.common.mybatis.core.page;
 
 import cn.hutool.http.HttpStatus;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.divine.common.core.enums.HttpStatusEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,21 +17,11 @@ import java.util.List;
  */
 
 @Data
-@NoArgsConstructor
 public class PageInfoRes<T> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 总记录数
-     */
-    private long total;
-
-    /**
-     * 列表数据
-     */
-    private List<T> rows;
 
     /**
      * 消息状态码
@@ -41,6 +32,26 @@ public class PageInfoRes<T> implements Serializable {
      * 消息内容
      */
     private String msg;
+    /**
+     * 总记录数
+     */
+    private long total;
+    /**
+     * 总记录数
+     */
+    private long pages;
+
+    /**
+     * 列表数据
+     */
+    private List<T> rows;
+
+    private long timestamp;
+
+
+    public PageInfoRes() {
+        this.timestamp = System.currentTimeMillis();
+    }
 
     /**
      * 分页
@@ -55,26 +66,28 @@ public class PageInfoRes<T> implements Serializable {
 
     public static <T> PageInfoRes<T> build(IPage<T> page) {
         PageInfoRes<T> rspData = new PageInfoRes<>();
-        rspData.setCode(HttpStatus.HTTP_OK);
-        rspData.setMsg("查询成功");
+        rspData.setCode(HttpStatusEnum.SUCCESS.getCode());
+        rspData.setMsg(HttpStatusEnum.SUCCESS.getMsg());
         rspData.setRows(page.getRecords());
         rspData.setTotal(page.getTotal());
+        rspData.setPages(page.getPages());
         return rspData;
     }
 
     public static <T> PageInfoRes<T> build(List<T> list) {
         PageInfoRes<T> rspData = new PageInfoRes<>();
-        rspData.setCode(HttpStatus.HTTP_OK);
-        rspData.setMsg("查询成功");
+        rspData.setCode(HttpStatusEnum.SUCCESS.getCode());
+        rspData.setMsg(HttpStatusEnum.SUCCESS.getMsg());
         rspData.setRows(list);
         rspData.setTotal(list.size());
+        rspData.setPages(1);
         return rspData;
     }
 
     public static <T> PageInfoRes<T> build() {
         PageInfoRes<T> rspData = new PageInfoRes<>();
-        rspData.setCode(HttpStatus.HTTP_OK);
-        rspData.setMsg("查询成功");
+        rspData.setCode(HttpStatusEnum.SUCCESS.getCode());
+        rspData.setMsg(HttpStatusEnum.SUCCESS.getMsg());
         return rspData;
     }
 

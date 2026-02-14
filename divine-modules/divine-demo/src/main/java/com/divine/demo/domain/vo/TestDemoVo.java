@@ -37,7 +37,7 @@ public class TestDemoVo {
 
     @Schema(description = "排序号")
     @ExcelProperty(value = "排序号")
-    private Integer orderNum;
+    private Integer sort;
 
     @Schema(description = "key键")
     @ExcelProperty(value = "key键")

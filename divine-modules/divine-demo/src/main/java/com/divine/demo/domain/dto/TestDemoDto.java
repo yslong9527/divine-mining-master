@@ -38,7 +38,7 @@ public class TestDemoDto extends BaseEntity {
 
     @Schema(description = "排序号")
     @NotNull(message = "排序号不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Integer orderNum;
+    private Integer sort;
 
     @Schema(description = "key键")
     @NotBlank(message = "key键不能为空", groups = {AddGroup.class, EditGroup.class})

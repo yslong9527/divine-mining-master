@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PriorityDemo implements Comparable<PriorityDemo> {
     private String name;
-    private Integer orderNum;
+    private Integer sort;
 
     @Override
     public int compareTo(PriorityDemo other) {
-        return Integer.compare(getOrderNum(), other.getOrderNum());
+        return Integer.compare(getSort(), other.getSort());
     }
 }

@@ -44,7 +44,7 @@ public class SysDept extends BaseEntity {
      * 显示顺序
      */
     @NotNull(message = "显示顺序不能为空")
-    private Integer orderNum;
+    private Integer sort;
 
     /**
      * 负责人

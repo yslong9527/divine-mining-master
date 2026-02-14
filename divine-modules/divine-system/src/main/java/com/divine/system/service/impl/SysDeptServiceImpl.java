@@ -63,7 +63,7 @@ public class SysDeptServiceImpl implements SysDeptService,DeptService {
             .like(StringUtils.isNotBlank(dept.getDeptName()), SysDept::getDeptName, dept.getDeptName())
             .eq(StringUtils.isNotBlank(dept.getStatus()), SysDept::getStatus, dept.getStatus())
             .orderByAsc(SysDept::getParentId)
-            .orderByAsc(SysDept::getOrderNum);
+            .orderByAsc(SysDept::getSort);
         return deptMapper.selectVoList(lqw);
     }
 
@@ -96,7 +96,7 @@ public class SysDeptServiceImpl implements SysDeptService,DeptService {
             tree.setId(dept.getDeptId())
                 .setParentId(dept.getParentId())
                 .setName(dept.getDeptName())
-                .setWeight(dept.getOrderNum()));
+                .setWeight(dept.getSort()));
     }
 
     /**

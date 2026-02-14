@@ -69,7 +69,7 @@ public class SysMenuServiceImpl implements SysMenuService {
                 .eq(StringUtils.isNotBlank(menu.getVisible()), SysMenu::getVisible, menu.getVisible())
                 .eq(StringUtils.isNotBlank(menu.getStatus()), SysMenu::getStatus, menu.getStatus())
                 .orderByAsc(SysMenu::getParentId)
-                .orderByAsc(SysMenu::getOrderNum));
+                .orderByAsc(SysMenu::getSort));
         } else {
             QueryWrapper<SysMenu> wrapper = Wrappers.query();
             wrapper.eq("sur.user_id", userId)
@@ -77,7 +77,7 @@ public class SysMenuServiceImpl implements SysMenuService {
                 .eq(StringUtils.isNotBlank(menu.getVisible()), "m.visible", menu.getVisible())
                 .eq(StringUtils.isNotBlank(menu.getStatus()), "m.status", menu.getStatus())
                 .orderByAsc("m.parent_id")
-                .orderByAsc("m.order_num");
+                .orderByAsc("m.sort");
             List<SysMenu> list = menuMapper.selectMenuListByUserId(wrapper);
             menuList = MapstructUtils.convert(list, SysMenuVo.class);
         }
@@ -215,7 +215,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             tree.setId(menu.getMenuId())
                 .setParentId(menu.getParentId())
                 .setName(menu.getMenuName())
-                .setWeight(menu.getOrderNum()));
+                .setWeight(menu.getSort()));
     }
 
     /**

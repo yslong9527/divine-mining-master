@@ -42,7 +42,7 @@ public class ItemCategoryVo implements Serializable {
 
     @Schema(description = "显示顺序")
     @ExcelProperty(value = "显示顺序")
-    private Long orderNum;
+    private Integer sort;
 
     @Schema(description = "物料类型状态（0正常 1停用）")
     @ExcelProperty(value = "物料类型状态", converter = ExcelDictConvert.class)

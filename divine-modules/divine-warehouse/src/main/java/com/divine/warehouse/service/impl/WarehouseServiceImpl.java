@@ -14,7 +14,6 @@ import com.divine.warehouse.domain.vo.WarehouseVo;
 import com.divine.warehouse.mapper.WarehouseMapper;
 import com.divine.warehouse.service.InventoryService;
 import com.divine.warehouse.service.WarehouseService;
-import com.divine.common.core.constant.HttpStatus;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -72,7 +71,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
         LambdaQueryWrapper<Warehouse> lqw = Wrappers.lambdaQuery();
         lqw.eq(StrUtil.isNotBlank(dto.getWarehouseCode()), Warehouse::getWarehouseCode, dto.getWarehouseCode());
         lqw.like(StrUtil.isNotBlank(dto.getWarehouseName()), Warehouse::getWarehouseName, dto.getWarehouseName());
-        lqw.orderByAsc(Warehouse::getOrderNum);
+        lqw.orderByAsc(Warehouse::getSort);
         return lqw;
     }
 
@@ -83,16 +82,16 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
     public void insertByBo(WarehouseDto dto) {
         validateWarehouseNameAndNo(dto);
         Warehouse add = MapstructUtils.convert(dto, Warehouse.class);
-        add.setOrderNum(this.getNextOrderNum());
+        add.setSort(this.getNextSortNum());
         warehouseMapper.insert(add);
     }
 
-    private Long getNextOrderNum() {
+    private Integer getNextSortNum() {
         LambdaQueryWrapper<Warehouse> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByDesc(Warehouse::getOrderNum);
+        wrapper.orderByDesc(Warehouse::getSort);
         wrapper.last("limit 1");
         Warehouse warehouse = warehouseMapper.selectOne(wrapper);
-        return warehouse == null ? 0L : warehouse.getOrderNum() + 1;
+        return warehouse == null ? 0 : warehouse.getSort() + 1;
     }
 
     /**
@@ -142,13 +141,13 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void updateOrderNum(List<WarehouseDto> tree) {
+    public void updateSort(List<WarehouseDto> tree) {
         if (CollUtil.isEmpty(tree)) {
             return;
         }
         List<Warehouse> updateList = MapstructUtils.convert(tree, Warehouse.class);
         for (int i = 0; i < updateList.size(); i++) {
-            updateList.get(i).setOrderNum((long) i);
+            updateList.get(i).setSort(i);
         }
         saveOrUpdateBatch(updateList);
     }

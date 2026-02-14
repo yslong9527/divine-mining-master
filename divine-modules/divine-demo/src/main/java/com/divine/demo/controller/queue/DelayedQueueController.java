@@ -37,9 +37,9 @@ public class DelayedQueueController {
     public Result<String> subscribe(@Schema(description = "队列名") String queueName) {
         log.info("通道: {} 监听中......", queueName);
         // 项目初始化设置一次即可
-        QueueUtils.subscribeBlockingQueue(queueName, (String orderNum) -> {
+        QueueUtils.subscribeBlockingQueue(queueName, (String orderNo) -> {
             // 观察接收时间
-            log.info("通道: {}, 收到数据: {}", queueName, orderNum);
+            log.info("通道: {}, 收到数据: {}", queueName, orderNo);
         }, true);
         return Result.success("操作成功");
     }
@@ -47,20 +47,20 @@ public class DelayedQueueController {
     @Operation(summary = "添加队列数据")
     @GetMapping("/add")
     public Result<String> add(@Schema(description = "队列名") String queueName,
-                            @Schema(description = "订单号") String orderNum,
+                            @Schema(description = "订单号") String orderNo,
                             @Schema(description = "延迟时间(秒)") Long time) {
-        QueueUtils.addDelayedQueueObject(queueName, orderNum, time, TimeUnit.SECONDS);
+        QueueUtils.addDelayedQueueObject(queueName, orderNo, time, TimeUnit.SECONDS);
         // 观察发送时间
-        log.info("通道: {} , 发送数据: {}", queueName, orderNum);
+        log.info("通道: {} , 发送数据: {}", queueName, orderNo);
         return Result.success("操作成功");
     }
 
     @Operation(summary = "删除队列数据")
     @GetMapping("/remove")
     public Result<String> remove(@Schema(description = "队列名") String queueName,
-                               @Schema(description = "订单号") String orderNum) {
-        if (QueueUtils.removeDelayedQueueObject(queueName, orderNum)) {
-            log.info("通道: {} , 删除数据: {}", queueName, orderNum);
+                               @Schema(description = "订单号") String orderNo) {
+        if (QueueUtils.removeDelayedQueueObject(queueName, orderNo)) {
+            log.info("通道: {} , 删除数据: {}", queueName, orderNo);
         } else {
             return Result.fail("操作失败");
         }

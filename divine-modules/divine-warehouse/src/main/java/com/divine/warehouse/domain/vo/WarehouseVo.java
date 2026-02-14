@@ -39,7 +39,7 @@ public class WarehouseVo extends BaseVo {
      * 排序
      */
     @ExcelProperty(value = "排序")
-    private Long orderNum;
+    private Integer sort;
     /**
      * 备注
      */

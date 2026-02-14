@@ -136,10 +136,10 @@ public class ItemCategoryController extends BaseController {
     }
 
     @Operation(summary = "修改")
-    @PostMapping("/update/orderNum")
+    @PostMapping("/update/sort")
     @SaCheckPermission("wms:item:edit")
-    public Result<Void> updateOrderNum(@RequestBody List<ItemTypeTreeSelectVo> tree) {
-        itemCategoryService.updateOrderNum(tree);
+    public Result<Void> updateSort(@RequestBody List<ItemTypeTreeSelectVo> tree) {
+        itemCategoryService.updateSort(tree);
         return Result.success();
     }
 }

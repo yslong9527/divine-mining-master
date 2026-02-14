@@ -29,7 +29,7 @@ public class TestDemoImportDto {
     @Schema(description = "排序号")
     @NotNull(message = "排序号不能为空")
     @ExcelProperty(value = "排序号")
-    private Long orderNum;
+    private Integer sort;
 
     @Schema(description = "key键")
     @NotBlank(message = "key键不能为空")

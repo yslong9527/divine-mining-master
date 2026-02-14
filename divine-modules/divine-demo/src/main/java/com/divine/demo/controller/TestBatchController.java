@@ -39,7 +39,7 @@ public class TestBatchController extends BaseController {
         List<TestDemo> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             TestDemo testDemo = new TestDemo();
-            testDemo.setOrderNum(-1);
+            testDemo.setSort(-1);
             testDemo.setTestKey("批量新增");
             testDemo.setValue("测试新增");
             list.add(testDemo);
@@ -59,7 +59,7 @@ public class TestBatchController extends BaseController {
         List<TestDemo> list = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             TestDemo testDemo = new TestDemo();
-            testDemo.setOrderNum(-1);
+            testDemo.setSort(-1);
             testDemo.setTestKey("批量新增");
             testDemo.setValue("测试新增");
             list.add(testDemo);
@@ -81,7 +81,7 @@ public class TestBatchController extends BaseController {
 //    @DS("slave")
     public Result<Void> remove() {
         return toAjax(testDemoMapper.delete(new LambdaQueryWrapper<TestDemo>()
-            .eq(TestDemo::getOrderNum, -1L)));
+            .eq(TestDemo::getSort, -1L)));
     }
 
 }

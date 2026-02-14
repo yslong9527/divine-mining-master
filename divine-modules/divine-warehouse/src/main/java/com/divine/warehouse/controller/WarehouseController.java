@@ -119,12 +119,12 @@ public class WarehouseController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "/update/orderNum")
+    @Operation(summary = "修改排序")
     @SaCheckPermission("wms:warehouse:edit")
     @Log(title = "仓库", businessType = BusinessType.UPDATE)
-    @PostMapping("/update/orderNum")
-    public Result<Void> updateOrderNum(@RequestBody List<WarehouseDto> tree) {
-        warehouseService.updateOrderNum(tree);
+    @PostMapping("/update/sort")
+    public Result<Void> updateSort(@RequestBody List<WarehouseDto> tree) {
+        warehouseService.updateSort(tree);
         return Result.success();
     }
 }

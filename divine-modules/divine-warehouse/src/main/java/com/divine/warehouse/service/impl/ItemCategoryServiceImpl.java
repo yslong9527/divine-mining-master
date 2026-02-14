@@ -59,7 +59,7 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
     @Override
     public List<ItemCategoryVo> queryList(ItemCategoryDto dto) {
         LambdaQueryWrapper<ItemCategory> lqw = buildQueryWrapper(dto);
-        lqw.orderByAsc(ItemCategory::getOrderNum);
+        lqw.orderByAsc(ItemCategory::getSort);
         return itemCategoryMapper.selectVoList(lqw);
     }
 
@@ -68,7 +68,7 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
         LambdaQueryWrapper<ItemCategory> lqw = Wrappers.lambdaQuery();
         lqw.eq(dto.getParentId() != null, ItemCategory::getParentId, dto.getParentId());
         lqw.like(StrUtil.isNotBlank(dto.getCategoryName()), ItemCategory::getCategoryName, dto.getCategoryName());
-        lqw.eq(dto.getOrderNum() != null, ItemCategory::getOrderNum, dto.getOrderNum());
+        lqw.eq(dto.getSort() != null, ItemCategory::getSort, dto.getSort());
         lqw.eq(StrUtil.isNotBlank(dto.getStatus()), ItemCategory::getStatus, dto.getStatus());
         return lqw;
     }
@@ -87,10 +87,10 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
             wrapper.eq(ItemCategory::getParentId, 0L);
         }
         //查当前级别排序最大值
-        wrapper.orderByDesc(ItemCategory::getOrderNum);
+        wrapper.orderByDesc(ItemCategory::getSort);
         wrapper.last("limit 1");
         ItemCategory itemType = itemCategoryMapper.selectOne(wrapper);
-        add.setOrderNum(itemType == null ? 0L : itemType.getOrderNum() + 1);
+        add.setSort(itemType == null ? 0 : itemType.getSort() + 1);
         itemCategoryMapper.insert(add);
     }
 
@@ -201,12 +201,12 @@ public class ItemCategoryServiceImpl extends ServiceImpl<ItemCategoryMapper, Ite
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateOrderNum(List<ItemTypeTreeSelectVo> tree) {
+    public void updateSort(List<ItemTypeTreeSelectVo> tree) {
         List<ItemCategory> updateList = new ArrayList<>();
         for (int i = 0; i < tree.size(); i++) {
             ItemCategory itemType = new ItemCategory();
             itemType.setId(tree.get(i).getId());
-            itemType.setOrderNum((long) i);
+            itemType.setSort(i);
             updateList.add(itemType);
         }
         saveOrUpdateBatch(updateList);

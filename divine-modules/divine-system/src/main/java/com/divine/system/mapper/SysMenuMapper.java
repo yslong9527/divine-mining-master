@@ -61,7 +61,7 @@ public interface SysMenuMapper extends BaseMapperPlus<SysMenu, SysMenuVo> {
             .in(SysMenu::getMenuType, UserConstants.TYPE_DIR, UserConstants.TYPE_MENU)
             .eq(SysMenu::getStatus, UserConstants.MENU_NORMAL)
             .orderByAsc(SysMenu::getParentId)
-            .orderByAsc(SysMenu::getOrderNum);
+            .orderByAsc(SysMenu::getSort);
         return this.selectList(lqw);
     }
 

@@ -47,5 +47,5 @@ public interface ItemCategoryService {
      */
     List<ItemTypeTreeSelectVo> buildItemTypeTreeSelect(List<ItemCategoryVo> itemTypes);
 
-    void updateOrderNum(List<ItemTypeTreeSelectVo> tree);
+    void updateSort(List<ItemTypeTreeSelectVo> tree);
 }

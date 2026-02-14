@@ -41,7 +41,7 @@ public class SysMenuVo implements Serializable {
     /**
      * 显示顺序
      */
-    private Integer orderNum;
+    private Integer sort;
 
     /**
      * 路由地址

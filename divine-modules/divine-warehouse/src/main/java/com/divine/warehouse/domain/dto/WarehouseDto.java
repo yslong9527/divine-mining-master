@@ -46,5 +46,5 @@ public class WarehouseDto extends BaseEntity {
      * 排序
      */
     @Schema(description = "排序")
-    private Long orderNum;
+    private Integer sort;
 }

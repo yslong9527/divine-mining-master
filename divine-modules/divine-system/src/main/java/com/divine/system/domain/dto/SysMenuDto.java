@@ -37,7 +37,7 @@ public class SysMenuDto extends BaseEntity {
 
     @Schema(description = "显示顺序")
     @NotNull(message = "显示顺序不能为空")
-    private Integer orderNum;
+    private Integer sort;
 
     @Schema(description = "路由地址")
     @Size(min = 0, max = 200, message = "路由地址不能超过{max}个字符")

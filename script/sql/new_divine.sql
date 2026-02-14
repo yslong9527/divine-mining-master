@@ -11,7 +11,7 @@
  Target Server Version : 80043 (8.0.43)
  File Encoding         : 65001
 
- Date: 13/02/2026 21:09:47
+ Date: 14/02/2026 18:21:54
 */
 
 SET NAMES utf8mb4;
@@ -187,7 +187,7 @@ INSERT INTO `gen_table_column` VALUES (2020845815653134338, 2020845815623774209,
 INSERT INTO `gen_table_column` VALUES (2020845815653134339, 2020845815623774209, 'warehouse_code', '编号', 'varchar(20)', 'String', 'warehouseCode', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'input', '', 2, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
 INSERT INTO `gen_table_column` VALUES (2020845815653134340, 2020845815623774209, 'warehouse_name', '名称', 'varchar(50)', 'String', 'warehouseName', '0', '0', '1', '1', '1', '1', '1', 'LIKE', 'input', '', 3, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
 INSERT INTO `gen_table_column` VALUES (2020845815653134341, 2020845815623774209, 'remark', '备注', 'varchar(255)', 'String', 'remark', '0', '0', '1', '1', '1', '1', NULL, 'EQ', 'input', '', 4, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
-INSERT INTO `gen_table_column` VALUES (2020845815653134342, 2020845815623774209, 'order_num', '排序', 'bigint', 'Long', 'orderNum', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
+INSERT INTO `gen_table_column` VALUES (2020845815653134342, 2020845815623774209, 'sort', '排序', 'bigint', 'Long', 'sort', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
 INSERT INTO `gen_table_column` VALUES (2020845815653134343, 2020845815623774209, 'create_by', '创建人', 'varchar(64)', 'String', 'createBy', '0', '0', '0', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 6, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
 INSERT INTO `gen_table_column` VALUES (2020845815653134344, 2020845815623774209, 'create_time', '创建时间', 'datetime(3)', 'Date', 'createTime', '0', '0', '0', NULL, NULL, NULL, NULL, 'EQ', 'datetime', '', 7, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
 INSERT INTO `gen_table_column` VALUES (2020845815653134345, 2020845815623774209, 'update_by', '修改人', 'varchar(64)', 'String', 'updateBy', '0', '0', '0', NULL, NULL, NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2026-02-09 15:02:43', NULL, '2026-02-09 15:02:43');
@@ -529,7 +529,7 @@ CREATE TABLE `sys_dept`  (
   `parent_id` bigint NULL DEFAULT 0 COMMENT '父部门id',
   `ancestors` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '祖级列表',
   `dept_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '部门名称',
-  `order_num` int NULL DEFAULT 0 COMMENT '显示顺序',
+  `sort` int NULL DEFAULT 0 COMMENT '显示顺序',
   `leader` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '负责人',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系电话',
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
@@ -736,6 +736,9 @@ INSERT INTO `sys_logininfor` VALUES (2021119290838020098, 'admin', '169.239.158.
 INSERT INTO `sys_logininfor` VALUES (2021220223706669057, 'admin', '192.168.29.168', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', '验证码已失效', '2026-02-10 15:50:28');
 INSERT INTO `sys_logininfor` VALUES (2021220630323494914, 'admin', '192.168.29.168', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-10 15:52:05');
 INSERT INTO `sys_logininfor` VALUES (2022006766104924161, 'admin', '192.168.29.168', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-12 19:55:55');
+INSERT INTO `sys_logininfor` VALUES (2022701357585620994, 'admin', '41.77.221.227', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-14 17:55:58');
+INSERT INTO `sys_logininfor` VALUES (2022701506617630722, 'admin', '41.77.221.227', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '退出成功', '2026-02-14 17:56:34');
+INSERT INTO `sys_logininfor` VALUES (2022701522853781505, 'admin', '41.77.221.227', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-14 17:56:38');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -745,7 +748,7 @@ CREATE TABLE `sys_menu`  (
   `menu_id` bigint NOT NULL COMMENT '菜单ID',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单名称',
   `parent_id` bigint NULL DEFAULT 0 COMMENT '父菜单ID',
-  `order_num` int NULL DEFAULT 0 COMMENT '显示顺序',
+  `sort` int NULL DEFAULT 0 COMMENT '显示顺序',
   `path` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '路由地址',
   `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件路径',
   `query_param` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路由参数',
@@ -949,7 +952,7 @@ INSERT INTO `sys_oper_log` VALUES (2021225510073143298, '入库单', 2, 'com.div
 INSERT INTO `sys_oper_log` VALUES (2021225590788329473, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.warehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021225590666694657\",\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"1111\",\"quantity\":\"111\",\"beforeQuantity\":\"111.00\",\"afterQuantity\":\"222.00\",\"imgUrl\":null},{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"222\",\"quantity\":\"111\",\"beforeQuantity\":\"0\",\"afterQuantity\":\"111\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 16:11:48');
 INSERT INTO `sys_oper_log` VALUES (2021226074198663169, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.warehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021226073892478977\",\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"1111\",\"quantity\":\"111\",\"beforeQuantity\":\"222.00\",\"afterQuantity\":\"333.00\",\"imgUrl\":null},{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"222\",\"quantity\":\"2\",\"beforeQuantity\":\"111.00\",\"afterQuantity\":\"113.00\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 16:13:43');
 INSERT INTO `sys_oper_log` VALUES (2022357172093362178, '仓库', 3, 'com.divine.warehouse.controller.WarehouseController.remove()', 'DELETE', 1, 'admin', '研发部门', '/warehouse/1828364609002311682', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002388888\"}', '', 0, '该仓库已有业务关联，无法删除！', '2026-02-13 19:08:18');
-INSERT INTO `sys_oper_log` VALUES (2022357246206713858, '仓库', 2, 'com.divine.warehouse.controller.WarehouseController.edit()', 'PUT', 1, 'admin', '研发部门', '/warehouse', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"createBy\":\"admin\",\"createTime\":\"2024-08-27 17:31:06\",\"updateBy\":\"admin\",\"updateTime\":\"2024-08-27 17:31:06\",\"id\":\"1828364609002311682\",\"warehouseCode\":null,\"warehouseName\":\"神洲一号仓\",\"remark\":null,\"orderNum\":1}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002515695}', 1, '', '2026-02-13 19:08:36');
+INSERT INTO `sys_oper_log` VALUES (2022357246206713858, '仓库', 2, 'com.divine.warehouse.controller.WarehouseController.edit()', 'PUT', 1, 'admin', '研发部门', '/warehouse', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"createBy\":\"admin\",\"createTime\":\"2024-08-27 17:31:06\",\"updateBy\":\"admin\",\"updateTime\":\"2024-08-27 17:31:06\",\"id\":\"1828364609002311682\",\"warehouseCode\":null,\"warehouseName\":\"神洲一号仓\",\"remark\":null,\"sort\":1}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002515695}', 1, '', '2026-02-13 19:08:36');
 INSERT INTO `sys_oper_log` VALUES (2022357260165357570, '仓库', 3, 'com.divine.warehouse.controller.WarehouseController.remove()', 'DELETE', 1, 'admin', '研发部门', '/warehouse/1828364740028174337', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002409952\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002519058}', 1, '', '2026-02-13 19:08:39');
 INSERT INTO `sys_oper_log` VALUES (2022357271775191042, '仓库', 3, 'com.divine.warehouse.controller.WarehouseController.remove()', 'DELETE', 1, 'admin', '研发部门', '/warehouse/1840317750635581441', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002412778\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002521827}', 1, '', '2026-02-13 19:08:42');
 INSERT INTO `sys_oper_log` VALUES (2022357573081407490, '物品品牌', 3, 'com.divine.warehouse.controller.ItemBrandController.remove()', 'DELETE', 1, 'admin', '研发部门', '/itemBrand/1828407291103842306', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002484608\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002593666}', 1, '', '2026-02-13 19:09:54');
@@ -1151,7 +1154,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '超级管理员', 'sys_user', 'zccbbg@qq.com', '18888888888', '0', '', '$2a$10$ibotj9JCxumu8gTqBuVY1u5Ws4OfcUpkeFa2pBBtGKUH.r/Ep4hqK', '1', '0', '192.168.29.168', '2026-02-13 01:55:55', 'admin', '2024-06-13 16:06:25', 'admin', '2026-02-12 19:55:55', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '超级管理员', 'sys_user', 'zccbbg@qq.com', '18888888888', '0', '', '$2a$10$ibotj9JCxumu8gTqBuVY1u5Ws4OfcUpkeFa2pBBtGKUH.r/Ep4hqK', '1', '0', '41.77.221.227', '2026-02-14 23:56:38', 'admin', '2024-06-13 16:06:25', 'admin', '2026-02-14 17:56:38', '管理员');
 INSERT INTO `sys_user` VALUES (100, 103, 'yislo', '超级管理员', 'sys_user', 'zccbbg@qq.com', '18888888888', '0', '', '$2a$10$ibotj9JCxumu8gTqBuVY1u5Ws4OfcUpkeFa2pBBtGKUH.r/Ep4hqK', '1', '0', '41.77.221.201', '2026-02-09 20:32:06', 'admin', '2024-06-13 16:06:25', 'yislo', '2026-02-09 14:32:06', '管理员');
 INSERT INTO `sys_user` VALUES (1829105396288688129, 105, 'ck', 'ck', 'sys_user', '', '', '0', '', '$2a$10$5ogFpqit10a8IpVFjKzosuz0whR0/tyQ4Nt9e6y3/MBodcDzwhCni', '1', '0', '221.224.86.138', '2024-10-09 15:40:16', 'admin', '2024-08-29 18:34:44', 'ck', '2024-10-09 15:40:16', NULL);
 
@@ -1244,7 +1247,7 @@ CREATE TABLE `wms_inventory`  (
   `sku_id` bigint NULL DEFAULT NULL COMMENT '规格ID',
   `warehouse_id` bigint NULL DEFAULT NULL COMMENT '所属仓库',
   `storage_shelf` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货架',
-  `quantity` decimal(20, 2) NULL DEFAULT NULL COMMENT '库存',
+  `quantity` bigint NULL DEFAULT NULL COMMENT '库存',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
@@ -1256,11 +1259,11 @@ CREATE TABLE `wms_inventory`  (
 -- ----------------------------
 -- Records of wms_inventory
 -- ----------------------------
-INSERT INTO `wms_inventory` VALUES (1843920012193648642, 1840282974696374273, 1828364609002311682, '一号货架', 4.00, NULL, 'ck', '2024-10-09 15:42:43.944', 'admin', '2026-02-10 16:06:14.240');
-INSERT INTO `wms_inventory` VALUES (1843920012193648643, 1840282974629265410, 1828364609002311682, '二号货架', 3.00, NULL, 'ck', '2024-10-09 15:42:43.945', 'ck', '2024-10-09 15:43:12.844');
-INSERT INTO `wms_inventory` VALUES (2021225510010228738, 1840282974696374273, 1828364609002311682, '三号货架', 333.00, NULL, 'admin', '2026-02-10 16:11:28.799', 'admin', '2026-02-10 16:13:43.269');
-INSERT INTO `wms_inventory` VALUES (2021225590729609218, 1840282974696374273, 1828364609002311682, '四号货架', 113.00, NULL, 'admin', '2026-02-10 16:11:48.043', 'admin', '2026-02-10 16:13:43.274');
-INSERT INTO `wms_inventory` VALUES (2022363384042135553, 1829398333903007745, 1828364609002311682, '五号货架', 1.00, NULL, 'admin', '2026-02-13 19:32:59.112', 'admin', '2026-02-13 19:32:59.112');
+INSERT INTO `wms_inventory` VALUES (1843920012193648642, 1840282974696374273, 1828364609002311682, '一号货架', 4, NULL, 'ck', '2024-10-09 15:42:43.944', 'admin', '2026-02-10 16:06:14.240');
+INSERT INTO `wms_inventory` VALUES (1843920012193648643, 1840282974629265410, 1828364609002311682, '二号货架', 3, NULL, 'ck', '2024-10-09 15:42:43.945', 'ck', '2024-10-09 15:43:12.844');
+INSERT INTO `wms_inventory` VALUES (2021225510010228738, 1840282974696374273, 1828364609002311682, '三号货架', 333, NULL, 'admin', '2026-02-10 16:11:28.799', 'admin', '2026-02-10 16:13:43.269');
+INSERT INTO `wms_inventory` VALUES (2021225590729609218, 1840282974696374273, 1828364609002311682, '四号货架', 113, NULL, 'admin', '2026-02-10 16:11:48.043', 'admin', '2026-02-10 16:13:43.274');
+INSERT INTO `wms_inventory` VALUES (2022363384042135553, 1829398333903007745, 1828364609002311682, '五号货架', 1, NULL, 'admin', '2026-02-13 19:32:59.112', 'admin', '2026-02-13 19:32:59.112');
 
 -- ----------------------------
 -- Table structure for wms_inventory_history
@@ -1636,7 +1639,7 @@ CREATE TABLE `wms_warehouse`  (
   `warehouse_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编号',
   `warehouse_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `order_num` bigint NULL DEFAULT 0 COMMENT '排序',
+  `sort` int NULL DEFAULT 0 COMMENT '排序',
   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
@@ -1648,24 +1651,5 @@ CREATE TABLE `wms_warehouse`  (
 -- Records of wms_warehouse
 -- ----------------------------
 INSERT INTO `wms_warehouse` VALUES (1828364609002311682, NULL, '神洲一号仓', NULL, 1, 'admin', '2024-08-27 17:31:06.000', 'admin', '2026-02-13 19:08:35.664');
-
--- ----------------------------
--- Table structure for wms_warehouse_shelf
--- ----------------------------
-DROP TABLE IF EXISTS `wms_warehouse_shelf`;
-CREATE TABLE `wms_warehouse_shelf`  (
-  `id` bigint NOT NULL COMMENT 'id',
-  `warehouseId` bigint NULL DEFAULT NULL COMMENT '仓库id',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '货架名称',
-  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
-  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of wms_warehouse_shelf
--- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
