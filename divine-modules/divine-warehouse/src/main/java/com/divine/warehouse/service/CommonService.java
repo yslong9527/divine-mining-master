@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 库存盘点单据详情Service业务层处理
  *
- * @author zcc
+ * @author yisl
  * @date 2024-08-13
  */
 public interface CommonService {

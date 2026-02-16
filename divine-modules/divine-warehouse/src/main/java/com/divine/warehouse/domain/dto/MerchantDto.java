@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 往来单位业务对象 wms_merchant
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-16
  */
 

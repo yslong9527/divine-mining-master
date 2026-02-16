@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 /**
  * 入库单详情Mapper接口
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-19
  */
 @Mapper

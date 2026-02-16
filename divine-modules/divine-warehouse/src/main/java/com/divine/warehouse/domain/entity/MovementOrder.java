@@ -9,7 +9,7 @@ import java.io.Serial;
 /**
  * 移库单对象 wms_movement_order
  *
- * @author zcc
+ * @author yisl
  * @date 2024-08-09
  */
 @Data

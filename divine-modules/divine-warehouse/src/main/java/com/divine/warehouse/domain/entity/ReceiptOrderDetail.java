@@ -6,7 +6,7 @@ import lombok.*;
 /**
  * 入库单详情对象 wms_receipt_order_detail
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-19
  */
 @Data

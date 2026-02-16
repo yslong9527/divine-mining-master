@@ -14,7 +14,7 @@ import java.io.Serializable;
 /**
  * 往来单位视图对象 wms_merchant
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-16
  */
 @Data

@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * 库存
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-19
  */
 @Tag(name = "库存")

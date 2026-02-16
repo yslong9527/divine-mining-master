@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 入库单视图对象 wms_receipt_order
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-19
  */
 @Data

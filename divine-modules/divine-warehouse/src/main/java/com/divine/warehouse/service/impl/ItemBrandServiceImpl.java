@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * 物品品牌Service业务层处理
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-30
  */
 @RequiredArgsConstructor

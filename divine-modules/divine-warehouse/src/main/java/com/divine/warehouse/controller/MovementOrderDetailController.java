@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * 库存移动详情
  *
- * @author zcc
+ * @author yisl
  * @date 2024-08-09
  */
 @Tag(name = "库存移动详情")

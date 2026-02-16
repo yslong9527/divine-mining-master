@@ -670,7 +670,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '超级管理员', 'sys_user', 'zccbbg@qq.com', '18888888888', '0', '', '$2a$10$ibotj9JCxumu8gTqBuVY1u5Ws4OfcUpkeFa2pBBtGKUH.result/Ep4hqK', '1', '0', '0:0:0:0:0:0:0:1', '2026-02-05 19:02:22', 'admin', '2024-06-13 16:06:25', 'admin', '2026-02-05 13:02:22', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '超级管理员', 'sys_user', 'ysl@qq.com', '18888888888', '0', '', '$2a$10$ibotj9JCxumu8gTqBuVY1u5Ws4OfcUpkeFa2pBBtGKUH.result/Ep4hqK', '1', '0', '0:0:0:0:0:0:0:1', '2026-02-05 19:02:22', 'admin', '2024-06-13 16:06:25', 'admin', '2026-02-05 13:02:22', '管理员');
 INSERT INTO `sys_user` VALUES (1829105396288688129, 105, 'ck', 'ck', 'sys_user', '', '', '0', '', '$2a$10$5ogFpqit10a8IpVFjKzosuz0whR0/tyQ4Nt9e6y3/MBodcDzwhCni', '1', '0', '221.224.86.138', '2024-10-09 15:40:16', 'admin', '2024-08-29 18:34:44', 'ck', '2024-10-09 15:40:16', NULL);
 
 -- ----------------------------

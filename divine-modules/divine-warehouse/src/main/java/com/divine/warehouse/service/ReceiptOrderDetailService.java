@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 入库单详情Service业务层处理
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-19
  */
 public interface ReceiptOrderDetailService{

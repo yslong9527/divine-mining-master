@@ -12,7 +12,7 @@ import java.io.Serial;
 /**
  * 物品品牌视图对象 wms_item_brand
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-30
  */
 @Data

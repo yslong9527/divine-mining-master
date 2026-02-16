@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 库存对象 wms_inventory
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-19
  */
 @Data

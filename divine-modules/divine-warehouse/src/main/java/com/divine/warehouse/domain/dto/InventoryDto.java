@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 /**
  * 库存业务对象 wms_inventory
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-19
  */
 

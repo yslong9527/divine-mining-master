@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * 物品品牌
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-30
  */
 @Tag(name = "物品品牌")

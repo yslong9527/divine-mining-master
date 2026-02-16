@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 移库单视图对象 wms_movement_order
  *
- * @author zcc
+ * @author yisl
  * @date 2024-08-09
  */
 @Data

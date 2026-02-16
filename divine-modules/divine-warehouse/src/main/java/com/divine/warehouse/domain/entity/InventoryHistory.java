@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 /**
  * 库存记录对象 wms_inventory_history
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-22
  */
 @Data

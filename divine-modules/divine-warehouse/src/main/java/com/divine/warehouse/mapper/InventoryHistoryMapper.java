@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 库存记录Mapper接口
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-22
  */
 @Mapper

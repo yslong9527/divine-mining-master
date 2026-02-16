@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 出库单详情对象 wms_shipment_order_detail
  *
- * @author zcc
+ * @author yisl
  * @date 2024-08-01
  */
 @Data

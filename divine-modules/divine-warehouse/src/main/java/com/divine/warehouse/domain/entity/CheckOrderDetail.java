@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 /**
  * 库存盘点单据详情对象 wms_check_order_detail
  *
- * @author zcc
+ * @author yisl
  * @date 2024-08-13
  */
 @Data

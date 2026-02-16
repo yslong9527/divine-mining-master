@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 物品品牌Service业务层处理
  *
- * @author zcc
+ * @author yisl
  * @date 2024-07-30
  */
 public interface ItemBrandService {

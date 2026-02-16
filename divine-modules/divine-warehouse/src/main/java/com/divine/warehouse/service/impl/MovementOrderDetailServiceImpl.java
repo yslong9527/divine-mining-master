@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * 库存移动详情Service业务层处理
  *
- * @author zcc
+ * @author yisl
  * @date 2024-08-09
  */
 @RequiredArgsConstructor
