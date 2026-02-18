@@ -1,7 +1,7 @@
 package com.divine.system.mapper;
 
-import com.divine.system.domain.entity.SysOss;
-import com.divine.system.domain.vo.SysOssVo;
+import com.divine.system.domain.entity.SysFile;
+import com.divine.system.domain.vo.SysFileVo;
 import com.divine.common.mybatis.core.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @author Lion Li
  */
 @Mapper
-public interface SysOssMapper extends BaseMapperPlus<SysOss, SysOssVo> {
+public interface SysFileMapper extends BaseMapperPlus<SysFile, SysFileVo> {
 }

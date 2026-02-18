@@ -7,20 +7,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * OSS对象存储对象
+ * 文件存储
  *
  * @author Lion Li
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("sys_oss")
-public class SysOss extends BaseEntity {
+@TableName("sys_file")
+public class SysFile extends BaseEntity {
 
     /**
      * 对象存储主键
      */
-    @TableId(value = "oss_id")
-    private Long ossId;
+    @TableId(value = "id")
+    private Long id;
 
     /**
      * 文件名
@@ -28,9 +28,9 @@ public class SysOss extends BaseEntity {
     private String fileName;
 
     /**
-     * 原名
+     * URL地址
      */
-    private String originalName;
+    private String fileUrl;
 
     /**
      * 文件后缀名
@@ -38,13 +38,14 @@ public class SysOss extends BaseEntity {
     private String fileSuffix;
 
     /**
-     * URL地址
+     * 业务id
      */
-    private String url;
+    private Long bizId;
 
     /**
-     * 服务商
+     * 业务类型
      */
-    private String service;
+    private String bizType;
+
 
 }

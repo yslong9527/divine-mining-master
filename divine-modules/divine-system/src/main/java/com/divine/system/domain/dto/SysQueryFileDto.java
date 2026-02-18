@@ -1,6 +1,6 @@
 package com.divine.system.domain.dto;
 
-import com.divine.system.domain.entity.SysOss;
+import com.divine.system.domain.entity.SysFile;
 import com.divine.common.mybatis.core.domain.BaseEntity;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,25 +14,22 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = SysOss.class, reverseConvertGenerate = false)
-public class SysOssDto extends BaseEntity {
+@AutoMapper(target = SysFile.class, reverseConvertGenerate = false)
+public class SysQueryFileDto extends BaseEntity {
 
-    @Schema(description = "ossId")
-    private Long ossId;
+    @Schema(description = "id")
+    private Long id;
 
     @Schema(description = "文件名")
     private String fileName;
 
-    @Schema(description = "原名")
-    private String originalName;
-
     @Schema(description = "文件后缀名")
     private String fileSuffix;
 
-    @Schema(description = "URL地址")
-    private String url;
+    @Schema(description = "业务id")
+    private Long bizId;
 
-    @Schema(description = "服务商")
-    private String service;
+    @Schema(description = "业务类型")
+    private String bizType;
 
 }

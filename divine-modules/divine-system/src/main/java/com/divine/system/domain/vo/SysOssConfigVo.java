@@ -71,7 +71,7 @@ public class SysOssConfigVo {
     private String region;
 
     /**
-     * 是否默认（0=是,1=否）
+     * 是否默认（0:否,1:是）
      */
     private String status;
 

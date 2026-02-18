@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : 47.239.3.188
+ Source Server         : local
  Source Server Type    : MySQL
- Source Server Version : 80043 (8.0.43)
- Source Host           : 47.239.3.188:3306
- Source Schema         : divine_wms
+ Source Server Version : 80041 (8.0.41)
+ Source Host           : localhost:3306
+ Source Schema         : divine_minerals
 
  Target Server Type    : MySQL
- Target Server Version : 80043 (8.0.43)
+ Target Server Version : 80041 (8.0.41)
  File Encoding         : 65001
 
- Date: 16/02/2026 14:22:04
+ Date: 17/02/2026 17:19:29
 */
 
 SET NAMES utf8mb4;
@@ -757,6 +757,10 @@ INSERT INTO `sys_logininfor` VALUES (2022701522853781505, 'admin', '41.77.221.22
 INSERT INTO `sys_logininfor` VALUES (2023360559362564097, 'admin', '41.77.221.237', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-16 13:35:24');
 INSERT INTO `sys_logininfor` VALUES (2023363355457589250, 'admin', '41.77.221.237', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '退出成功', '2026-02-16 13:46:31');
 INSERT INTO `sys_logininfor` VALUES (2023363380761825281, 'admin', '41.77.221.237', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-16 13:46:37');
+INSERT INTO `sys_logininfor` VALUES (2023686038493831170, 'admin', '41.77.221.237', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '0', '验证码错误', '2026-02-17 11:08:45');
+INSERT INTO `sys_logininfor` VALUES (2023686075256905729, 'admin', '41.77.221.237', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '0', '验证码错误', '2026-02-17 11:08:53');
+INSERT INTO `sys_logininfor` VALUES (2023686092952674305, 'admin', '41.77.221.237', '刚果金|Kinshasa|橘子电信', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-17 11:08:57');
+INSERT INTO `sys_logininfor` VALUES (2023773782121873410, 'admin', '192.168.29.168', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '1', '登录成功', '2026-02-17 16:57:24');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -907,4 +911,852 @@ CREATE TABLE `sys_notice`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`notice_id`) USING BTREE
-) ENGINE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '通知公告表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_notice
+-- ----------------------------
+INSERT INTO `sys_notice` VALUES (1, '温馨提醒：2018-07-01 新版本发布啦', '2', 0xE696B0E78988E69CACE58685E5AEB9, '1', 'admin', '2024-06-13 16:06:38', '', NULL, '管理员');
+INSERT INTO `sys_notice` VALUES (2, '维护通知：2018-07-01 系统凌晨维护', '1', 0xE7BBB4E68AA4E58685E5AEB9, '1', 'admin', '2024-06-13 16:06:38', '', NULL, '管理员');
+
+-- ----------------------------
+-- Table structure for sys_oper_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_oper_log`;
+CREATE TABLE `sys_oper_log`  (
+  `oper_id` bigint NOT NULL COMMENT '日志主键',
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '模块标题',
+  `business_type` int NULL DEFAULT 0 COMMENT '业务类型（0其它 1新增 2修改 3删除）',
+  `method` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '方法名称',
+  `request_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '请求方式',
+  `operator_type` int NULL DEFAULT 0 COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
+  `oper_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '操作人员',
+  `dept_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '部门名称',
+  `oper_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '请求URL',
+  `oper_ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '主机地址',
+  `oper_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '操作地点',
+  `oper_param` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '请求参数',
+  `json_result` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '返回参数',
+  `status` int NULL DEFAULT 0 COMMENT '操作状态（0异常 1正常）',
+  `error_msg` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '错误消息',
+  `oper_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
+  PRIMARY KEY (`oper_id`) USING BTREE,
+  INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
+  INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
+  INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_oper_log
+-- ----------------------------
+INSERT INTO `sys_oper_log` VALUES (2020131907443335170, '参数管理', 2, 'com.divine.system.controller.system.SysConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/config', '120.243.204.5', '中国|安徽省|宣城市|移动', '{\"createBy\":null,\"createTime\":\"2024-06-13 16:06:37\",\"updateBy\":null,\"updateTime\":null,\"configId\":3,\"configName\":\"主框架页-侧边栏主题\",\"configKey\":\"sys.index.sideTheme\",\"configValue\":\"theme-dark\",\"configType\":\"Y\",\"remark\":\"深色主题theme-dark，浅色主题theme-light\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-07 15:45:54');
+INSERT INTO `sys_oper_log` VALUES (2020131965718994945, '参数管理', 2, 'com.divine.system.controller.system.SysConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/config', '120.243.204.5', '中国|安徽省|宣城市|移动', '{\"createBy\":null,\"createTime\":\"2024-06-13 16:06:37\",\"updateBy\":null,\"updateTime\":null,\"configId\":3,\"configName\":\"主框架页-侧边栏主题\",\"configKey\":\"sys.index.sideTheme\",\"configValue\":\"theme-light\",\"configType\":\"Y\",\"remark\":\"深色主题theme-dark，浅色主题theme-light\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-07 15:46:08');
+INSERT INTO `sys_oper_log` VALUES (2020845816152256513, '代码生成', 6, 'com.divine.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', '研发部门', '/tool/gen/importTable', '41.77.221.201', '刚果金|Kinshasa|橘子电信', '\"wms_warehouse,wms_shipment_order_detail,wms_shipment_order,wms_item_brand,wms_check_order,wms_item,wms_inventory_history,wms_inventory,wms_check_order_detail,sys_user_role\"', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-09 15:02:43');
+INSERT INTO `sys_oper_log` VALUES (2021125396570238977, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.doWarehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '169.239.158.70', '刚果金|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021125396364718081\",\"orderNo\":\"RK02103097\",\"totalQuantity\":\"111\",\"totalAmount\":null,\"orderStatus\":1,\"remark\":null,\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"orderId\":null,\"id\":null,\"skuId\":\"1840282974696374273\",\"quantity\":\"111\",\"amount\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"beforeQuantity\":\"3.00\",\"afterQuantity\":\"114.00\"}],\"optType\":2,\"bizOrderNo\":null,\"merchantId\":null,\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 09:33:40');
+INSERT INTO `sys_oper_log` VALUES (2021130083579129858, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.doWarehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '169.239.158.70', '刚果金|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021130083507826689\",\"orderNo\":\"RK02107564\",\"totalQuantity\":\"1\",\"totalAmount\":\"111\",\"orderStatus\":1,\"remark\":\"zdxfdsfasdfsafd\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"orderId\":null,\"id\":null,\"skuId\":\"1840282974696374273\",\"quantity\":\"1\",\"amount\":\"111\",\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"beforeQuantity\":\"114.00\",\"afterQuantity\":\"115.00\"}],\"optType\":2,\"bizOrderNo\":\"3123123131\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 09:52:17');
+INSERT INTO `sys_oper_log` VALUES (2021139478035755010, '入库单', 1, 'com.divine.warehouse.controller.ReceiptOrderController.add()', 'POST', 1, 'admin', '研发部门', '/receiptOrder', '169.239.158.70', '刚果金|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021139477993811970\",\"orderNo\":\"RK02106282\",\"totalQuantity\":\"0\",\"totalAmount\":null,\"orderStatus\":0,\"remark\":null,\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"orderId\":null,\"id\":null,\"skuId\":\"1829399118304964610\",\"quantity\":null,\"amount\":null,\"remark\":null,\"warehouseId\":\"1828364740028174337\",\"beforeQuantity\":null,\"afterQuantity\":null}],\"optType\":2,\"bizOrderNo\":null,\"merchantId\":null,\"warehouseId\":\"1828364740028174337\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":\"2021139477993811970\"}', 1, '', '2026-02-10 10:29:37');
+INSERT INTO `sys_oper_log` VALUES (2021140283111436289, '代码生成', 6, 'com.divine.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', '研发部门', '/tool/gen/importTable', '169.239.158.70', '刚果金|橘子电信', '\"wms_warehouse_shelf\"', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 10:32:49');
+INSERT INTO `sys_oper_log` VALUES (2021140289214148610, '代码生成', 6, 'com.divine.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', '研发部门', '/tool/gen/importTable', '169.239.158.70', '刚果金|橘子电信', '\"wms_warehouse_shelf\"', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 10:32:51');
+INSERT INTO `sys_oper_log` VALUES (2021140376875102209, '代码生成', 8, 'com.divine.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '169.239.158.70', '刚果金|橘子电信', '{\"tables\":\"wms_warehouse_shelf\"}', '', 0, '', '2026-02-10 10:33:11');
+INSERT INTO `sys_oper_log` VALUES (2021140495322247170, '代码生成', 8, 'com.divine.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '169.239.158.70', '刚果金|橘子电信', '{\"tables\":\"wms_warehouse_shelf\"}', '', 0, '', '2026-02-10 10:33:40');
+INSERT INTO `sys_oper_log` VALUES (2021140678412005378, '代码生成', 8, 'com.divine.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '169.239.158.70', '刚果金|橘子电信', '{\"tables\":\"wms_warehouse_shelf\"}', '', 0, '', '2026-02-10 10:34:23');
+INSERT INTO `sys_oper_log` VALUES (2021166457724268546, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.doWarehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '169.239.158.70', '刚果金|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021166457636188162\",\"orderNo\":\"RK02100704\",\"totalQuantity\":\"111\",\"totalAmount\":\"22\",\"orderStatus\":1,\"remark\":\"1312的点点滴滴\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"orderId\":null,\"id\":null,\"skuId\":\"1840282974696374273\",\"quantity\":\"111\",\"amount\":\"22\",\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"beforeQuantity\":\"115.00\",\"afterQuantity\":\"226.00\"}],\"optType\":2,\"bizOrderNo\":\"31231231321\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 12:16:50');
+INSERT INTO `sys_oper_log` VALUES (2021182824628285441, '入库单', 1, 'com.divine.warehouse.controller.ReceiptOrderController.add()', 'POST', 1, 'admin', '研发部门', '/receiptOrder', '169.239.158.70', '刚果金|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021182823583903745\",\"orderNo\":\"RK02102363\",\"totalQuantity\":\"0\",\"totalAmount\":null,\"orderStatus\":0,\"remark\":null,\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"orderId\":null,\"id\":null,\"skuId\":\"1840282974696374273\",\"quantity\":null,\"amount\":null,\"remark\":null,\"warehouseId\":\"1840317750635581441\",\"beforeQuantity\":null,\"afterQuantity\":null}],\"optType\":2,\"bizOrderNo\":null,\"merchantId\":null,\"warehouseId\":\"1840317750635581441\"}', '', 0, 'com.divine.warehouse.mapper.ReceiptOrderDetailMapper.insert (batch index #1) failed. Cause: java.sql.BatchUpdateException: Unknown column \'order_id\' in \'field list\'\n; bad SQL grammar []', '2026-02-10 13:21:52');
+INSERT INTO `sys_oper_log` VALUES (2021182859596197890, '入库单', 1, 'com.divine.warehouse.controller.ReceiptOrderController.add()', 'POST', 1, 'admin', '研发部门', '/receiptOrder', '169.239.158.70', '刚果金|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021182859550060545\",\"orderNo\":\"RK02102363\",\"totalQuantity\":\"1\",\"totalAmount\":null,\"orderStatus\":0,\"remark\":null,\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"orderId\":null,\"id\":null,\"skuId\":\"1840282974696374273\",\"quantity\":\"1\",\"amount\":\"1\",\"remark\":null,\"warehouseId\":\"1840317750635581441\",\"beforeQuantity\":null,\"afterQuantity\":null}],\"optType\":2,\"bizOrderNo\":null,\"merchantId\":null,\"warehouseId\":\"1840317750635581441\"}', '', 0, 'com.divine.warehouse.mapper.ReceiptOrderDetailMapper.insert (batch index #1) failed. Cause: java.sql.BatchUpdateException: Unknown column \'order_id\' in \'field list\'\n; bad SQL grammar []', '2026-02-10 13:22:00');
+INSERT INTO `sys_oper_log` VALUES (2021221194448994305, '出库单', 2, 'com.divine.warehouse.controller.ShipmentOrderController.shipment()', 'PUT', 1, 'admin', '研发部门', '/shipmentOrder/shipment', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"111111\",\"quantity\":\"111\",\"beforeQuantity\":null,\"afterQuantity\":null,\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '', 0, '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'shipment_status\' in \'field list\'\r\n### The error may exist in com/divine/warehouse/mapper/ShipmentOrderMapper.java (best guess)\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: SELECT  id,shipment_status,warehouse_id,opt_type,biz_order_no,merchant_id,order_no,order_status,total_quantity,total_amount,remark,create_by,create_time,update_by,update_time  FROM wms_shipment_order      WHERE  (order_no = ?)\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'shipment_status\' in \'field list\'\n; bad SQL grammar []', '2026-02-10 15:54:20');
+INSERT INTO `sys_oper_log` VALUES (2021221798487482369, '出库单', 2, 'com.divine.warehouse.controller.ShipmentOrderController.shipment()', 'PUT', 1, 'admin', '研发部门', '/shipmentOrder/shipment', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"111111\",\"quantity\":\"111\",\"beforeQuantity\":null,\"afterQuantity\":null,\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '', 0, '\r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Unknown column \'total_amount\' in \'field list\'\r\n### The error may exist in com/divine/warehouse/mapper/ShipmentOrderMapper.java (best guess)\r\n### The error may involve defaultParameterMap\r\n### The error occurred while setting parameters\r\n### SQL: SELECT  id,warehouse_id,opt_type,biz_order_no,merchant_id,order_no,order_status,total_quantity,total_amount,remark,create_by,create_time,update_by,update_time  FROM wms_shipment_order      WHERE  (order_no = ?)\r\n### Cause: java.sql.SQLSyntaxErrorException: Unknown column \'total_amount\' in \'field list\'\n; bad SQL grammar []', '2026-02-10 15:56:44');
+INSERT INTO `sys_oper_log` VALUES (2021222099298799617, '出库单', 2, 'com.divine.warehouse.controller.ShipmentOrderController.shipment()', 'PUT', 1, 'admin', '研发部门', '/shipmentOrder/shipment', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021222098778705921\",\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"111111\",\"quantity\":\"111\",\"beforeQuantity\":null,\"afterQuantity\":null,\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '', 0, 'com.divine.warehouse.mapper.ShipmentOrderDetailMapper.insert (batch index #1) failed. Cause: java.sql.BatchUpdateException: Unknown column \'order_id\' in \'field list\'\n; bad SQL grammar []', '2026-02-10 15:57:56');
+INSERT INTO `sys_oper_log` VALUES (2021223519703937026, '出库单', 2, 'com.divine.warehouse.controller.ShipmentOrderController.shipment()', 'PUT', 1, 'admin', '研发部门', '/shipmentOrder/shipment', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021223519506804737\",\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"111111\",\"quantity\":\"111\",\"beforeQuantity\":\"226.00\",\"afterQuantity\":\"115.00\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 16:03:34');
+INSERT INTO `sys_oper_log` VALUES (2021224168143335425, '出库单', 2, 'com.divine.warehouse.controller.ShipmentOrderController.shipment()', 'PUT', 1, 'admin', '研发部门', '/shipmentOrder/shipment', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"111111\",\"quantity\":\"111\",\"beforeQuantity\":null,\"afterQuantity\":null,\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '', 0, '出库单号重复，请手动修改', '2026-02-10 16:06:09');
+INSERT INTO `sys_oper_log` VALUES (2021224190687719426, '出库单', 2, 'com.divine.warehouse.controller.ShipmentOrderController.shipment()', 'PUT', 1, 'admin', '研发部门', '/shipmentOrder/shipment', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021224190628999169\",\"orderNo\":\"RK021042212\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"111111\",\"quantity\":\"111\",\"beforeQuantity\":\"115.00\",\"afterQuantity\":\"4.00\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 16:06:14');
+INSERT INTO `sys_oper_log` VALUES (2021225271526297602, '出库单', 2, 'com.divine.warehouse.controller.ShipmentOrderController.shipment()', 'PUT', 1, 'admin', '研发部门', '/shipmentOrder/shipment', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021225181025800193\",\"orderNo\":\"RK021042212\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"111111\",\"quantity\":\"111\",\"beforeQuantity\":null,\"afterQuantity\":null,\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '', 0, '库存不足', '2026-02-10 16:10:32');
+INSERT INTO `sys_oper_log` VALUES (2021225510073143298, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.warehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021225501361573889\",\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"1111\",\"quantity\":\"111\",\"beforeQuantity\":\"0\",\"afterQuantity\":\"111\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 16:11:29');
+INSERT INTO `sys_oper_log` VALUES (2021225590788329473, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.warehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021225590666694657\",\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"1111\",\"quantity\":\"111\",\"beforeQuantity\":\"111.00\",\"afterQuantity\":\"222.00\",\"imgUrl\":null},{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"222\",\"quantity\":\"111\",\"beforeQuantity\":\"0\",\"afterQuantity\":\"111\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 16:11:48');
+INSERT INTO `sys_oper_log` VALUES (2021226074198663169, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.warehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '192.168.29.168', '内网IP', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":\"2021226073892478977\",\"orderNo\":\"RK02104222\",\"orderStatus\":1,\"totalQuantity\":\"111\",\"totalPrice\":null,\"remark\":\"1323123\",\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"1111\",\"quantity\":\"111\",\"beforeQuantity\":\"222.00\",\"afterQuantity\":\"333.00\",\"imgUrl\":null},{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1840282974696374273\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":\"222\",\"quantity\":\"2\",\"beforeQuantity\":\"111.00\",\"afterQuantity\":\"113.00\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":\"3123123\",\"merchantId\":\"1828354153193836545\",\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功\",\"detailMessage\":null,\"data\":null}', 1, '', '2026-02-10 16:13:43');
+INSERT INTO `sys_oper_log` VALUES (2022357172093362178, '仓库', 3, 'com.divine.warehouse.controller.WarehouseController.remove()', 'DELETE', 1, 'admin', '研发部门', '/warehouse/1828364609002311682', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002388888\"}', '', 0, '该仓库已有业务关联，无法删除！', '2026-02-13 19:08:18');
+INSERT INTO `sys_oper_log` VALUES (2022357246206713858, '仓库', 2, 'com.divine.warehouse.controller.WarehouseController.edit()', 'PUT', 1, 'admin', '研发部门', '/warehouse', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"createBy\":\"admin\",\"createTime\":\"2024-08-27 17:31:06\",\"updateBy\":\"admin\",\"updateTime\":\"2024-08-27 17:31:06\",\"id\":\"1828364609002311682\",\"warehouseCode\":null,\"warehouseName\":\"神洲一号仓\",\"remark\":null,\"sort\":1}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002515695}', 1, '', '2026-02-13 19:08:36');
+INSERT INTO `sys_oper_log` VALUES (2022357260165357570, '仓库', 3, 'com.divine.warehouse.controller.WarehouseController.remove()', 'DELETE', 1, 'admin', '研发部门', '/warehouse/1828364740028174337', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002409952\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002519058}', 1, '', '2026-02-13 19:08:39');
+INSERT INTO `sys_oper_log` VALUES (2022357271775191042, '仓库', 3, 'com.divine.warehouse.controller.WarehouseController.remove()', 'DELETE', 1, 'admin', '研发部门', '/warehouse/1840317750635581441', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002412778\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002521827}', 1, '', '2026-02-13 19:08:42');
+INSERT INTO `sys_oper_log` VALUES (2022357573081407490, '物品品牌', 3, 'com.divine.warehouse.controller.ItemBrandController.remove()', 'DELETE', 1, 'admin', '研发部门', '/itemBrand/1828407291103842306', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002484608\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002593666}', 1, '', '2026-02-13 19:09:54');
+INSERT INTO `sys_oper_log` VALUES (2022357589795708929, '物品品牌', 3, 'com.divine.warehouse.controller.ItemBrandController.remove()', 'DELETE', 1, 'admin', '研发部门', '/itemBrand/1828407151135723522', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002488594\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002597652}', 1, '', '2026-02-13 19:09:58');
+INSERT INTO `sys_oper_log` VALUES (2022357600528932866, '物品品牌', 3, 'com.divine.warehouse.controller.ItemBrandController.remove()', 'DELETE', 1, 'admin', '研发部门', '/itemBrand/1828364927610032129', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002491154\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002600211}', 1, '', '2026-02-13 19:10:00');
+INSERT INTO `sys_oper_log` VALUES (2022357610855309313, '物品品牌', 3, 'com.divine.warehouse.controller.ItemBrandController.remove()', 'DELETE', 1, 'admin', '研发部门', '/itemBrand/1828364873889386498', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002493596\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002602670}', 1, '', '2026-02-13 19:10:03');
+INSERT INTO `sys_oper_log` VALUES (2022357621391400962, '物品品牌', 3, 'com.divine.warehouse.controller.ItemBrandController.remove()', 'DELETE', 1, 'admin', '研发部门', '/itemBrand/1828364846953566209', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771002496145\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771002605182}', 1, '', '2026-02-13 19:10:05');
+INSERT INTO `sys_oper_log` VALUES (2022363384180547585, '入库单', 2, 'com.divine.warehouse.controller.ReceiptOrderController.warehousing()', 'POST', 1, 'admin', '研发部门', '/receiptOrder/warehousing', '41.77.221.131', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"businessNo\":\"PK20260213001\",\"totalQuantity\":\"1\",\"totalPrice\":null,\"remark\":null,\"details\":[{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"id\":null,\"orderId\":null,\"skuId\":\"1829398333903007745\",\"unitPrice\":null,\"remark\":null,\"warehouseId\":\"1828364609002311682\",\"storageShelf\":null,\"quantity\":\"1\",\"beforeQuantity\":\"0\",\"afterQuantity\":\"1\",\"imgUrl\":null}],\"optType\":2,\"bizOrderNo\":null,\"merchantId\":null,\"warehouseId\":\"1828364609002311682\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771003979136}', 1, '', '2026-02-13 19:32:59');
+INSERT INTO `sys_oper_log` VALUES (2023368243302342657, '代码生成', 3, 'com.divine.generator.controller.GenController.remove()', 'DELETE', 1, 'admin', '研发部门', '/tool/gen/2020845814713610242,2020845814835245058,2020845814944296961,2020845815049154561,2020845815128846338,2020845815237898242,2020845815325978626,2020845815401476097,2020845815497945089,2020845815623774209', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771243447925\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771243556156}', 1, '', '2026-02-16 14:05:56');
+INSERT INTO `sys_oper_log` VALUES (2023368260062781441, '代码生成', 3, 'com.divine.generator.controller.GenController.remove()', 'DELETE', 1, 'admin', '研发部门', '/tool/gen/2021140282985607170,2021140289134456834', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771243452020\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771243560221}', 1, '', '2026-02-16 14:06:00');
+INSERT INTO `sys_oper_log` VALUES (2023368300214853634, '代码生成', 6, 'com.divine.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', '研发部门', '/tool/gen/importTable', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '\"wms_warehouse,sys_menu,sys_dept,wms_inventory,wms_check_order,wms_movement_order,wms_movement_order_detail,wms_receipt_order,wms_receipt_order_detail,wms_shipment_order\"', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771243569778}', 1, '', '2026-02-16 14:06:10');
+INSERT INTO `sys_oper_log` VALUES (2023368303893258241, '代码生成', 6, 'com.divine.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', '研发部门', '/tool/gen/importTable', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '\"wms_warehouse,sys_menu,sys_dept,wms_inventory,wms_check_order,wms_movement_order,wms_movement_order_detail,wms_receipt_order,wms_receipt_order_detail,wms_shipment_order\"', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771243570671}', 1, '', '2026-02-16 14:06:11');
+INSERT INTO `sys_oper_log` VALUES (2023368348277383170, '代码生成', 3, 'com.divine.generator.controller.GenController.remove()', 'DELETE', 1, 'admin', '研发部门', '/tool/gen/2023368297798934530,2023368298172227586,2023368298470023170,2023368298713292801,2023368298897842177,2023368299145306113,2023368299334049793,2023368299589902338,2023368299711537154,2023368299816394754', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771243473063\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771243581250}', 1, '', '2026-02-16 14:06:21');
+INSERT INTO `sys_oper_log` VALUES (2023372683715518466, '参数管理', 1, 'com.divine.system.controller.system.SysConfigController.add()', 'POST', 1, 'admin', '研发部门', '/system/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"configId\":null,\"configName\":\"库存预警数量\",\"configKey\":\"sys.warehouse.warning\",\"configValue\":\"10\",\"configType\":\"Y\",\"remark\":\"库存数量少于这个数量的时候将会进行通知\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771244614902}', 1, '', '2026-02-16 14:23:35');
+INSERT INTO `sys_oper_log` VALUES (2023686886213001218, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":1,\"configKey\":\"minio\",\"accessKey\":\"ceshi\",\"secretKey\":\"ruoyi123\",\"bucketName\":\"ruoyi\",\"prefix\":\"\",\"endpoint\":\"127.0.0.1:9000\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"0\",\"region\":\"\",\"ext1\":\"\",\"remark\":null,\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319526614}', 1, '', '2026-02-17 11:12:07');
+INSERT INTO `sys_oper_log` VALUES (2023687860843421697, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":2,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5t7WCfvq2BVZcFaeJcUH\",\"secretKey\":\"cQWkhWbeNbJxFFuwGqnsxc74VwzX4i\",\"bucketName\":\"aliyun\",\"prefix\":\"\",\"endpoint\":\"s3-cn-north-1.qiniucs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"0\",\"region\":\"\",\"ext1\":\"\",\"remark\":null,\"accessPolicy\":\"1\"}', '', 0, '操作配置\'aliyun\'失败, 配置key已存在!', '2026-02-17 11:15:59');
+INSERT INTO `sys_oper_log` VALUES (2023687930716332034, '对象存储配置', 3, 'com.divine.system.controller.system.SysOssConfigController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/oss/config/5', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771319666781\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319775643}', 1, '', '2026-02-17 11:16:16');
+INSERT INTO `sys_oper_log` VALUES (2023687942363914242, '对象存储配置', 3, 'com.divine.system.controller.system.SysOssConfigController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/oss/config/4', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771319669585\"}', '', 0, '系统内置, 不可删除!', '2026-02-17 11:16:18');
+INSERT INTO `sys_oper_log` VALUES (2023687981081534466, '对象存储配置', 3, 'com.divine.system.controller.system.SysOssConfigController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/oss/config/4', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771319678825\"}', '', 0, '系统内置, 不可删除!', '2026-02-17 11:16:28');
+INSERT INTO `sys_oper_log` VALUES (2023687993899327489, '对象存储配置', 3, 'com.divine.system.controller.system.SysOssConfigController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/oss/config/3', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771319681888\"}', '', 0, '系统内置, 不可删除!', '2026-02-17 11:16:31');
+INSERT INTO `sys_oper_log` VALUES (2023688090737418241, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":1,\"configKey\":\"minio\",\"accessKey\":\"ceshi\",\"secretKey\":\"ruoyi123\",\"bucketName\":\"minio\",\"prefix\":\"\",\"endpoint\":\"127.0.0.1:9000\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"0\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319813796}', 1, '', '2026-02-17 11:16:54');
+INSERT INTO `sys_oper_log` VALUES (2023688121469083649, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":2,\"configKey\":\"qiniu\",\"accessKey\":\"XXXXXXXXXXXXXXX\",\"secretKey\":\"XXXXXXXXXXXXXXX\",\"bucketName\":\"qiniu\",\"prefix\":\"\",\"endpoint\":\"s3-cn-north-1.qiniucs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"0\",\"region\":\"\",\"ext1\":\"\",\"remark\":null,\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319821123}', 1, '', '2026-02-17 11:17:01');
+INSERT INTO `sys_oper_log` VALUES (2023688153937190913, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"XXXXXXXXXXXXXXX\",\"secretKey\":\"XXXXXXXXXXXXXXX\",\"bucketName\":\"aliyun\",\"prefix\":\"\",\"endpoint\":\"oss-cn-beijing.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"0\",\"region\":\"\",\"ext1\":\"\",\"remark\":null,\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319828862}', 1, '', '2026-02-17 11:17:09');
+INSERT INTO `sys_oper_log` VALUES (2023688189265813506, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":4,\"configKey\":\"qcloud\",\"accessKey\":\"XXXXXXXXXXXXXXX\",\"secretKey\":\"XXXXXXXXXXXXXXX\",\"bucketName\":\"qcloud\",\"prefix\":\"\",\"endpoint\":\"cos.ap-beijing.myqcloud.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"0\",\"region\":\"ap-beijing\",\"ext1\":\"\",\"remark\":null,\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319837287}', 1, '', '2026-02-17 11:17:17');
+INSERT INTO `sys_oper_log` VALUES (2023688500176986114, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5t7WCfvq2BVZcFaeJcUH\",\"secretKey\":\"cQWkhWbeNbJxFFuwGqnsxc74VwzX4i\",\"bucketName\":\"aliyun\",\"prefix\":\"\",\"endpoint\":\"oss-cn-beijing.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"0\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319911413}', 1, '', '2026-02-17 11:18:31');
+INSERT INTO `sys_oper_log` VALUES (2023688519932157953, '对象存储状态修改', 2, 'com.divine.system.controller.system.SysOssConfigController.changeStatus()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config/changeStatus', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":null,\"secretKey\":null,\"bucketName\":null,\"prefix\":null,\"endpoint\":null,\"domain\":null,\"isHttps\":null,\"status\":\"1\",\"region\":null,\"ext1\":null,\"remark\":null,\"accessPolicy\":null}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771319916121}', 1, '', '2026-02-17 11:18:36');
+INSERT INTO `sys_oper_log` VALUES (2023689497855107074, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5t7WCfvq2BVZcFaeJcUH\",\"secretKey\":\"cQWkhWbeNbJxFFuwGqnsxc74VwzX4i\",\"bucketName\":\"aliyun\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771320149277}', 1, '', '2026-02-17 11:22:29');
+INSERT INTO `sys_oper_log` VALUES (2023689885463322625, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 699433B1794D103330E24ED9; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 11:24:02');
+INSERT INTO `sys_oper_log` VALUES (2023689914571792386, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 699433B8AFAD5B3334C09036; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 11:24:09');
+INSERT INTO `sys_oper_log` VALUES (2023691719133339650, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5tPrEqKpi8uZNqDxZTPL\",\"secretKey\":\"GmBwUGTmFXaURcv8gKrCqZHaV7uROd\",\"bucketName\":\"aliyun\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771320678861}', 1, '', '2026-02-17 11:31:19');
+INSERT INTO `sys_oper_log` VALUES (2023692041306218498, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 699435B36AFD363934C40016; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 11:32:36');
+INSERT INTO `sys_oper_log` VALUES (2023697862744317953, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943B1F93A7E93732539BF5; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 11:55:44');
+INSERT INTO `sys_oper_log` VALUES (2023698191716163586, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943B6EC78BAF34306D017D; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 11:57:02');
+INSERT INTO `sys_oper_log` VALUES (2023698554821255169, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943BC4ACF6C53631DC9DF6; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 11:58:29');
+INSERT INTO `sys_oper_log` VALUES (2023698774867025922, '对象存储状态修改', 2, 'com.divine.system.controller.system.SysOssConfigController.changeStatus()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config/changeStatus', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":2,\"configKey\":\"qiniu\",\"accessKey\":null,\"secretKey\":null,\"bucketName\":null,\"prefix\":null,\"endpoint\":null,\"domain\":null,\"isHttps\":null,\"status\":\"1\",\"region\":null,\"ext1\":null,\"remark\":null,\"accessPolicy\":null}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771322361090}', 1, '', '2026-02-17 11:59:21');
+INSERT INTO `sys_oper_log` VALUES (2023698788192329729, '对象存储状态修改', 2, 'com.divine.system.controller.system.SysOssConfigController.changeStatus()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config/changeStatus', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":null,\"secretKey\":null,\"bucketName\":null,\"prefix\":null,\"endpoint\":null,\"domain\":null,\"isHttps\":null,\"status\":\"1\",\"region\":null,\"ext1\":null,\"remark\":null,\"accessPolicy\":null}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771322364267}', 1, '', '2026-02-17 11:59:24');
+INSERT INTO `sys_oper_log` VALUES (2023698852197408769, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943C0BE61358303304BE79; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 11:59:40');
+INSERT INTO `sys_oper_log` VALUES (2023699519259516930, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5tPrEqKpi8uZNqDxZTPL\",\"secretKey\":\"GmBwUGTmFXaURcv8gKrCqZHaV7uROd\",\"bucketName\":\"aliyun\",\"prefix\":\"\",\"endpoint\":\"divine-mine.oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771322538567}', 1, '', '2026-02-17 12:02:19');
+INSERT INTO `sys_oper_log` VALUES (2023699569800880129, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '创建Bucket失败, 请核对配置信息:[The specified bucket is not valid. (Service: Amazon S3; Status Code: 400; Error Code: InvalidBucketName; Request ID: 69943CB6B1E82330351027AA; S3 Extended Request ID: aliyun.divine-mine.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 12:02:31');
+INSERT INTO `sys_oper_log` VALUES (2023699706380001282, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"divine-mine\",\"accessKey\":\"LTAI5tPrEqKpi8uZNqDxZTPL\",\"secretKey\":\"GmBwUGTmFXaURcv8gKrCqZHaV7uROd\",\"bucketName\":\"divine-mine\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771322583181}', 1, '', '2026-02-17 12:03:03');
+INSERT INTO `sys_oper_log` VALUES (2023699795475406850, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '创建Bucket失败, 请核对配置信息:[The specified bucket is not valid. (Service: Amazon S3; Status Code: 400; Error Code: InvalidBucketName; Request ID: 69943CECC390C33535179A66; S3 Extended Request ID: aliyun.divine-mine.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 12:03:24');
+INSERT INTO `sys_oper_log` VALUES (2023699976883249153, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5tPrEqKpi8uZNqDxZTPL\",\"secretKey\":\"GmBwUGTmFXaURcv8gKrCqZHaV7uROd\",\"bucketName\":\"divine-mine\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771322647673}', 1, '', '2026-02-17 12:04:08');
+INSERT INTO `sys_oper_log` VALUES (2023700023595212801, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[Put public object acl is not allowed (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943D22CE63A831316430A9; S3 Extended Request ID: divine-mine.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 12:04:19');
+INSERT INTO `sys_oper_log` VALUES (2023700175210913794, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5tPrEqKpi8uZNqDxZTPL\",\"secretKey\":\"GmBwUGTmFXaURcv8gKrCqZHaV7uROd\",\"bucketName\":\"aliyun\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771322694958}', 1, '', '2026-02-17 12:04:55');
+INSERT INTO `sys_oper_log` VALUES (2023700310854705153, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[AccessDenied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943D67AB4B8130323DBB64; S3 Extended Request ID: aliyun.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 12:05:27');
+INSERT INTO `sys_oper_log` VALUES (2023700555739144193, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5tPrEqKpi8uZNqDxZTPL\",\"secretKey\":\"GmBwUGTmFXaURcv8gKrCqZHaV7uROd\",\"bucketName\":\"divine-mine\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771322785682}', 1, '', '2026-02-17 12:06:26');
+INSERT INTO `sys_oper_log` VALUES (2023700642166972418, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[Put public object acl is not allowed (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943DB6AB4B813438AD1A65; S3 Extended Request ID: divine-mine.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 12:06:46');
+INSERT INTO `sys_oper_log` VALUES (2023701827275956226, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"aliyun\",\"accessKey\":\"LTAI5tJ37eqMa7Rv31AFKYNk\",\"secretKey\":\"PtOQKYQLwPQc2RHiKq0BPQdpenottw\",\"bucketName\":\"divine-mine\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771323088840}', 1, '', '2026-02-17 12:11:29');
+INSERT INTO `sys_oper_log` VALUES (2023701881361506305, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[Put public object acl is not allowed (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943EDDB1E82332313BCAAC; S3 Extended Request ID: divine-mine.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 12:11:42');
+INSERT INTO `sys_oper_log` VALUES (2023701953969102849, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"divine-mine\",\"accessKey\":\"LTAI5tJ37eqMa7Rv31AFKYNk\",\"secretKey\":\"PtOQKYQLwPQc2RHiKq0BPQdpenottw\",\"bucketName\":\"divine-mine\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771323119046}', 1, '', '2026-02-17 12:11:59');
+INSERT INTO `sys_oper_log` VALUES (2023702020817920001, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '', 0, '上传文件失败，请检查配置信息:[Put public object acl is not allowed (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied; Request ID: 69943EFE6AFD363433B35A21; S3 Extended Request ID: divine-mine.oss-cn-hongkong.aliyuncs.com; Proxy: null)]', '2026-02-17 12:12:15');
+INSERT INTO `sys_oper_log` VALUES (2023702429976469506, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":{\"url\":\"http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/9d1cd77a3fcb4a45a905b557f3d4f215.png\",\"ossId\":\"2023702429913554945\",\"fileName\":\"7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png\"},\"timestamp\":1771323232534}', 1, '', '2026-02-17 12:13:53');
+INSERT INTO `sys_oper_log` VALUES (2023703355973935106, '对象存储配置', 2, 'com.divine.system.controller.system.SysOssConfigController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/oss/config', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"createBy\":null,\"createTime\":null,\"updateBy\":null,\"updateTime\":null,\"ossConfigId\":3,\"configKey\":\"divine-mine\",\"accessKey\":\"LTAI5tRydCAPYQEtbbwS2yvh\",\"secretKey\":\"Smr3uNISFD0v2OPxOIVrWwRjoKPjtN\",\"bucketName\":\"divine-mine\",\"prefix\":\"\",\"endpoint\":\"oss-cn-hongkong.aliyuncs.com\",\"domain\":\"\",\"isHttps\":\"N\",\"status\":\"1\",\"region\":\"\",\"ext1\":\"\",\"remark\":\"\",\"accessPolicy\":\"1\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771323453311}', 1, '', '2026-02-17 12:17:33');
+INSERT INTO `sys_oper_log` VALUES (2023703762100002818, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":{\"url\":\"http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/1cd60e2ab77141c79495fff1f6160a5f.png\",\"ossId\":\"2023703762037088257\",\"fileName\":\"7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png\"},\"timestamp\":1771323550138}', 1, '', '2026-02-17 12:19:10');
+INSERT INTO `sys_oper_log` VALUES (2023704387827245057, '入库单', 3, 'com.divine.warehouse.controller.ReceiptOrderController.remove()', 'DELETE', 1, 'admin', '研发部门', '/receiptOrder/2021226073892478977', '41.77.221.237', '刚果金|Kinshasa|橘子电信', '{\"timestamp\":\"1771323590407\"}', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":null,\"timestamp\":1771323699324}', 1, '', '2026-02-17 12:21:39');
+INSERT INTO `sys_oper_log` VALUES (2023772910045863938, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.211', '刚果金|Kinshasa|橘子电信', '', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":{\"url\":\"http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/93e24750b2db4468b527f269912a8162.png\",\"ossId\":\"2023772910012309506\",\"fileName\":\"7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png\"},\"timestamp\":1771340036295}', 1, '', '2026-02-17 16:53:56');
+INSERT INTO `sys_oper_log` VALUES (2023772977913896961, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '41.77.221.211', '刚果金|Kinshasa|橘子电信', '', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":{\"url\":\"http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/51e0b4f2a91e40b99a39c552cf6bb698.png\",\"ossId\":\"2023772977871953922\",\"fileName\":\"7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png\"},\"timestamp\":1771340052474}', 1, '', '2026-02-17 16:54:12');
+INSERT INTO `sys_oper_log` VALUES (2023773922928852993, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[Not Found (Service: Amazon S3; Status Code: 404; Error Code: 404 Not Found; Request ID: null; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 16:57:58');
+INSERT INTO `sys_oper_log` VALUES (2023774048829276162, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[Not Found (Service: Amazon S3; Status Code: 404; Error Code: 404 Not Found; Request ID: null; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 16:58:28');
+INSERT INTO `sys_oper_log` VALUES (2023774166093627393, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[Not Found (Service: Amazon S3; Status Code: 404; Error Code: 404 Not Found; Request ID: null; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 16:58:56');
+INSERT INTO `sys_oper_log` VALUES (2023774358322712577, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[> (Service: Amazon S3; Status Code: 400; Error Code: InvalidRequest; Request ID: Njk5NDgyY2FfNDhiNzI0MDlfMTAyY2ZfY2RmNDVl; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 16:59:42');
+INSERT INTO `sys_oper_log` VALUES (2023774491730939906, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[> (Service: Amazon S3; Status Code: 400; Error Code: InvalidRequest; Request ID: Njk5NDgyZTlfYzRhZDY0MDlfMTc0MmZfNzEzOWI0; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 17:00:13');
+INSERT INTO `sys_oper_log` VALUES (2023775784704917505, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[> (Service: Amazon S3; Status Code: 400; Error Code: InvalidRequest; Request ID: Njk5NDg0MWVfY2NhODI0MDlfMTE3Y2VfY2FmN2Y4; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 17:05:22');
+INSERT INTO `sys_oper_log` VALUES (2023775983816916993, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[> (Service: Amazon S3; Status Code: 400; Error Code: InvalidRequest; Request ID: Njk5NDg0NGJfNWE5NjQwOV8xN2VjYl9kM2Q5YWE=; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 17:06:09');
+INSERT INTO `sys_oper_log` VALUES (2023776271818801153, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[> (Service: Amazon S3; Status Code: 400; Error Code: InvalidRequest; Request ID: Njk5NDg0OTJfNDVhNzY0MDlfOGVmMF9kOGExYWI=; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 17:07:18');
+INSERT INTO `sys_oper_log` VALUES (2023776517500157953, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '', 0, '创建Bucket失败, 请核对配置信息:[> (Service: Amazon S3; Status Code: 400; Error Code: InvalidRequest; Request ID: Njk5NDg0Y2NfYzhhZTY0MDlfNWI3Y183MmNiZDY=; S3 Extended Request ID: null; Proxy: null)]', '2026-02-17 17:08:16');
+INSERT INTO `sys_oper_log` VALUES (2023777467254059009, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":{\"url\":\"http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/790ca2b83c3a4e51881e7c5545231c6c.jpg\",\"ossId\":\"2023777467065315330\",\"fileName\":\"224227_74723956859.jpg\"},\"timestamp\":1771341122812}', 1, '', '2026-02-17 17:12:03');
+INSERT INTO `sys_oper_log` VALUES (2023777983073759233, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":{\"url\":\"http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/8db823861bb44a2aba4776ad27c9d2e7.jpg\",\"ossId\":\"2023777983006650370\",\"fileName\":\"224227_74723956859.jpg\"},\"timestamp\":1771341245802}', 1, '', '2026-02-17 17:14:06');
+INSERT INTO `sys_oper_log` VALUES (2023779048250814466, 'OSS对象存储', 1, 'com.divine.system.controller.system.SysFileController.upload()', 'POST', 1, 'admin', '研发部门', '/system/oss/upload', '192.168.29.168', '内网IP', '', '{\"code\":200,\"msg\":\"操作成功!\",\"data\":{\"url\":\"http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/ad11f31f431f4ac996f5b0711976bb51.jpg\",\"ossId\":\"2023779046761836545\",\"fileName\":\"e8d1583f13f35c1cda811ed6e010e0da33585e3c.jpg\"},\"timestamp\":1771341499759}', 1, '', '2026-02-17 17:18:20');
+
+-- ----------------------------
+-- Table structure for sys_oss
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_oss`;
+CREATE TABLE `sys_oss`  (
+  `oss_id` bigint NOT NULL COMMENT '对象存储主键',
+  `file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '文件名',
+  `original_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '原名',
+  `file_suffix` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '文件后缀名',
+  `url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '上传人',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新人',
+  `service` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'minio' COMMENT '服务商',
+  PRIMARY KEY (`oss_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'OSS对象存储表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_oss
+-- ----------------------------
+INSERT INTO `sys_oss` VALUES (2023702429913554945, '2026/02/17/9d1cd77a3fcb4a45a905b557f3d4f215.png', '7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png', '.png', 'http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/9d1cd77a3fcb4a45a905b557f3d4f215.png', '2026-02-17 12:13:53', 'admin', '2026-02-17 12:13:53', 'admin', 'aliyun');
+INSERT INTO `sys_oss` VALUES (2023703762037088257, '2026/02/17/1cd60e2ab77141c79495fff1f6160a5f.png', '7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png', '.png', 'http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/1cd60e2ab77141c79495fff1f6160a5f.png', '2026-02-17 12:19:10', 'admin', '2026-02-17 12:19:10', 'admin', 'aliyun');
+INSERT INTO `sys_oss` VALUES (2023772910012309506, '2026/02/17/93e24750b2db4468b527f269912a8162.png', '7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png', '.png', 'http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/93e24750b2db4468b527f269912a8162.png', '2026-02-17 16:53:56', 'admin', '2026-02-17 16:53:56', 'admin', 'aliyun');
+INSERT INTO `sys_oss` VALUES (2023772977871953922, '2026/02/17/51e0b4f2a91e40b99a39c552cf6bb698.png', '7a1550f3-da7e-45d5-961b-8d4e0cd9b9fa.png', '.png', 'http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/51e0b4f2a91e40b99a39c552cf6bb698.png', '2026-02-17 16:54:12', 'admin', '2026-02-17 16:54:12', 'admin', 'aliyun');
+INSERT INTO `sys_oss` VALUES (2023777467065315330, '2026/02/17/790ca2b83c3a4e51881e7c5545231c6c.jpg', '224227_74723956859.jpg', '.jpg', 'http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/790ca2b83c3a4e51881e7c5545231c6c.jpg', '2026-02-17 17:12:03', 'admin', '2026-02-17 17:12:03', 'admin', 'divine-mine');
+INSERT INTO `sys_oss` VALUES (2023777983006650370, '2026/02/17/8db823861bb44a2aba4776ad27c9d2e7.jpg', '224227_74723956859.jpg', '.jpg', 'http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/8db823861bb44a2aba4776ad27c9d2e7.jpg', '2026-02-17 17:14:06', 'admin', '2026-02-17 17:14:06', 'admin', 'divine-mine');
+INSERT INTO `sys_oss` VALUES (2023779046761836545, '2026/02/17/ad11f31f431f4ac996f5b0711976bb51.jpg', 'e8d1583f13f35c1cda811ed6e010e0da33585e3c.jpg', '.jpg', 'http://divine-mine.oss-cn-hongkong.aliyuncs.com/2026/02/17/ad11f31f431f4ac996f5b0711976bb51.jpg', '2026-02-17 17:18:19', 'admin', '2026-02-17 17:18:19', 'admin', 'divine-mine');
+
+-- ----------------------------
+-- Table structure for sys_oss_config
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_oss_config`;
+CREATE TABLE `sys_oss_config`  (
+  `oss_config_id` bigint NOT NULL COMMENT '主建',
+  `config_key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置key',
+  `access_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'accessKey',
+  `secret_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '秘钥',
+  `bucket_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '桶名称',
+  `prefix` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '前缀',
+  `endpoint` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '访问站点',
+  `domain` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '自定义域名',
+  `is_https` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'N' COMMENT '是否https（Y=是,N=否）',
+  `region` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '域',
+  `access_policy` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1' COMMENT '桶权限类型(0=private 1=public 2=custom)',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '是否默认（0=是,1=否）',
+  `ext1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '扩展字段',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`oss_config_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '对象存储配置表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_oss_config
+-- ----------------------------
+INSERT INTO `sys_oss_config` VALUES (1, 'minio', 'ceshi', 'ruoyi123', 'minio', '', '127.0.0.1:9000', '', 'N', '', '1', '0', '', 'admin', '2024-06-13 16:06:38', 'admin', '2026-02-17 11:16:54', '');
+INSERT INTO `sys_oss_config` VALUES (2, 'qiniu', 'XXXXXXXXXXXXXXX', 'XXXXXXXXXXXXXXX', 'qiniu', '', 's3-cn-north-1.qiniucs.com', '', 'N', '', '1', '0', '', 'admin', '2024-06-13 16:06:38', 'admin', '2026-02-17 11:59:21', '');
+INSERT INTO `sys_oss_config` VALUES (3, 'aliyun', 'LTAI5tRydCAPYQEtbbwS2yvh', 'Smr3uNISFD0v2OPxOIVrWwRjoKPjtN', 'aliyun', '', 'oss-cn-hongkong.aliyuncs.com', '', 'N', '', '1', '1', '', 'admin', '2024-06-13 16:06:38', 'admin', '2026-02-17 12:17:33', '');
+INSERT INTO `sys_oss_config` VALUES (4, 'qcloud', 'XXXXXXXXXXXXXXX', 'XXXXXXXXXXXXXXX', 'qcloud', '', 'cos.ap-beijing.myqcloud.com', '', 'N', 'ap-beijing', '1', '0', '', 'admin', '2024-06-13 16:06:38', 'admin', '2026-02-17 11:17:17', '');
+
+-- ----------------------------
+-- Table structure for sys_post
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_post`;
+CREATE TABLE `sys_post`  (
+  `post_id` bigint NOT NULL COMMENT '岗位ID',
+  `post_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位编码',
+  `post_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位名称',
+  `post_sort` int NOT NULL COMMENT '显示顺序',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`post_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '岗位信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_post
+-- ----------------------------
+INSERT INTO `sys_post` VALUES (1, 'ceo', '董事长', 1, '1', 'admin', '2024-06-13 16:06:25', '', NULL, '');
+INSERT INTO `sys_post` VALUES (2, 'se', '项目经理', 2, '1', 'admin', '2024-06-13 16:06:25', '', NULL, '');
+INSERT INTO `sys_post` VALUES (3, 'hr', '人力资源', 3, '1', 'admin', '2024-06-13 16:06:25', '', NULL, '');
+INSERT INTO `sys_post` VALUES (4, 'user', '普通员工', 4, '1', 'admin', '2024-06-13 16:06:25', '', NULL, '');
+INSERT INTO `sys_post` VALUES (1811656351757385729, 'caiwu8989', '财务', 5, '1', 'admin', '2024-07-12 22:58:28', 'admin', '2024-07-12 14:58:38', NULL);
+
+-- ----------------------------
+-- Table structure for sys_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role`  (
+  `role_id` bigint NOT NULL COMMENT '角色ID',
+  `role_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色名称',
+  `role_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色权限字符串',
+  `role_sort` int NOT NULL COMMENT '显示顺序',
+  `data_scope` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+  `menu_check_strictly` tinyint(1) NULL DEFAULT 1 COMMENT '菜单树选择项是否关联显示',
+  `dept_check_strictly` tinyint(1) NULL DEFAULT 1 COMMENT '部门树选择项是否关联显示',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`role_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_role
+-- ----------------------------
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 1, '1', 1, 1, '1', '0', 'admin', '2024-06-13 16:06:26', '', NULL, '超级管理员');
+INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 1, 1, '1', '1', 'admin', '2024-06-13 16:06:26', 'admin', '2024-07-10 17:13:05', '普通角色');
+INSERT INTO `sys_role` VALUES (1811607750859661314, '测试角色1', 'test1', 2, '1', 1, 1, '1', '1', 'admin', '2024-07-12 11:45:21', 'admin', '2024-07-12 11:45:21', NULL);
+INSERT INTO `sys_role` VALUES (1811629311809396737, '测试角色2', 'test2', 3, '1', 1, 1, '1', '1', 'admin', '2024-07-12 13:11:01', 'admin', '2024-07-12 13:11:01', NULL);
+INSERT INTO `sys_role` VALUES (1829105952432427010, '试用', 'trier', 0, '1', 1, 1, '1', '0', 'admin', '2024-08-29 18:36:57', 'admin', '2024-09-11 16:32:53', NULL);
+
+-- ----------------------------
+-- Table structure for sys_role_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_dept`;
+CREATE TABLE `sys_role_dept`  (
+  `role_id` bigint NOT NULL COMMENT '角色ID',
+  `dept_id` bigint NOT NULL COMMENT '部门ID',
+  PRIMARY KEY (`role_id`, `dept_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色和部门关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_role_dept
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sys_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_menu`;
+CREATE TABLE `sys_role_menu`  (
+  `role_id` bigint NOT NULL COMMENT '角色ID',
+  `menu_id` bigint NOT NULL COMMENT '菜单ID',
+  PRIMARY KEY (`role_id`, `menu_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色和菜单关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_role_menu
+-- ----------------------------
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1808758090157985794);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1809059968309743618);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1809059968309743619);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1813458070128599041);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1813820131794837506);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1815207165755183105);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1818123963605549057);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1818466281474822145);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1818854933803638785);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1818855673632727042);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1820729144067321858);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1821075355068559361);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1822820194307051521);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1822862323595145218);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1823187248797270018);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1823190638784757762);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1829349433573822466);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1829350164603260929);
+INSERT INTO `sys_role_menu` VALUES (1829105952432427010, 1829351081448755202);
+
+-- ----------------------------
+-- Table structure for sys_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user`  (
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `dept_id` bigint NULL DEFAULT NULL COMMENT '部门ID',
+  `user_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户账号',
+  `nick_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户昵称',
+  `user_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'sys_user' COMMENT '用户类型（sys_user系统用户）',
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户邮箱',
+  `phonenumber` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '手机号码',
+  `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
+  `avatar` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '头像地址',
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '密码',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '帐号状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `login_ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '最后登录IP',
+  `login_date` datetime NULL DEFAULT NULL COMMENT '最后登录时间',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_user
+-- ----------------------------
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '超级管理员', 'sys_user', 'zccbbg@qq.com', '18888888888', '0', '', '$2a$10$ibotj9JCxumu8gTqBuVY1u5Ws4OfcUpkeFa2pBBtGKUH.r/Ep4hqK', '1', '0', '192.168.29.168', '2026-02-17 22:57:24', 'admin', '2024-06-13 16:06:25', 'admin', '2026-02-17 16:57:24', '管理员');
+INSERT INTO `sys_user` VALUES (100, 103, 'yislo', '超级管理员', 'sys_user', 'zccbbg@qq.com', '18888888888', '0', '', '$2a$10$ibotj9JCxumu8gTqBuVY1u5Ws4OfcUpkeFa2pBBtGKUH.r/Ep4hqK', '1', '0', '41.77.221.201', '2026-02-09 20:32:06', 'admin', '2024-06-13 16:06:25', 'yislo', '2026-02-09 14:32:06', '管理员');
+INSERT INTO `sys_user` VALUES (1829105396288688129, 105, 'ck', 'ck', 'sys_user', '', '', '0', '', '$2a$10$5ogFpqit10a8IpVFjKzosuz0whR0/tyQ4Nt9e6y3/MBodcDzwhCni', '1', '0', '221.224.86.138', '2024-10-09 15:40:16', 'admin', '2024-08-29 18:34:44', 'ck', '2024-10-09 15:40:16', NULL);
+
+-- ----------------------------
+-- Table structure for sys_user_post
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_post`;
+CREATE TABLE `sys_user_post`  (
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `post_id` bigint NOT NULL COMMENT '岗位ID',
+  PRIMARY KEY (`user_id`, `post_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户与岗位关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_user_post
+-- ----------------------------
+INSERT INTO `sys_user_post` VALUES (1, 1);
+
+-- ----------------------------
+-- Table structure for sys_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_role`;
+CREATE TABLE `sys_user_role`  (
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `role_id` bigint NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`user_id`, `role_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户和角色关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_user_role
+-- ----------------------------
+INSERT INTO `sys_user_role` VALUES (1, 1);
+INSERT INTO `sys_user_role` VALUES (1829105396288688129, 1829105952432427010);
+
+-- ----------------------------
+-- Table structure for wms_check_order
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_check_order`;
+CREATE TABLE `wms_check_order`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `check_no` varchar(22) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '盘点单号',
+  `check_status` tinyint NULL DEFAULT 11 COMMENT '库存盘点单状态 -1：作废 0：未盘库 1：已盘库',
+  `total_quantity` bigint NULL DEFAULT NULL COMMENT '盈亏数',
+  `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '总金额',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '所属仓库',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1843920323943682050 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '库存盘点单据' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_check_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wms_check_order_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_check_order_detail`;
+CREATE TABLE `wms_check_order_detail`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `check_id` bigint NOT NULL COMMENT '盘点单id',
+  `sku_id` bigint NOT NULL COMMENT '规格id',
+  `quantity` bigint NULL DEFAULT NULL COMMENT '库存数量',
+  `unit_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '单价',
+  `storage_shelf` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货架',
+  `check_quantity` decimal(20, 2) NULL DEFAULT NULL COMMENT '盘点数量',
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '所属仓库',
+  `inventory_id` bigint NULL DEFAULT NULL COMMENT '库存id',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1843920323981430788 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '库存盘点单据详情' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_check_order_detail
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wms_inventory
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_inventory`;
+CREATE TABLE `wms_inventory`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `sku_id` bigint NULL DEFAULT NULL COMMENT '规格ID',
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '所属仓库',
+  `storage_shelf` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货架',
+  `quantity` bigint NULL DEFAULT NULL COMMENT '库存',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2022363384042135554 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '库存表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_inventory
+-- ----------------------------
+INSERT INTO `wms_inventory` VALUES (1843920012193648642, 1840282974696374273, 1828364609002311682, '一号货架', 4, NULL, 'ck', '2024-10-09 15:42:43.944', 'admin', '2026-02-10 16:06:14.240');
+INSERT INTO `wms_inventory` VALUES (1843920012193648643, 1840282974629265410, 1828364609002311682, '二号货架', 3, NULL, 'ck', '2024-10-09 15:42:43.945', 'ck', '2024-10-09 15:43:12.844');
+INSERT INTO `wms_inventory` VALUES (2021225510010228738, 1840282974696374273, 1828364609002311682, '三号货架', 333, NULL, 'admin', '2026-02-10 16:11:28.799', 'admin', '2026-02-10 16:13:43.269');
+INSERT INTO `wms_inventory` VALUES (2021225590729609218, 1840282974696374273, 1828364609002311682, '四号货架', 113, NULL, 'admin', '2026-02-10 16:11:48.043', 'admin', '2026-02-10 16:13:43.274');
+INSERT INTO `wms_inventory` VALUES (2022363384042135553, 1829398333903007745, 1828364609002311682, '五号货架', 1, NULL, 'admin', '2026-02-13 19:32:59.112', 'admin', '2026-02-13 19:32:59.112');
+
+-- ----------------------------
+-- Table structure for wms_inventory_history
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_inventory_history`;
+CREATE TABLE `wms_inventory_history`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '所属仓库',
+  `sku_id` bigint NULL DEFAULT NULL COMMENT '物料ID',
+  `quantity` bigint NULL DEFAULT NULL COMMENT '库存变化',
+  `before_quantity` decimal(20, 2) NULL DEFAULT NULL COMMENT '更新前数量',
+  `after_quantity` decimal(20, 2) NULL DEFAULT NULL COMMENT '更新后数量',
+  `unit_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '单价',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `order_id` bigint NULL DEFAULT NULL COMMENT '操作id（出库、入库、库存移动表单id）',
+  `order_no` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作单号（入库、出库、移库、盘库单号）',
+  `order_type` int NULL DEFAULT NULL COMMENT '操作类型',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2022363384075689987 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '库存记录' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_inventory_history
+-- ----------------------------
+INSERT INTO `wms_inventory_history` VALUES (2022363384075689986, 1828364609002311682, 1829398333903007745, 1, 0.00, 1.00, NULL, NULL, NULL, 'PK20260213001', 1, '2026-02-13 19:32:59.118');
+
+-- ----------------------------
+-- Table structure for wms_item
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_item`;
+CREATE TABLE `wms_item`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `item_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编号',
+  `item_name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+  `item_category` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分类',
+  `unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '单位类别',
+  `item_brand` bigint NULL DEFAULT NULL COMMENT '品牌',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1840308261127651331 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '物料' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_item
+-- ----------------------------
+INSERT INTO `wms_item` VALUES (1828402622516334594, NULL, '活动扳手', '1828364988754595841', NULL, NULL, NULL, 'admin', '2024-08-27 20:02:09.948', 'admin', '2024-09-02 21:45:27.127');
+INSERT INTO `wms_item` VALUES (1828406450112335874, NULL, '内六角扳手', '1828365043024695297', NULL, NULL, NULL, 'admin', '2024-08-27 20:17:22.521', 'admin', '2024-08-27 20:17:22.521');
+INSERT INTO `wms_item` VALUES (1828407870173646849, NULL, '开口扳手', '1828365014901886978', NULL, NULL, NULL, 'admin', '2024-08-27 20:23:01.096', 'admin', '2024-08-27 20:23:01.096');
+INSERT INTO `wms_item` VALUES (1828408320146968578, NULL, 'PPR沉插直通', '1828405773474631681', NULL, NULL, NULL, 'admin', '2024-08-27 20:24:48.375', 'admin', '2024-08-27 20:24:48.375');
+INSERT INTO `wms_item` VALUES (1828408795734904833, NULL, '304不锈钢纱网', '1828408600515219457', NULL, NULL, NULL, 'admin', '2024-08-27 20:26:41.757', 'admin', '2024-08-27 20:33:27.034');
+INSERT INTO `wms_item` VALUES (1829398192563351554, NULL, '正三通', '1829398007993004034', NULL, NULL, NULL, 'admin', '2024-08-30 13:58:12.354', 'admin', '2024-08-30 14:01:08.050');
+INSERT INTO `wms_item` VALUES (1829398333580046338, NULL, '电焊手套', '1829398007993004034', NULL, NULL, NULL, 'admin', '2024-08-30 13:58:45.971', 'admin', '2024-08-30 14:00:49.686');
+INSERT INTO `wms_item` VALUES (1829398492388978689, NULL, '工作服（春秋长）', '1829398007993004034', NULL, NULL, NULL, 'admin', '2024-08-30 13:59:23.834', 'admin', '2024-08-30 14:00:32.373');
+INSERT INTO `wms_item` VALUES (1829398701680553985, NULL, '防酸眼镜', '1829397958923841538', NULL, NULL, NULL, 'admin', '2024-08-30 14:00:13.735', 'admin', '2024-08-30 14:00:13.735');
+INSERT INTO `wms_item` VALUES (1829399118040723457, NULL, '雨衣', '1829397958923841538', NULL, NULL, NULL, 'admin', '2024-08-30 14:01:52.989', 'admin', '2024-08-30 14:01:52.989');
+INSERT INTO `wms_item` VALUES (1840282974297915394, NULL, '窗帘', '1840282771834667010', NULL, NULL, NULL, 'wms2_admin', '2024-09-29 14:50:26.535', 'wms2_admin', '2024-09-29 14:50:26.535');
+
+-- ----------------------------
+-- Table structure for wms_item_brand
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_item_brand`;
+CREATE TABLE `wms_item_brand`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `brand_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '品牌名称',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1828407291103842307 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '商品品牌表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_item_brand
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wms_item_category
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_item_category`;
+CREATE TABLE `wms_item_category`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '物料类型id',
+  `parent_id` bigint NULL DEFAULT 0 COMMENT '父物料类型id',
+  `category_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '物料类型名称',
+  `sort` int NULL DEFAULT 0 COMMENT '显示顺序',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '1' COMMENT '物料类型状态（0停用 1正常）',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1840282771834667011 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '物料类型表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_item_category
+-- ----------------------------
+INSERT INTO `wms_item_category` VALUES (1828364988754595841, 0, '手机', 0, '1', 'admin', '2024-08-27 17:32:37.357', 'admin', '2024-08-27 20:14:12.100');
+INSERT INTO `wms_item_category` VALUES (1828365014901886978, 0, '打印机', 1, '1', 'admin', '2024-08-27 17:32:43.598', 'admin', '2024-08-27 20:14:12.447');
+INSERT INTO `wms_item_category` VALUES (1828365043024695297, 0, '电脑', 3, '1', 'admin', '2024-08-27 17:32:50.301', 'admin', '2024-08-27 20:14:12.704');
+INSERT INTO `wms_item_category` VALUES (1828405743737016322, 0, '家电', 4, '1', 'admin', '2024-08-27 20:14:34.104', 'admin', '2024-08-27 20:14:34.104');
+INSERT INTO `wms_item_category` VALUES (1828405773474631681, 1828405743737016322, '冰箱', 0, '1', 'admin', '2024-08-27 20:14:41.195', 'admin', '2024-08-27 20:14:41.195');
+INSERT INTO `wms_item_category` VALUES (1828405825714688001, 1828405743737016322, '电视', 1, '1', 'admin', '2024-08-27 20:14:53.651', 'admin', '2024-08-27 20:14:53.651');
+INSERT INTO `wms_item_category` VALUES (1828408600515219457, 0, '健生器材', 5, '1', 'admin', '2024-08-27 20:25:55.213', 'admin', '2024-08-27 20:25:55.213');
+INSERT INTO `wms_item_category` VALUES (1829397860466749441, 0, '生鲜', 6, '1', 'admin', '2024-08-30 13:56:53.174', 'admin', '2024-08-30 13:56:53.174');
+INSERT INTO `wms_item_category` VALUES (1829397958923841538, 1829397860466749441, '水果', 0, '1', 'admin', '2024-08-30 13:57:16.644', 'admin', '2024-08-30 13:57:16.644');
+INSERT INTO `wms_item_category` VALUES (1829398007993004034, 1829397860466749441, '海鲜', 1, '1', 'admin', '2024-08-30 13:57:28.347', 'admin', '2024-08-30 13:57:28.347');
+INSERT INTO `wms_item_category` VALUES (1840282771834667010, 1828405743737016322, '空调', 2, '1', 'wms2_admin', '2024-09-29 14:49:38.274', 'wms2_admin', '2024-09-29 14:49:38.274');
+
+-- ----------------------------
+-- Table structure for wms_item_sku
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_item_sku`;
+CREATE TABLE `wms_item_sku`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `sku_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '规格名称',
+  `item_id` bigint NULL DEFAULT NULL,
+  `barcode` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '条码',
+  `sku_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
+  `length` decimal(10, 1) NULL DEFAULT NULL COMMENT '长，单位cm',
+  `width` decimal(10, 1) NULL DEFAULT NULL COMMENT '宽，单位cm',
+  `height` decimal(10, 1) NULL DEFAULT NULL COMMENT '高，单位cm',
+  `gross_weight` decimal(10, 3) NULL DEFAULT NULL COMMENT '毛重，单位kg',
+  `net_weight` decimal(10, 3) NULL DEFAULT NULL COMMENT '净重，单位kg',
+  `cost_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '成本价（元）',
+  `selling_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '销售价（元）',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1840308261463195650 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'sku信息' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_item_sku
+-- ----------------------------
+INSERT INTO `wms_item_sku` VALUES (1828402624005312514, '黑', 1828402622516334594, 'x00003', '00001', NULL, NULL, NULL, NULL, NULL, 5000.00, 5288.00, 'admin', '2024-08-27 20:02:10.302', 'admin', '2024-09-02 21:45:27.177');
+INSERT INTO `wms_item_sku` VALUES (1828402624005312515, '白', 1828402622516334594, '', '000002', NULL, NULL, NULL, NULL, NULL, 5000.00, 5288.00, 'admin', '2024-08-27 20:02:10.304', 'admin', '2024-09-02 21:45:27.184');
+INSERT INTO `wms_item_sku` VALUES (1828402624005312516, '粉', 1828402622516334594, '', '00003', NULL, NULL, NULL, NULL, NULL, 5000.00, 5288.00, 'admin', '2024-08-27 20:02:10.305', 'admin', '2024-09-02 21:45:27.190');
+INSERT INTO `wms_item_sku` VALUES (1828406451399987201, 'pro', 1828406450112335874, '', 'mac0001', NULL, NULL, NULL, NULL, NULL, NULL, 24999.00, 'admin', '2024-08-27 20:17:22.821', 'admin', '2024-08-27 20:17:22.821');
+INSERT INTO `wms_item_sku` VALUES (1828407871469686786, 'l6468', 1828407870173646849, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3188.00, 'admin', '2024-08-27 20:23:01.393', 'admin', '2024-08-27 20:23:01.393');
+INSERT INTO `wms_item_sku` VALUES (1828408321522700289, '白色', 1828408320146968578, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2699.00, 'admin', '2024-08-27 20:24:48.697', 'admin', '2024-08-27 20:24:48.697');
+INSERT INTO `wms_item_sku` VALUES (1828408796968030210, '10kg', 1828408795734904833, '102025115', NULL, NULL, NULL, NULL, NULL, 10.000, NULL, NULL, 'admin', '2024-08-27 20:26:42.049', 'admin', '2024-08-27 20:33:27.395');
+INSERT INTO `wms_item_sku` VALUES (1828408796968030211, '20kg', 1828408795734904833, '254523055', NULL, NULL, NULL, NULL, NULL, 20.000, NULL, NULL, 'admin', '2024-08-27 20:26:42.052', 'admin', '2024-08-27 20:33:27.515');
+INSERT INTO `wms_item_sku` VALUES (1828408796968030212, '50kg', 1828408795734904833, '5204862525', NULL, NULL, NULL, NULL, NULL, 50.000, NULL, NULL, 'admin', '2024-08-27 20:26:42.052', 'admin', '2024-08-27 20:33:27.634');
+INSERT INTO `wms_item_sku` VALUES (1829398193024724993, '大', 1829398192563351554, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 13:58:12.457', 'admin', '2024-08-30 14:01:08.172');
+INSERT INTO `wms_item_sku` VALUES (1829398193024724994, '中', 1829398192563351554, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 13:58:12.458', 'admin', '2024-08-30 14:01:08.328');
+INSERT INTO `wms_item_sku` VALUES (1829398333903007745, '大', 1829398333580046338, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 13:58:46.047', 'admin', '2024-08-30 14:00:49.854');
+INSERT INTO `wms_item_sku` VALUES (1829398333903007746, '中', 1829398333580046338, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 13:58:46.048', 'admin', '2024-08-30 14:00:50.001');
+INSERT INTO `wms_item_sku` VALUES (1829398492779048962, '大', 1829398492388978689, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 13:59:23.925', 'admin', '2024-08-30 14:00:32.544');
+INSERT INTO `wms_item_sku` VALUES (1829398492779048963, '中', 1829398492388978689, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 13:59:23.925', 'admin', '2024-08-30 14:00:32.683');
+INSERT INTO `wms_item_sku` VALUES (1829398702011904001, '大', 1829398701680553985, '', NULL, 10.0, 10.0, 10.0, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 14:00:13.810', 'admin', '2024-08-30 14:00:13.810');
+INSERT INTO `wms_item_sku` VALUES (1829398702011904002, '中', 1829398701680553985, '', NULL, 5.0, 5.0, 5.0, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 14:00:13.812', 'admin', '2024-08-30 14:00:13.812');
+INSERT INTO `wms_item_sku` VALUES (1829399118304964609, '大', 1829399118040723457, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 14:01:53.064', 'admin', '2024-08-30 14:01:53.064');
+INSERT INTO `wms_item_sku` VALUES (1829399118304964610, '中', 1829399118040723457, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-30 14:01:53.064', 'admin', '2024-08-30 14:01:53.064');
+INSERT INTO `wms_item_sku` VALUES (1840282974629265410, '1P', 1840282974297915394, '', NULL, NULL, NULL, NULL, NULL, NULL, 2000.00, NULL, 'wms2_admin', '2024-09-29 14:50:26.627', 'wms2_admin', '2024-09-29 14:50:26.627');
+INSERT INTO `wms_item_sku` VALUES (1840282974696374273, '2P', 1840282974297915394, '', NULL, NULL, NULL, NULL, NULL, NULL, 3000.00, NULL, 'wms2_admin', '2024-09-29 14:50:26.628', 'wms2_admin', '2024-09-29 14:50:26.628');
+
+-- ----------------------------
+-- Table structure for wms_merchant
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_merchant`;
+CREATE TABLE `wms_merchant`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `merchant_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编号',
+  `merchant_name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+  `merchant_type` tinyint NULL DEFAULT NULL COMMENT '企业类型',
+  `merchant_level` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '级别',
+  `bank_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '开户行',
+  `bank_account` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '银行账户',
+  `address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '地址',
+  `mobile` varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `tel` varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '座机号',
+  `contact_person` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系人',
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'Email',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1828354284882399234 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '往来单位' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_merchant
+-- ----------------------------
+INSERT INTO `wms_merchant` VALUES (1828354016258199554, 'c_0001', 'ZXM', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-27 16:49:01.319', 'admin', '2024-08-27 16:49:01.319');
+INSERT INTO `wms_merchant` VALUES (1828354153193836545, 's_0001', 'CJC', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-27 16:49:33.964', 'admin', '2024-08-27 16:49:33.964');
+INSERT INTO `wms_merchant` VALUES (1828354284882399233, 'c_s_0001', '494', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin', '2024-08-27 16:50:05.367', 'admin', '2024-08-27 16:50:05.367');
+
+-- ----------------------------
+-- Table structure for wms_movement_order
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_movement_order`;
+CREATE TABLE `wms_movement_order`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `move_no` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '移库编号',
+  `move_status` tinyint NULL DEFAULT NULL COMMENT '状态',
+  `total_quantity` bigint NULL DEFAULT NULL COMMENT '总数量',
+  `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '总金额',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `source_warehouse_id` bigint NULL DEFAULT NULL COMMENT '源仓库',
+  `target_warehouse_id` bigint NULL DEFAULT NULL COMMENT '目标仓库',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1843920257199722499 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '移库单' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_movement_order
+-- ----------------------------
+INSERT INTO `wms_movement_order` VALUES (1843920257199722498, 'YK10096786', 1, 1, NULL, NULL, 1828364609002311682, 1840317750635581441, 'ck', '2024-10-09 15:43:42.356', 'ck', '2024-10-09 15:43:42.356');
+
+-- ----------------------------
+-- Table structure for wms_movement_order_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_movement_order_detail`;
+CREATE TABLE `wms_movement_order_detail`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `order_id` bigint NULL DEFAULT NULL COMMENT '移库单Id',
+  `sku_id` bigint NULL DEFAULT NULL COMMENT '规格id',
+  `quantity` bigint NULL DEFAULT NULL COMMENT '数量',
+  `unit_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '单价',
+  `storage_shelf` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货架',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `source_warehouse_id` bigint NULL DEFAULT NULL COMMENT '源仓库',
+  `target_warehouse_id` bigint NULL DEFAULT NULL COMMENT '目标仓库',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1843920257237471234 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '库存移动详情' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_movement_order_detail
+-- ----------------------------
+INSERT INTO `wms_movement_order_detail` VALUES (1843920257237471233, 1843920257199722498, 1840282974696374273, 1, NULL, NULL, NULL, 1828364609002311682, 1840317750635581441, 'ck', '2024-10-09 15:43:42.365', 'ck', '2024-10-09 15:43:42.365');
+
+-- ----------------------------
+-- Table structure for wms_receipt_order
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_receipt_order`;
+CREATE TABLE `wms_receipt_order`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `receipt_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '入库单号',
+  `receipt_status` tinyint NULL DEFAULT NULL COMMENT '入库状态',
+  `total_quantity` bigint NULL DEFAULT NULL COMMENT '商品总数',
+  `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '订单金额',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `opt_type` int NULL DEFAULT NULL COMMENT '入库类型',
+  `merchant_id` bigint NULL DEFAULT NULL COMMENT '供应商',
+  `biz_order_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务订单号',
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '仓库id',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2022363383853391874 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '入库单' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_receipt_order
+-- ----------------------------
+INSERT INTO `wms_receipt_order` VALUES (1843920012030070785, 'RK10098845', 1, 8, NULL, NULL, 2, NULL, NULL, 1828364609002311682, 'ck', '2024-10-09 15:42:43.905', 'ck', '2024-10-09 15:42:43.905');
+INSERT INTO `wms_receipt_order` VALUES (2021125396364718081, 'RK02103097', 1, 111, NULL, NULL, 2, NULL, NULL, 1828364609002311682, 'admin', '2026-02-10 09:33:39.849', 'admin', '2026-02-10 09:33:39.849');
+INSERT INTO `wms_receipt_order` VALUES (2021130083507826689, 'RK02107564', 1, 1, 111.00, 'zdxfdsfasdfsafd', 2, 1828354153193836545, '3123123131', 1828364609002311682, 'admin', '2026-02-10 09:52:17.346', 'admin', '2026-02-10 09:52:17.346');
+INSERT INTO `wms_receipt_order` VALUES (2021225501361573889, 'RK02104222', 1, 111, NULL, '1323123', 2, 1828354153193836545, '3123123', 1828364609002311682, 'admin', '2026-02-10 16:11:26.748', 'admin', '2026-02-10 16:11:26.748');
+INSERT INTO `wms_receipt_order` VALUES (2021225590666694657, 'RK02104222', 1, 111, NULL, '1323123', 2, 1828354153193836545, '3123123', 1828364609002311682, 'admin', '2026-02-10 16:11:48.028', 'admin', '2026-02-10 16:11:48.028');
+INSERT INTO `wms_receipt_order` VALUES (2022363383853391873, 'PK20260213001', NULL, 1, NULL, NULL, 2, NULL, NULL, 1828364609002311682, 'admin', '2026-02-13 19:32:59.068', 'admin', '2026-02-13 19:32:59.068');
+
+-- ----------------------------
+-- Table structure for wms_receipt_order_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_receipt_order_detail`;
+CREATE TABLE `wms_receipt_order_detail`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `receipt_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '入库单id',
+  `sku_id` bigint NULL DEFAULT NULL COMMENT '规格id',
+  `quantity` bigint NULL DEFAULT NULL COMMENT '入库数量',
+  `unit_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '单价',
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '所属仓库',
+  `storage_shelf` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货架',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2022363383895334914 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '入库单详情' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_receipt_order_detail
+-- ----------------------------
+INSERT INTO `wms_receipt_order_detail` VALUES (1843920012088791042, '1843920012030070785', 1840282974696374273, 4, 4000.00, 1828364609002311682, NULL, NULL, 'ck', '2024-10-09 15:42:43.920', 'ck', '2024-10-09 15:42:43.920');
+INSERT INTO `wms_receipt_order_detail` VALUES (1843920012105568258, '1843920012030070785', 1840282974629265410, 4, 4000.00, 1828364609002311682, NULL, NULL, 'ck', '2024-10-09 15:42:43.922', 'ck', '2024-10-09 15:42:43.922');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021125396427632641, '2021125396364718081', 1840282974696374273, 111, NULL, 1828364609002311682, NULL, NULL, 'admin', '2026-02-10 09:33:39.860', 'admin', '2026-02-10 09:33:39.860');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021130083516215297, '2021130083507826689', 1840282974696374273, 1, 111.00, 1828364609002311682, NULL, NULL, 'admin', '2026-02-10 09:52:17.349', 'admin', '2026-02-10 09:52:17.349');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021166457648771073, '2021166457636188162', 1840282974696374273, 111, 22.00, 1828364609002311682, NULL, NULL, 'admin', '2026-02-10 12:16:49.618', 'admin', '2026-02-10 12:16:49.618');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021225509955702786, '2021225501361573889', 1840282974696374273, 111, NULL, 1828364609002311682, '1111', NULL, 'admin', '2026-02-10 16:11:28.788', 'admin', '2026-02-10 16:11:28.788');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021225590666694658, '2021225590666694657', 1840282974696374273, 111, NULL, 1828364609002311682, '1111', NULL, 'admin', '2026-02-10 16:11:48.032', 'admin', '2026-02-10 16:11:48.032');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021225590666694659, '2021225590666694657', 1840282974696374273, 111, NULL, 1828364609002311682, '222', NULL, 'admin', '2026-02-10 16:11:48.034', 'admin', '2026-02-10 16:11:48.034');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021226073942810626, '2021226073892478977', 1840282974696374273, 111, NULL, 1828364609002311682, '1111', NULL, 'admin', '2026-02-10 16:13:43.254', 'admin', '2026-02-10 16:13:43.254');
+INSERT INTO `wms_receipt_order_detail` VALUES (2021226073942810627, '2021226073892478977', 1840282974696374273, 2, NULL, 1828364609002311682, '222', NULL, 'admin', '2026-02-10 16:13:43.255', 'admin', '2026-02-10 16:13:43.255');
+INSERT INTO `wms_receipt_order_detail` VALUES (2022363383895334913, '2022363383853391873', 1829398333903007745, 1, NULL, 1828364609002311682, NULL, NULL, 'admin', '2026-02-13 19:32:59.081', 'admin', '2026-02-13 19:32:59.081');
+
+-- ----------------------------
+-- Table structure for wms_shipment_order
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_shipment_order`;
+CREATE TABLE `wms_shipment_order`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `shipment_no` varchar(22) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '出库单号，系统自动生成',
+  `shipment_status` tinyint NULL DEFAULT NULL COMMENT '出库单状态',
+  `total_quantity` bigint NULL DEFAULT NULL COMMENT '总数量',
+  `total_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '总金额',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `opt_type` int NULL DEFAULT NULL COMMENT '出库类型',
+  `biz_order_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务订单号',
+  `recipient` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '领用人',
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '仓库id',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2021225181025800194 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '出库单' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_shipment_order
+-- ----------------------------
+INSERT INTO `wms_shipment_order` VALUES (1843920133316759553, 'CK10094547', 1, 1, NULL, NULL, 2, NULL, NULL, 1828364609002311682, 'ck', '2024-10-09 15:43:12.821', 'ck', '2024-10-09 15:43:12.821');
+INSERT INTO `wms_shipment_order` VALUES (2021223519506804737, 'RK02104222', 1, 111, NULL, '1323123', 2, '3123123', '1828354153193836545', 1828364609002311682, 'admin', '2026-02-10 16:03:34.226', 'admin', '2026-02-10 16:03:34.226');
+INSERT INTO `wms_shipment_order` VALUES (2021224190628999169, 'RK021042212', 1, 111, NULL, '1323123', 2, '3123123', '1828354153193836545', 1828364609002311682, 'admin', '2026-02-10 16:06:14.234', 'admin', '2026-02-10 16:06:14.234');
+
+-- ----------------------------
+-- Table structure for wms_shipment_order_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_shipment_order_detail`;
+CREATE TABLE `wms_shipment_order_detail`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `shipment_id` bigint NULL DEFAULT NULL COMMENT '出库单id',
+  `warehouse_id` bigint NULL DEFAULT NULL COMMENT '所属仓库',
+  `sku_id` bigint NULL DEFAULT NULL COMMENT '规格id',
+  `quantity` bigint NULL DEFAULT NULL COMMENT '数量',
+  `storage_shelf` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '货架',
+  `unit_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '金额',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2021225271392079874 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '出库单详情' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_shipment_order_detail
+-- ----------------------------
+INSERT INTO `wms_shipment_order_detail` VALUES (1843920133354508289, 1843920133316759553, 1828364609002311682, 1840282974629265410, 1, NULL, NULL, NULL, 'ck', '2024-10-09 15:43:12.830', 'ck', '2024-10-09 15:43:12.830');
+INSERT INTO `wms_shipment_order_detail` VALUES (2021223519506804738, 2021223519506804737, 1828364609002311682, 1840282974696374273, 111, '111111', NULL, NULL, 'admin', '2026-02-10 16:03:34.236', 'admin', '2026-02-10 16:03:34.236');
+INSERT INTO `wms_shipment_order_detail` VALUES (2021224190628999170, 2021224190628999169, 1828364609002311682, 1840282974696374273, 111, '111111', NULL, NULL, 'admin', '2026-02-10 16:06:14.236', 'admin', '2026-02-10 16:06:14.236');
+
+-- ----------------------------
+-- Table structure for wms_warehouse
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_warehouse`;
+CREATE TABLE `wms_warehouse`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `warehouse_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编号',
+  `warehouse_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `sort` int NULL DEFAULT 0 COMMENT '排序',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1840317750635581442 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '仓库' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_warehouse
+-- ----------------------------
+INSERT INTO `wms_warehouse` VALUES (1828364609002311682, NULL, '神洲一号仓', NULL, 1, 'admin', '2024-08-27 17:31:06.000', 'admin', '2026-02-13 19:08:35.664');
+
+-- ----------------------------
+-- Table structure for wms_warehouse_shelf
+-- ----------------------------
+DROP TABLE IF EXISTS `wms_warehouse_shelf`;
+CREATE TABLE `wms_warehouse_shelf`  (
+  `id` bigint NOT NULL COMMENT 'id',
+  `warehouseId` bigint NULL DEFAULT NULL COMMENT '仓库id',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '货架名称',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wms_warehouse_shelf
+-- ----------------------------
+
+SET FOREIGN_KEY_CHECKS = 1;

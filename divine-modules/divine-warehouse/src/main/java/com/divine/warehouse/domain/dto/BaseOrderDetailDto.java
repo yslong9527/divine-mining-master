@@ -48,6 +48,9 @@ public class BaseOrderDetailDto extends BaseEntity {
     @Schema(description = "更新前数量")
     private Long beforeQuantity;
 
+    @Schema(description = "文件地址")
+    private List<String> fileList;
+
     @Schema(description = "更新前数量")
     private Long afterQuantity;
 

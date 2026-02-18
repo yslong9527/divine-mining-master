@@ -14,9 +14,9 @@ import com.divine.common.log.enums.BusinessType;
 import com.divine.common.satoken.utils.LoginHelper;
 import com.divine.common.web.core.BaseController;
 import com.divine.system.domain.vo.ProfileVo;
-import com.divine.system.domain.vo.SysOssVo;
 import com.divine.system.domain.vo.SysUserVo;
-import com.divine.system.service.SysOssService;
+import com.divine.system.domain.vo.UploadFileVO;
+import com.divine.system.service.SysFileService;
 import com.divine.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +37,7 @@ import java.util.Map;
 public class SysProfileController extends BaseController {
 
     private final SysUserService userService;
-    private final SysOssService sysOssService;
+    private final SysFileService sysFileService;
 
     /**
      * 个人信息
@@ -115,8 +115,8 @@ public class SysProfileController extends BaseController {
             if (!StringUtils.equalsAnyIgnoreCase(extension, MimeTypeUtils.IMAGE_EXTENSION)) {
                 return Result.fail("文件格式不正确，请上传" + Arrays.toString(MimeTypeUtils.IMAGE_EXTENSION) + "格式");
             }
-            SysOssVo oss = sysOssService.upload(avatarfile);
-            String avatar = oss.getUrl();
+            UploadFileVO fileVO = sysFileService.upload(avatarfile);
+            String avatar = fileVO.getUrl();
             if (userService.updateUserAvatar(LoginHelper.getUsername(), avatar)) {
                 return Result.success(Map.of("imgUrl", avatar));
             }

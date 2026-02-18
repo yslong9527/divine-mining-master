@@ -11,9 +11,11 @@ import com.divine.common.core.domain.Result;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.core.validate.QueryGroup;
 import com.divine.common.log.enums.BusinessType;
-import com.divine.system.domain.dto.SysOssDto;
-import com.divine.system.domain.vo.SysOssVo;
-import com.divine.system.service.SysOssService;
+import com.divine.system.domain.dto.SysFileDTO;
+import com.divine.system.domain.dto.SysQueryFileDto;
+import com.divine.system.domain.vo.SysFileVo;
+import com.divine.system.domain.vo.UploadFileVO;
+import com.divine.system.service.SysFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,80 +29,60 @@ import jakarta.validation.constraints.NotEmpty;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "文件上传")
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/system/oss")
-public class SysOssController extends BaseController {
+@RequestMapping("/system/file")
+public class SysFileController extends BaseController {
 
-    private final SysOssService sysSssService;
+    private final SysFileService sysSssService;
 
-    /**
-     * 查询OSS对象存储列表
-     */
-    @Operation(summary = "查询OSS对象存储列表")
+    @Operation(summary = "获取文件列表")
     @SaCheckPermission("system:oss:list")
     @GetMapping("/list")
-    public PageInfoRes<SysOssVo> list(@Validated(QueryGroup.class) SysOssDto dto, BasePage basePage) {
+    public PageInfoRes<SysFileVo> list(@Validated(QueryGroup.class) SysQueryFileDto dto, BasePage basePage) {
         return sysSssService.queryPageList(dto, basePage);
     }
 
-    /**
-     * 查询OSS对象基于id串
-     *
-     * @param ossIds OSS对象ID串
-     */
-    @Operation(summary = "查询OSS对象基于id串")
+    @Operation(summary = "获取文件详情")
     @SaCheckPermission("system:oss:list")
     @GetMapping("/listByIds/{ossIds}")
-    public Result<List<SysOssVo>> listByIds(@NotEmpty(message = "主键不能为空")
+    public Result<List<SysFileVo>> listByIds(@NotEmpty(message = "主键不能为空")
                                        @PathVariable Long[] ossIds) {
-        List<SysOssVo> list = sysSssService.listByIds(Arrays.asList(ossIds));
+        List<SysFileVo> list = sysSssService.listByIds(Arrays.asList(ossIds));
         return Result.success(list);
     }
 
-    /**
-     * 上传OSS对象存储
-     *
-     * @param file 文件
-     */
-    @Operation(summary = "上传OSS对象存储")
+    @Operation(summary = "上传文件")
     @SaCheckPermission("system:oss:upload")
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result<Map<String, String>> upload(@RequestPart("file") MultipartFile file) {
+    public Result<UploadFileVO> upload(@RequestPart("file") MultipartFile file) {
         if (ObjectUtil.isNull(file)) {
             throw new BusinessException("上传文件不能为空");
         }
-        SysOssVo oss = sysSssService.upload(file);
-        return Result.success(Map.of(
-            "url", oss.getUrl(),
-            "fileName", oss.getOriginalName(),
-            "ossId", oss.getOssId().toString()
-        ));
+        return Result.success(sysSssService.upload(file));
     }
 
-    /**
-     * 下载OSS对象
-     *
-     * @param ossId OSS对象ID
-     */
-    @Operation(summary = "下载OSS对象")
+    @Operation(summary = "保存文件信息")
+    @SaCheckPermission("system:oss:save")
+    @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/save")
+    public Result<Boolean> saveFile(@RequestBody SysFileDTO dto) {
+        sysSssService.saveFile(dto);
+        return Result.success(true);
+    }
+
+    @Operation(summary = "下载文件")
     @SaCheckPermission("system:oss:download")
     @GetMapping("/download/{ossId}")
     public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
         sysSssService.download(ossId,response);
     }
 
-    /**
-     * 删除OSS对象存储
-     *
-     * @param ossIds OSS对象ID串
-     */
-    @Operation(summary = "删除OSS对象存储")
+    @Operation(summary = "删除文件")
     @SaCheckPermission("system:oss:remove")
     @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossIds}")

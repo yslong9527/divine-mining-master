@@ -1,9 +1,10 @@
 package com.divine.system.domain.vo;
 
-import com.divine.system.domain.entity.SysOss;
+import com.divine.system.domain.entity.SysFile;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,15 +13,13 @@ import java.util.Date;
  * @author Lion Li
  */
 @Data
-@AutoMapper(target = SysOss.class)
-public class SysOssVo {
-
-    private static final long serialVersionUID = 1L;
+@AutoMapper(target = SysFile.class)
+public class SysFileVo implements Serializable {
 
     /**
      * 对象存储主键
      */
-    private Long ossId;
+    private Long id;
 
     /**
      * 文件名
@@ -28,9 +27,9 @@ public class SysOssVo {
     private String fileName;
 
     /**
-     * 原名
+     * URL地址
      */
-    private String originalName;
+    private String fileUrl;
 
     /**
      * 文件后缀名
@@ -38,9 +37,14 @@ public class SysOssVo {
     private String fileSuffix;
 
     /**
-     * URL地址
+     * 业务id
      */
-    private String url;
+    private Long bizId;
+
+    /**
+     * 业务类型
+     */
+    private String bizType;
 
     /**
      * 创建时间
@@ -51,11 +55,6 @@ public class SysOssVo {
      * 上传人
      */
     private String createBy;
-
-    /**
-     * 服务商
-     */
-    private String service;
 
 
 }

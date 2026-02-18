@@ -63,7 +63,7 @@ public class SysOssConfigDto extends BaseEntity {
     @Schema(description = "是否https（Y=是,N=否）")
     private String isHttps;
 
-    @Schema(description = "是否默认（0=是,1=否）")
+    @Schema(description = "是否默认（0:否,1:是）")
     private String status;
 
     @Schema(description = "域")
