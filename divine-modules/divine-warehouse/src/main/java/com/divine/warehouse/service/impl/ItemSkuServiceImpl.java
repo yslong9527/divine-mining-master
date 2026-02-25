@@ -13,9 +13,9 @@ import com.divine.warehouse.domain.vo.BaseOrderDetailVO;
 import com.divine.warehouse.domain.vo.ItemSkuMapVo;
 import com.divine.warehouse.domain.vo.ItemSkuVo;
 import com.divine.warehouse.mapper.ItemSkuMapper;
+import com.divine.warehouse.service.CommonService;
 import com.divine.warehouse.service.InventoryService;
 import com.divine.warehouse.service.ItemSkuService;
-import com.divine.common.core.constant.HttpStatus;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -40,6 +40,7 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
 
     private final ItemSkuMapper itemSkuMapper;
     private final InventoryService inventoryService;
+    private final CommonService commonService;
 
     /**
      * 查询sku信息
@@ -90,6 +91,7 @@ public class ItemSkuServiceImpl extends ServiceImpl<ItemSkuMapper, ItemSku> impl
     @Override
     public Boolean insertByBo(ItemSkuDto dto) {
         ItemSku add = MapstructUtils.convert(dto, ItemSku.class);
+        add.setSkuNo(commonService.getNo("SKU"));
         return itemSkuMapper.insert(add) > 0;
     }
 

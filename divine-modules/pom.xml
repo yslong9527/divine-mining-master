@@ -13,7 +13,7 @@
         <module>divine-demo</module>
         <module>divine-generator</module>
         <module>divine-system</module>
-        <module>divine-weighing</module>
+        <module>divine-mine</module>
         <module>divine-warehouse</module>
     </modules>
 

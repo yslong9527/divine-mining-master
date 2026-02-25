@@ -317,7 +317,7 @@
             <!-- 过磅模块-->
             <dependency>
                 <groupId>com.divine</groupId>
-                <artifactId>divine-weighing</artifactId>
+                <artifactId>divine-mine</artifactId>
                 <version>${revision}</version>
             </dependency>
 

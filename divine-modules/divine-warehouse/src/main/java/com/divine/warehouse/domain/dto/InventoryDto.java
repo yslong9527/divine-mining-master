@@ -24,9 +24,6 @@ import java.math.BigDecimal;
 @AutoMapper(target = Inventory.class, reverseConvertGenerate = false)
 public class InventoryDto extends BaseEntity {
 
-    /**
-     * id
-     */
     @Schema(description = "id")
     @NotNull(message = "id不能为空", groups = { EditGroup.class })
     private Long id;
