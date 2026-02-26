@@ -17,8 +17,8 @@ public class BaseOrderVo<T extends BaseOrderDetailVO> extends BaseVo {
     @ExcelProperty(value = "id")
     private Long id;
 
-    @ExcelProperty(value = "订单号")
-    private String orderNo;
+    @ExcelProperty(value = "业务单号")
+    private String bizNo;
 
     @ExcelProperty(value = "物品总数")
     private BigDecimal totalQuantity;

@@ -22,7 +22,7 @@ public class BaseOrderDto<T extends BaseOrderDetailDto> extends BaseEntity {
 
     @Schema(description = "业务单号")
     @NotBlank(message = "业务单号不能为空", groups = { EditGroup.class })
-    private String businessNo;
+    private String bizNo;
 
     @Schema(description = "总数")
     private BigDecimal totalQuantity;

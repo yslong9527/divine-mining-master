@@ -22,7 +22,7 @@ public class BaseOrderDetailDto extends BaseEntity {
 
     @Schema(description = "业务单id")
     @NotNull(message = "业务单id不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long orderId;
+    private Long bizId;
 
     @Schema(description = "规格id")
     @NotNull(message = "规格id不能为空", groups = { AddGroup.class, EditGroup.class })

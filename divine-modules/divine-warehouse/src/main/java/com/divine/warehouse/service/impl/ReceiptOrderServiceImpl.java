@@ -105,7 +105,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     public Long insertByBo(ReceiptOrderDto dto) {
         // 创建入库单
         String receiptNo = commonService.getNo(InventoryTypeEnum.CHECK.getCode());
-        dto.setBusinessNo(receiptNo);
+        dto.setBizNo(receiptNo);
         ReceiptOrder receiptOrder = MapstructUtils.convert(dto, ReceiptOrder.class);
         receiptOrder.setReceiptNo(receiptNo);
         receiptOrderMapper.insert(receiptOrder);
@@ -196,7 +196,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
         ReceiptOrderVo receiptOrderVo = queryById(id);
         Assert.notNull(receiptOrderVo, "入库单不存在");
         if (InventoryStatusEnum.FINISH.getCode().equals(receiptOrderVo.getOrderStatus())) {
-            throw new BusinessException("入库单【" + receiptOrderVo.getOrderNo() + "】已入库，无法删除！");
+            throw new BusinessException("入库单【" + receiptOrderVo.getBizNo() + "】已入库，无法删除！");
         }
     }
 

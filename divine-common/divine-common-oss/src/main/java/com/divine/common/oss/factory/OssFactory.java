@@ -1,11 +1,11 @@
 package com.divine.common.oss.factory;
 
 import com.divine.common.core.constant.CacheNames;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.json.utils.JsonUtils;
 import com.divine.common.oss.constant.OssConstant;
 import com.divine.common.oss.core.OssClient;
-import com.divine.common.oss.exception.OssException;
 import com.divine.common.oss.properties.OssProperties;
 import com.divine.common.redis.utils.CacheUtils;
 import com.divine.common.redis.utils.RedisUtils;
@@ -31,7 +31,7 @@ public class OssFactory {
         // 获取redis 默认类型
         String configKey = RedisUtils.getCacheObject(OssConstant.DEFAULT_CONFIG_KEY);
         if (StringUtils.isEmpty(configKey)) {
-            throw new OssException("文件存储服务类型无法找到!");
+            throw new BusinessException("文件存储服务类型无法找到!");
         }
         return instance(configKey);
     }
@@ -42,7 +42,7 @@ public class OssFactory {
     public static synchronized OssClient instance(String configKey) {
         String json = CacheUtils.get(CacheNames.SYS_OSS_CONFIG, configKey);
         if (json == null) {
-            throw new OssException("系统异常, '" + configKey + "'配置信息不存在!");
+            throw new BusinessException("系统异常, '" + configKey + "'配置信息不存在!");
         }
         OssProperties properties = JsonUtils.parseObject(json, OssProperties.class);
         OssClient client = CLIENT_CACHE.get(configKey);

@@ -34,14 +34,14 @@ public class SysOssConfigController extends BaseController {
     private final SysOssConfigService sysOssConfigService;
 
     @Operation(summary = "查询对象存储配置列表")
-    @SaCheckPermission("system::list")
+    @SaCheckPermission("system:file:list")
     @GetMapping("/list")
     public PageInfoRes<SysOssConfigVo> list(@Validated(QueryGroup.class) SysOssConfigDto dto, BasePage basePage) {
         return sysOssConfigService.queryPageList(dto, basePage);
     }
 
     @Operation(summary = "获取对象存储配置详细信息")
-    @SaCheckPermission("system:oss:query")
+    @SaCheckPermission("system:file:query")
     @GetMapping("/{ossConfigId}")
     public Result<SysOssConfigVo> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long ossConfigId) {
@@ -49,7 +49,7 @@ public class SysOssConfigController extends BaseController {
     }
 
     @Operation(summary = "新增对象存储配置")
-    @SaCheckPermission("system:oss:add")
+    @SaCheckPermission("system:file:add")
     @Log(title = "对象存储配置", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -58,7 +58,7 @@ public class SysOssConfigController extends BaseController {
     }
 
     @Operation(summary = "修改对象存储配置")
-    @SaCheckPermission("system:oss:edit")
+    @SaCheckPermission("system:file:edit")
     @Log(title = "对象存储配置", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -72,7 +72,7 @@ public class SysOssConfigController extends BaseController {
      * @param ossConfigIds OSS配置ID串
      */
     @Operation(summary = "删除对象存储配置")
-    @SaCheckPermission("system:oss:remove")
+    @SaCheckPermission("system:file:remove")
     @Log(title = "对象存储配置", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossConfigIds}")
     public Result<Void> remove(@NotEmpty(message = "主键不能为空")
@@ -81,7 +81,7 @@ public class SysOssConfigController extends BaseController {
     }
 
     @Operation(summary = "状态修改")
-    @SaCheckPermission("system:oss:edit")
+    @SaCheckPermission("system:file:edit")
     @Log(title = "对象存储状态修改", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public Result<Void> changeStatus(@RequestBody SysOssConfigDto dto) {

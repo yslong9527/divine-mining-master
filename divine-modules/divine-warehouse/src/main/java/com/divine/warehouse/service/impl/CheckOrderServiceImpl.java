@@ -93,7 +93,7 @@ public class CheckOrderServiceImpl implements CheckOrderService {
     public void insertByBo(CheckOrderDto dto) {
         // 创建盘库单
         String checkNo = commonService.getNo(InventoryTypeEnum.CHECK.getCode());
-        dto.setBusinessNo(checkNo);
+        dto.setBizNo(checkNo);
         CheckOrder checkOrder = MapstructUtils.convert(dto, CheckOrder.class);
         checkOrder.setCheckNo(checkNo);
         checkOrder.setCheckStatus(InventoryStatusEnum.FINISH.getCode());
@@ -131,7 +131,7 @@ public class CheckOrderServiceImpl implements CheckOrderService {
             throw new com.divine.common.core.exception.base.BusinessException("盘库单不存在");
         }
         if (InventoryStatusEnum.FINISH.getCode().equals(checkOrderVo.getOrderStatus())) {
-            throw new BusinessException("盘库单【" + checkOrderVo.getOrderNo() + "】已盘库完成，无法删除！");
+            throw new BusinessException("盘库单【" + checkOrderVo.getBizNo() + "】已盘库完成，无法删除！");
         }
     }
 

@@ -141,7 +141,7 @@ public class MovementOrderServiceImpl implements MovementOrderService {
             throw new com.divine.common.core.exception.base.BusinessException("移库单不存在");
         }
         if (InventoryStatusEnum.FINISH.getCode().equals(movementOrderVo.getOrderStatus())) {
-            throw new BusinessException("移库单【" + movementOrderVo.getOrderNo() + "】已移库，无法删除！");
+            throw new BusinessException("移库单【" + movementOrderVo.getBizNo() + "】已移库，无法删除！");
         }
     }
 

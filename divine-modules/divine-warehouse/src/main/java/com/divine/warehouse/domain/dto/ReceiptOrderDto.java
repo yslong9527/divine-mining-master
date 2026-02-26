@@ -5,7 +5,6 @@ import com.divine.common.core.validate.EditGroup;
 import com.divine.warehouse.domain.entity.ReceiptOrder;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +26,7 @@ public class ReceiptOrderDto extends BaseOrderDto<ReceiptOrderDetailDto> {
     @NotNull(message = "入库类型不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long optType;
 
-    @Schema(description = "订单号")
+    @Schema(description = "第三方订单号")
     private String bizOrderNo;
 
     @Schema(description = "对接商户")

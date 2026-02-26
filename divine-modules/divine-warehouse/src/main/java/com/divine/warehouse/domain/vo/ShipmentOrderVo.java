@@ -34,6 +34,6 @@ public class ShipmentOrderVo extends BaseOrderVo<ShipmentOrderDetailVO>{
     /**
      * 订单号
      */
-    @ExcelProperty(value = "业务订单号")
+    @ExcelProperty(value = "第三方订单号")
     private String bizOrderNo;
 }

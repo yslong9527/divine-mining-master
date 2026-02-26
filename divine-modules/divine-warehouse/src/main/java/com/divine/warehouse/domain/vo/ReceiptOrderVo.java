@@ -34,6 +34,6 @@ public class ReceiptOrderVo extends BaseOrderVo<ReceiptOrderDetailVO> {
     /**
      * 订单号
      */
-    @ExcelProperty(value = "业务订单号")
+    @ExcelProperty(value = "第三方订单号")
     private String bizOrderNo;
 }

@@ -102,7 +102,7 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
     public Long insertByBo(ShipmentOrderDto dto) {
         // 创建出库单
         String shipmentNo = commonService.getNo(InventoryTypeEnum.SHIPMENT.getCode());
-        dto.setBusinessNo(shipmentNo);
+        dto.setBizNo(shipmentNo);
         //组装数据保存
         ShipmentOrder shipmentOrder = MapstructUtils.convert(dto, ShipmentOrder.class);
         shipmentOrder.setShipmentNo(shipmentNo);
@@ -155,7 +155,7 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
             throw new com.divine.common.core.exception.base.BusinessException("出库单不存在");
         }
         if (InventoryStatusEnum.FINISH.getCode().equals(shipmentOrderVo.getOrderStatus())) {
-            throw new BusinessException("出库单【" + shipmentOrderVo.getOrderNo() + "】已出库，无法删除！");
+            throw new BusinessException("出库单【" + shipmentOrderVo.getBizNo() + "】已出库，无法删除！");
         }
     }
 

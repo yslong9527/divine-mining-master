@@ -64,7 +64,7 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
     private LambdaQueryWrapper<ReceiptOrderDetail> buildQueryWrapper(ReceiptOrderDetailDto dto) {
         Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<ReceiptOrderDetail> lqw = Wrappers.lambdaQuery();
-        lqw.eq(dto.getOrderId() != null, ReceiptOrderDetail::getReceiptId, dto.getOrderId());
+        lqw.eq(dto.getBizId() != null, ReceiptOrderDetail::getReceiptId, dto.getBizId());
         lqw.eq(dto.getSkuId() != null, ReceiptOrderDetail::getSkuId, dto.getSkuId());
         lqw.eq(dto.getQuantity() != null, ReceiptOrderDetail::getQuantity, dto.getQuantity());
         lqw.eq(dto.getUnitPrice() != null, ReceiptOrderDetail::getUnitPrice, dto.getUnitPrice());
@@ -120,7 +120,7 @@ public class ReceiptOrderDetailServiceImpl extends ServiceImpl<ReceiptOrderDetai
     @Override
     public List<ReceiptOrderDetailVO> queryByReceiptOrderId(Long receiptOrderId) {
         ReceiptOrderDetailDto dto = new ReceiptOrderDetailDto();
-        dto.setOrderId(receiptOrderId);
+        dto.setBizId(receiptOrderId);
         List<ReceiptOrderDetailVO> details = queryList(dto);
         if (CollUtil.isEmpty(details)) {
             return Collections.emptyList();

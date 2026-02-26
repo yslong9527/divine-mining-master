@@ -14,13 +14,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.divine.common.core.exception.base.BusinessException;
 import com.divine.common.core.utils.DateUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.oss.constant.OssConstant;
 import com.divine.common.oss.entity.UploadResult;
 import com.divine.common.oss.enumd.AccessPolicyType;
 import com.divine.common.oss.enumd.PolicyType;
-import com.divine.common.oss.exception.OssException;
 import com.divine.common.oss.properties.OssProperties;
 
 import java.io.ByteArrayInputStream;
@@ -71,10 +71,10 @@ public class OssClient {
 
             createBucket();
         } catch (Exception e) {
-            if (e instanceof OssException) {
+            if (e instanceof BusinessException) {
                 throw e;
             }
-            throw new OssException("配置错误! 请检查系统配置:[" + e.getMessage() + "]");
+            throw new BusinessException("配置错误! 请检查系统配置:[" + e.getMessage() + "]");
         }
     }
 
@@ -90,7 +90,7 @@ public class OssClient {
             client.createBucket(createBucketRequest);
             client.setBucketPolicy(bucketName, getPolicy(bucketName, accessPolicy.getPolicyType()));
         } catch (Exception e) {
-            throw new OssException("创建Bucket失败, 请核对配置信息:[" + e.getMessage() + "]");
+            throw new BusinessException("创建Bucket失败, 请核对配置信息:[" + e.getMessage() + "]");
         }
     }
 
@@ -111,7 +111,7 @@ public class OssClient {
             putObjectRequest.setCannedAcl(getAccessPolicy().getAcl());
             client.putObject(putObjectRequest);
         } catch (Exception e) {
-            throw new OssException("上传文件失败，请检查配置信息:[" + e.getMessage() + "]");
+            throw new BusinessException("上传文件失败，请检查配置信息:[" + e.getMessage() + "]");
         }
         return UploadResult.builder().url(getUrl() + "/" + path).filename(path).build();
     }
@@ -123,7 +123,7 @@ public class OssClient {
             putObjectRequest.setCannedAcl(getAccessPolicy().getAcl());
             client.putObject(putObjectRequest);
         } catch (Exception e) {
-            throw new OssException("上传文件失败，请检查配置信息:[" + e.getMessage() + "]");
+            throw new BusinessException("上传文件失败，请检查配置信息:[" + e.getMessage() + "]");
         }
         return UploadResult.builder().url(getUrl() + "/" + path).filename(path).build();
     }
@@ -133,7 +133,7 @@ public class OssClient {
         try {
             client.deleteObject(properties.getBucketName(), path);
         } catch (Exception e) {
-            throw new OssException("删除文件失败，请检查配置信息:[" + e.getMessage() + "]");
+            throw new BusinessException("删除文件失败，请检查配置信息:[" + e.getMessage() + "]");
         }
     }
 

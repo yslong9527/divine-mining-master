@@ -26,7 +26,7 @@ public class ShipmentOrderDto extends BaseOrderDto<ShipmentOrderDetailDto> {
     @NotNull(message = "出库类型不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long optType;
 
-    @Schema(description = "订单号")
+    @Schema(description = "第三方订单号")
     private String bizOrderNo;
 
     @Schema(description = "领用人")

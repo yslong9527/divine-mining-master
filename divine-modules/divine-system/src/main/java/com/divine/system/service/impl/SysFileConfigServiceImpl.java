@@ -39,7 +39,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class SysOssConfigServiceImpl implements SysOssConfigService {
+public class SysFileConfigServiceImpl implements SysOssConfigService {
 
     private final SysOssConfigMapper ossConfigMapper;
 

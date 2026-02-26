@@ -22,11 +22,6 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = MovementOrder.class, reverseConvertGenerate = false)
 public class MovementOrderDto extends BaseOrderDto<MovementOrderDetailDto> {
 
-
-    @Schema(description = "移库库单号")
-    @NotBlank(message = "入库单号不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String movementNo;
-
     @Schema(description = "源仓库")
     @NotNull(message = "源仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long sourceWarehouseId;
