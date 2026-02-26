@@ -2,6 +2,7 @@ package com.divine.warehouse.service;
 
 
 import com.divine.common.core.domain.vo.OptionVO;
+import com.divine.system.domain.vo.SysConfigVo;
 
 import java.util.List;
 
@@ -26,4 +27,11 @@ public interface CommonService {
      * @return
      */
     List<OptionVO> getOption(String type);
+
+    /**
+     * 获取配置参数值
+     * @param keyName
+     * @return
+     */
+    SysConfigVo getConfigParam(String keyName);
 }

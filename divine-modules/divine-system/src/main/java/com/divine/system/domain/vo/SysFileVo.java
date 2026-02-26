@@ -2,6 +2,7 @@ package com.divine.system.domain.vo;
 
 import com.divine.system.domain.entity.SysFile;
 import io.github.linpeilie.annotations.AutoMapper;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,44 +17,28 @@ import java.util.Date;
 @AutoMapper(target = SysFile.class)
 public class SysFileVo implements Serializable {
 
-    /**
-     * 对象存储主键
-     */
+    @Schema(description = "id")
     private Long id;
 
-    /**
-     * 文件名
-     */
+    @Schema(description = "文件名")
     private String fileName;
 
-    /**
-     * URL地址
-     */
+    @Schema(description = "URL地址")
     private String fileUrl;
 
-    /**
-     * 文件后缀名
-     */
+    @Schema(description = "文件后缀名")
     private String fileSuffix;
 
-    /**
-     * 业务id
-     */
+    @Schema(description = "业务id")
     private Long bizId;
 
-    /**
-     * 业务类型
-     */
+    @Schema(description = "业务类型")
     private String bizType;
 
-    /**
-     * 创建时间
-     */
+    @Schema(description = "创建时间")
     private Date createTime;
 
-    /**
-     * 上传人
-     */
+    @Schema(description = "上传人")
     private String createBy;
 
 

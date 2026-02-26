@@ -28,13 +28,13 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/system/oss/config")
+@RequestMapping("/system/file/config")
 public class SysOssConfigController extends BaseController {
 
     private final SysOssConfigService sysOssConfigService;
 
     @Operation(summary = "查询对象存储配置列表")
-    @SaCheckPermission("system:oss:list")
+    @SaCheckPermission("system::list")
     @GetMapping("/list")
     public PageInfoRes<SysOssConfigVo> list(@Validated(QueryGroup.class) SysOssConfigDto dto, BasePage basePage) {
         return sysOssConfigService.queryPageList(dto, basePage);
