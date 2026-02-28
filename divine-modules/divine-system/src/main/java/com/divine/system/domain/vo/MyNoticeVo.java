@@ -1,8 +1,8 @@
 package com.divine.system.domain.vo;
 
-import com.divine.system.domain.entity.SysNotice;
 import com.divine.common.translation.annotation.Translation;
 import com.divine.common.translation.constant.TransConstant;
+import com.divine.system.domain.entity.SysNotice;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @AutoMapper(target = SysNotice.class)
-public class SysNoticeVo implements Serializable {
+public class MyNoticeVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -57,6 +57,11 @@ public class SysNoticeVo implements Serializable {
      * 创建者
      */
     private String createBy;
+
+    /**
+     * 是否已读(0:未读,1:已读)
+     */
+    private Integer isRead;
 
     /**
      * 创建人名称

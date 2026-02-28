@@ -44,7 +44,7 @@ public class SysNoticeDto extends BaseEntity {
     private String noticeContent;
 
     /**
-     * 公告状态（0正常 1关闭）
+     * 公告状态（0:关闭,1:正常）
      */
     private String status;
 

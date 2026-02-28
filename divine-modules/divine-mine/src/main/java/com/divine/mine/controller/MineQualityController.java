@@ -31,7 +31,7 @@ import com.divine.common.log.enums.BusinessType;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/wms/quality")
+@RequestMapping("/quality")
 public class MineQualityController extends BaseController {
 
     private final MineQualityService mineQualityService;
@@ -39,7 +39,7 @@ public class MineQualityController extends BaseController {
     /**
      * 查询送货质量列表
      */
-    @SaCheckPermission("wms:quality:list")
+    @SaCheckPermission("quality:list")
     @GetMapping("/list")
     public PageInfoRes<MineQualityVo> list(MineQualityDto dto, BasePage basePage) {
         return mineQualityService.queryPageList(dto, basePage);
@@ -48,7 +48,7 @@ public class MineQualityController extends BaseController {
     /**
      * 导出送货质量列表
      */
-    @SaCheckPermission("wms:quality:export")
+    @SaCheckPermission("quality:export")
     @Log(title = "送货质量", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MineQualityDto dto, HttpServletResponse response) {
@@ -61,7 +61,7 @@ public class MineQualityController extends BaseController {
      *
      * @param id 主键
      */
-    @SaCheckPermission("wms:quality:query")
+    @SaCheckPermission("quality:query")
     @GetMapping("/{id}")
     public Result<MineQualityVo> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long id) {
@@ -71,7 +71,7 @@ public class MineQualityController extends BaseController {
     /**
      * 新增送货质量
      */
-    @SaCheckPermission("wms:quality:add")
+    @SaCheckPermission("quality:add")
     @Log(title = "送货质量", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -83,7 +83,7 @@ public class MineQualityController extends BaseController {
     /**
      * 修改送货质量
      */
-    @SaCheckPermission("wms:quality:edit")
+    @SaCheckPermission("quality:edit")
     @Log(title = "送货质量", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -97,7 +97,7 @@ public class MineQualityController extends BaseController {
      *
      * @param ids 主键串
      */
-    @SaCheckPermission("wms:quality:remove")
+    @SaCheckPermission("quality:remove")
     @Log(title = "送货质量", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public Result<Void> remove(@NotEmpty(message = "主键不能为空")

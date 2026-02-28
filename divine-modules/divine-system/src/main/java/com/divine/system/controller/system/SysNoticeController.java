@@ -8,14 +8,17 @@ import com.divine.common.web.core.BaseController;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.log.enums.BusinessType;
 import com.divine.system.domain.dto.SysNoticeDto;
+import com.divine.system.domain.vo.MyNoticeVo;
 import com.divine.system.domain.vo.SysNoticeVo;
 import com.divine.system.service.SysNoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
- * 公告 信息操作处理
+ * 公告、通知信息操作处理
  *
  * @author yisl
  * @date 2024-07-19
@@ -38,6 +41,39 @@ public class SysNoticeController extends BaseController {
     @GetMapping("/list")
     public PageInfoRes<SysNoticeVo> list(SysNoticeDto notice, BasePage basePage) {
         return noticeService.selectPageNoticeList(notice, basePage);
+    }
+
+    /**
+     * 获取我的通知
+     * @param basePage
+     * @return
+     */
+    @SaCheckPermission("system:notice:getMyNotice")
+    @PostMapping("/getMyNotice")
+    public PageInfoRes<MyNoticeVo> getMyNotice(@RequestBody BasePage basePage) {
+        return noticeService.getMyNotice(basePage);
+    }
+
+    /**
+     * 已读
+     * @id 消息id
+     * @return
+     */
+    @SaCheckPermission("system:notice:read")
+    @PutMapping("/read")
+    public Result<Void> read(@RequestParam List<Long> ids) {
+        noticeService.read(ids);
+        return Result.success();
+    }
+
+    /**
+     * 获取未读消息数量
+     * @return
+     */
+    @SaCheckPermission("system:notice:getUnreadCont")
+    @GetMapping("/getUnreadCont")
+    public Result<Long> getUnreadCont() {
+        return Result.success(noticeService.getUnreadCont());
     }
 
     /**

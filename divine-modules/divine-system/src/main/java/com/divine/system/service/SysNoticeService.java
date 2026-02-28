@@ -1,7 +1,9 @@
 package com.divine.system.service;
 
+import com.divine.common.core.domain.Result;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.system.domain.dto.SysNoticeDto;
+import com.divine.system.domain.vo.MyNoticeVo;
 import com.divine.system.domain.vo.SysNoticeVo;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 
@@ -24,6 +26,25 @@ public interface SysNoticeService {
      * @return 公告信息
      */
     SysNoticeVo selectNoticeById(Long noticeId);
+
+    /**
+     * 获取我的通知消息
+     * @param basePage
+     * @return
+     */
+    PageInfoRes<MyNoticeVo> getMyNotice(BasePage basePage);
+
+    /**
+     * 已读
+     * @param id
+     */
+    void read(List<Long> id);
+
+    /**
+     * 获取为未读消息数量
+     * @return
+     */
+    Long getUnreadCont();
 
     /**
      * 查询公告列表
@@ -64,4 +85,5 @@ public interface SysNoticeService {
      * @return 结果
      */
     int deleteNoticeByIds(Long[] noticeIds);
+
 }

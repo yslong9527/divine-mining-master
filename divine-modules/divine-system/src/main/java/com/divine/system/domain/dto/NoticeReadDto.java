@@ -2,10 +2,9 @@ package com.divine.system.domain.dto;
 
 import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
-import com.divine.common.mybatis.core.domain.BaseEntity;
 import com.divine.system.domain.entity.NoticeRead;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.*;
 import io.github.linpeilie.annotations.AutoMapper;
 
@@ -19,14 +18,13 @@ import java.util.Date;
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Builder
 @AutoMapper(target = NoticeRead.class, reverseConvertGenerate = false)
-public class NoticeReadDto extends BaseEntity {
+public class NoticeReadDto {
 
     /**
      * 主键
      */
-    @NotNull(message = "主键不能为空", groups = { EditGroup.class })
     private Long id;
 
     /**

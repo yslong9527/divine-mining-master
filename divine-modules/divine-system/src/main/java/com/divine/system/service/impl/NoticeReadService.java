@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Collection;
 
 /**
@@ -64,15 +63,15 @@ public class NoticeReadService {
     /**
      * 新增公告已读记录
      */
-    public void insertByBo(NoticeReadDto dto) {
-        NoticeRead add = MapstructUtils.convert(dto, NoticeRead.class);
-        noticeReadMapper.insert(add);
+    public void insertByDto(List<NoticeReadDto> dto) {
+        List<NoticeRead> noticeReads = MapstructUtils.convert(dto, NoticeRead.class);
+        noticeReadMapper.insertBatch(noticeReads);
     }
 
     /**
      * 修改公告已读记录
      */
-    public void updateByBo(NoticeReadDto dto) {
+    public void updateByDto(NoticeReadDto dto) {
         NoticeRead update = MapstructUtils.convert(dto, NoticeRead.class);
         noticeReadMapper.updateById(update);
     }

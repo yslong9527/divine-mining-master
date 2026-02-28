@@ -5,6 +5,7 @@ import com.divine.common.mybatis.core.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import java.io.Serial;
@@ -16,11 +17,9 @@ import java.io.Serial;
  * @date 2026-02-28
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @TableName("sys_notice_read")
-public class NoticeRead extends BaseEntity {
+public class NoticeRead implements Serializable {
 
-    @Serial
     private static final long serialVersionUID=1L;
 
     /**

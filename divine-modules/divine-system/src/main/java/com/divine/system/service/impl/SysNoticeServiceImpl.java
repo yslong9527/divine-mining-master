@@ -7,8 +7,11 @@ import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
+import com.divine.common.satoken.utils.LoginHelper;
+import com.divine.system.domain.dto.NoticeReadDto;
 import com.divine.system.domain.dto.SysNoticeDto;
 import com.divine.system.domain.entity.SysNotice;
+import com.divine.system.domain.vo.MyNoticeVo;
 import com.divine.system.domain.vo.SysNoticeVo;
 import com.divine.system.mapper.SysNoticeMapper;
 import com.divine.system.mapper.SysUserMapper;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,7 +33,7 @@ import java.util.List;
 public class SysNoticeServiceImpl implements SysNoticeService {
 
     private final SysNoticeMapper noticeMapper;
-    private final SysUserMapper userMapper;
+    private final NoticeReadService noticeReadService;
 
     @Override
     public PageInfoRes<SysNoticeVo> selectPageNoticeList(SysNoticeDto notice, BasePage basePage) {
@@ -47,6 +51,55 @@ public class SysNoticeServiceImpl implements SysNoticeService {
     @Override
     public SysNoticeVo selectNoticeById(Long noticeId) {
         return noticeMapper.selectVoById(noticeId);
+    }
+
+    /**
+     * 获取我的消息
+     *
+     * @param basePage
+     * @return
+     */
+    @Override
+    public PageInfoRes<MyNoticeVo> getMyNotice(BasePage basePage) {
+        Long userId = LoginHelper.getUserId();
+        Page<MyNoticeVo> res = new Page<>(basePage.getPageNum(), basePage.getPageSize());
+        res = noticeMapper.getMyNotice(res, userId);
+        return PageInfoRes.build(res);
+    }
+
+    /**
+     * 已读
+     *
+     * @param ids
+     */
+    @Override
+    public void read(List<Long> ids) {
+        Long userId = LoginHelper.getUserId();
+        // 组装数据新增
+        Date date = new Date();
+        List<NoticeReadDto> list = ids.stream().map(id ->
+            NoticeReadDto.builder()
+                .noticeId(id)
+                .userId(userId)
+                .readTime(date)
+                .build()).toList();
+        // 批量已读
+        noticeReadService.insertByDto(list);
+    }
+
+    /**
+     * 获取未读消息数量
+     *
+     * @return
+     */
+    @Override
+    public Long getUnreadCont() {
+        // 获取当前登录人
+        Long userId = LoginHelper.getUserId();
+        return noticeMapper.getUnreadCont(userId);
+        // 获取所有通知消息
+        // 获取已读通知消息
+        // 计算未读消息
     }
 
     /**
