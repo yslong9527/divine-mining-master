@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.WarehouseVo;
 import com.divine.warehouse.service.WarehouseService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "仓库")
+/**
+ * 仓库
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +36,6 @@ public class WarehouseController extends BaseController {
     /**
      * 查询仓库列表
      */
-    @Operation(summary = "查询仓库列表")
     @SaCheckPermission("wms:warehouse:list")
     @GetMapping("/list")
     public PageInfoRes<WarehouseVo> list(WarehouseDto dto, BasePage basePage) {
@@ -46,7 +45,6 @@ public class WarehouseController extends BaseController {
     /**
      * 查询仓库列表
      */
-    @Operation(summary = "查询仓库列表")
     @SaCheckPermission("wms:warehouse:list")
     @GetMapping("/listNoPage")
     public Result<List<WarehouseVo>> listNoPage(WarehouseDto dto) {
@@ -56,7 +54,6 @@ public class WarehouseController extends BaseController {
     /**
      * 导出仓库列表
      */
-    @Operation(summary = "导出仓库列表")
     @SaCheckPermission("wms:warehouse:list")
     @Log(title = "仓库", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -70,7 +67,6 @@ public class WarehouseController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取仓库详细信息")
     @SaCheckPermission("wms:warehouse:list")
     @GetMapping("/{id}")
     public Result<WarehouseVo> getInfo(@NotNull(message = "主键不能为空")
@@ -81,7 +77,6 @@ public class WarehouseController extends BaseController {
     /**
      * 新增仓库
      */
-    @Operation(summary = "新增仓库")
     @SaCheckPermission("wms:warehouse:edit")
     @Log(title = "仓库", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -94,7 +89,6 @@ public class WarehouseController extends BaseController {
     /**
      * 修改仓库
      */
-    @Operation(summary = "修改仓库")
     @SaCheckPermission("wms:warehouse:edit")
     @Log(title = "仓库", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -109,7 +103,6 @@ public class WarehouseController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除仓库")
     @SaCheckPermission("wms:warehouse:edit")
     @Log(title = "仓库", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
@@ -119,7 +112,11 @@ public class WarehouseController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "修改排序")
+    /**
+     * 修改排序
+     * @param tree
+     * @return
+     */
     @SaCheckPermission("wms:warehouse:edit")
     @Log(title = "仓库", businessType = BusinessType.UPDATE)
     @PostMapping("/update/sort")

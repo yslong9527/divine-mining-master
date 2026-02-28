@@ -2,9 +2,6 @@ package com.divine.demo.controller.queue;
 
 import com.divine.common.core.domain.Result;
 import com.divine.common.redis.utils.QueueUtils;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Lion Li
  * @version 3.6.0
  */
-@Tag(name = "有界队列 演示案例")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/demo/queue/bounded")
 public class BoundedQueueController {
 
-    @Operation(summary = "添加队列数据")
+    /**
+     * 添加队列数据
+     *
+     * @param queueName 队列名
+     * @param capacity  容量
+     * @return
+     */
     @GetMapping("/add")
-    public Result<String> add(@Schema(description = "队列名") String queueName,
-                            @Schema(description = "容量") int capacity) {
+    public Result<String> add(String queueName, int capacity) {
         // 用完了一定要销毁 否则会一直存在
         boolean b = QueueUtils.destroyBoundedQueue(queueName);
         log.info("通道: {} , 删除: {}", queueName, b);
@@ -55,9 +56,14 @@ public class BoundedQueueController {
         return Result.success("操作成功");
     }
 
-    @Operation(summary = "删除队列数据")
+    /**
+     * 删除队列数据
+     *
+     * @param queueName 队列名
+     * @return
+     */
     @GetMapping("/remove")
-    public Result<String> remove(@Schema(description = "队列名") String queueName) {
+    public Result<String> remove(String queueName) {
         String data = "data-" + 5;
         if (QueueUtils.removeBoundedQueueObject(queueName, data)) {
             log.info("通道: {} , 删除数据: {}", queueName, data);
@@ -67,9 +73,14 @@ public class BoundedQueueController {
         return Result.success("操作成功");
     }
 
-    @Operation(summary = "获取队列数据")
+    /**
+     * 获取队列数据
+     *
+     * @param queueName 队列名
+     * @return
+     */
     @GetMapping("/get")
-    public Result<String> get(@Schema(description = "队列名") String queueName) {
+    public Result<String> get(String queueName) {
         String data;
         do {
             data = QueueUtils.getBoundedQueueObject(queueName);

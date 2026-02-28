@@ -6,8 +6,6 @@ import com.divine.common.excel.core.ExcelResult;
 import com.divine.common.excel.utils.ExcelUtil;
 import com.divine.demo.listener.ExportDemoListener;
 import com.divine.demo.service.IExportExcelService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +24,6 @@ import java.util.Map;
  *
  * @author Lion Li
  */
-@Tag(name = "测试Excel功能")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/demo/excel")
@@ -34,7 +31,10 @@ public class TestExcelController {
 
     private final IExportExcelService exportExcelService;
 
-    @Operation(summary = "单列表多数据")
+    /**
+     * 单列表多数据
+     * @param response
+     */
     @GetMapping("/exportTemplateOne")
     public void exportTemplateOne(HttpServletResponse response) {
         Map<String, String> map = new HashMap<>();
@@ -51,7 +51,10 @@ public class TestExcelController {
         ExcelUtil.exportTemplate(CollUtil.newArrayList(map, list), "单列表.xlsx", "excel/单列表.xlsx", response);
     }
 
-    @Operation(summary = "多列表多数据")
+    /**
+     * 多列表多数据
+     * @param response
+     */
     @GetMapping("/exportTemplateMuliti")
     public void exportTemplateMuliti(HttpServletResponse response) {
         Map<String, String> map = new HashMap<>();
@@ -83,13 +86,21 @@ public class TestExcelController {
         ExcelUtil.exportTemplateMultiList(multiListMap, "多列表.xlsx", "excel/多列表.xlsx", response);
     }
 
-    @Operation(summary = "导出下拉框")
+    /**
+     * 导出下拉框
+     * @param response
+     */
     @GetMapping("/exportWithOptions")
     public void exportWithOptions(HttpServletResponse response) {
         exportExcelService.exportWithOptions(response);
     }
 
-    @Operation(summary = "导入表格")
+    /**
+     * 导入表格
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @PostMapping(value = "/importWithOptions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<ExportDemoVo> importWithOptions(@RequestPart("file") MultipartFile file) throws Exception {
         // 处理解析结果

@@ -2,7 +2,6 @@ package com.divine.warehouse.domain.dto;
 
 import com.divine.warehouse.domain.entity.CheckOrderDetail;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,24 +22,20 @@ public class CheckOrderDetailDto extends BaseOrderDetailDto {
     /**
      * 盘点数量
      */
-    @Schema(description = "盘点数量")
     private Long checkQuantity;
 
     /**
      * 盈亏数
      */
-    @Schema(description = "盈亏数")
     private Long profitAndLoss;
 
     /**
      * 库存id
      */
-    @Schema(description = "库存id")
     private Long inventoryId;
 
     /**
      * 有盈亏
      */
-    @Schema(description = "有盈亏")
     private Boolean haveProfitAndLoss;
 }

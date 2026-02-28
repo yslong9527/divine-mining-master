@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.ItemBrandVo;
 import com.divine.warehouse.service.ItemBrandService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-07-30
  */
-@Tag(name = "物品品牌")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +39,6 @@ public class ItemBrandController extends BaseController {
     /**
      * 查询物品品牌列表
      */
-    @Operation(summary = "查询物品品牌列表")
     @SaCheckPermission("wms:itemBrand:list")
     @GetMapping("/list")
     public PageInfoRes<ItemBrandVo> list(ItemBrandDto dto, BasePage basePage) {
@@ -52,7 +48,6 @@ public class ItemBrandController extends BaseController {
     /**
      * 查询物品品牌列表
      */
-    @Operation(summary = "查询物品品牌列表")
     @SaCheckPermission("wms:itemBrand:list")
     @GetMapping("/listNoPage")
     public Result<List<ItemBrandVo>> listNoPage(ItemBrandDto dto) {
@@ -62,7 +57,6 @@ public class ItemBrandController extends BaseController {
     /**
      * 导出物品品牌列表
      */
-    @Operation(summary = "导出物品品牌列表")
     @SaCheckPermission("wms:itemBrand:list")
     @Log(title = "物品品牌", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -76,7 +70,6 @@ public class ItemBrandController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取物品品牌详细信息")
     @SaCheckPermission("wms:itemBrand:list")
     @GetMapping("/{id}")
     public Result<ItemBrandVo> getInfo(@NotNull(message = "主键不能为空")
@@ -87,7 +80,6 @@ public class ItemBrandController extends BaseController {
     /**
      * 新增物品品牌
      */
-    @Operation(summary = "新增物品品牌")
     @SaCheckPermission("wms:itemBrand:edit")
     @Log(title = "物品品牌", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -100,7 +92,6 @@ public class ItemBrandController extends BaseController {
     /**
      * 修改物品品牌
      */
-    @Operation(summary = "修改物品品牌")
     @SaCheckPermission("wms:itemBrand:edit")
     @Log(title = "物品品牌", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -115,7 +106,6 @@ public class ItemBrandController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除物品品牌")
     @SaCheckPermission("wms:itemBrand:edit")
     @Log(title = "物品品牌", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")

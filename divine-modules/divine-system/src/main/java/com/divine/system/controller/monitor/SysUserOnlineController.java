@@ -15,7 +15,6 @@ import com.divine.common.core.utils.StreamUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.redis.utils.RedisUtils;
 import com.divine.system.domain.entity.SysUserOnline;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +24,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Tag(name = "在线用户监控")
+/**
+ * 在线用户监控
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/online")
 public class SysUserOnlineController extends BaseController {
 
-    @Operation(summary = "获取在线用户监控列表")
+    /**
+     * 获取在线用户监控列表
+     * @param ipaddr
+     * @param userName
+     * @return
+     */
     @SaCheckPermission("monitor:online:list")
     @GetMapping("/list")
     public PageInfoRes<SysUserOnline> list(@Parameter(description = "IP地址") String ipaddr,
@@ -69,10 +75,9 @@ public class SysUserOnlineController extends BaseController {
 
     /**
      * 强退用户
-     *
-     * @param tokenId token值
+     * @param tokenId
+     * @return
      */
-    @Operation(summary = "强退用户")
     @SaCheckPermission("monitor:online:forceLogout")
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")

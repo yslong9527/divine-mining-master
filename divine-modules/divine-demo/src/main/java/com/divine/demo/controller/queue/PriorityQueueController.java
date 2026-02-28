@@ -3,9 +3,6 @@ package com.divine.demo.controller.queue;
 import cn.hutool.core.util.RandomUtil;
 import com.divine.common.core.domain.Result;
 import com.divine.common.redis.utils.QueueUtils;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,16 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Lion Li
  * @version 3.6.0
  */
-@Tag(name="优先队列 演示案例")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/demo/queue/priority")
 public class PriorityQueueController {
 
-    @Operation(summary = "添加队列数据")
+    /**
+     * 添加队列数据
+     *
+     * @param queueName 列队名
+     * @return
+     */
     @GetMapping("/add")
-    public Result<String> add(@Schema(description = "队列名") String queueName) {
+    public Result<String> add(String queueName) {
         // 用完了一定要销毁 否则会一直存在
         boolean b = QueueUtils.destroyPriorityQueue(queueName);
         log.info("通道: {} , 删除: {}", queueName, b);
@@ -51,11 +52,16 @@ public class PriorityQueueController {
         return Result.success("操作成功");
     }
 
-    @Operation(summary = "删除队列数据")
+    /**
+     * 删除队列数据
+     *
+     * @param queueName 队列名
+     * @param name      对象名
+     * @param sort      排序号
+     * @return
+     */
     @GetMapping("/remove")
-    public Result<String> remove(@Schema(description = "队列名") String queueName,
-                               @Schema(description = "对象名") String name,
-                               @Schema(description = "排序号") Integer sort) {
+    public Result<String> remove(String queueName, String name, Integer sort) {
         PriorityDemo data = new PriorityDemo();
         data.setName(name);
         data.setSort(sort);
@@ -67,9 +73,14 @@ public class PriorityQueueController {
         return Result.success("操作成功");
     }
 
-    @Operation(summary = "获取队列数据")
+    /**
+     * 获取队列数据
+     *
+     * @param queueName 队列名
+     * @return
+     */
     @GetMapping("/get")
-    public Result<String> get(@Schema(description = "队列名") String queueName) {
+    public Result<String> get(String queueName) {
         PriorityDemo data;
         do {
             data = QueueUtils.getPriorityQueueObject(queueName);

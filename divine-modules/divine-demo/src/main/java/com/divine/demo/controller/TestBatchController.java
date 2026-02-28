@@ -5,8 +5,6 @@ import com.divine.common.core.domain.Result;
 import com.divine.demo.domain.entity.TestDemo;
 import com.divine.demo.mapper.TestDemoMapper;
 import com.divine.common.web.core.BaseController;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-@Tag(name = "测试批量方法")
+/**
+ * 测试单表Controller
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/demo/batch")
@@ -32,7 +32,6 @@ public class TestBatchController extends BaseController {
      * <p>
      * 3.5.0 版本 增加 rewriteBatchedStatements=true 批处理参数 使 MP 原生批处理可以达到同样的速度
      */
-    @Operation(summary = "新增批量方法 可完美替代 saveBatch 秒级插入上万数据 (对mysql负荷较大)")
     @PostMapping("/add")
 //    @DS("slave")
     public Result<Void> add() {
@@ -52,7 +51,6 @@ public class TestBatchController extends BaseController {
      * <p>
      * 3.5.0 版本 增加 rewriteBatchedStatements=true 批处理参数 使 MP 原生批处理可以达到同样的速度
      */
-    @Operation(summary = "新增或更新 可完美替代 saveOrUpdateBatch 高性能")
     @PostMapping("/addOrUpdate")
 //    @DS("slave")
     public Result<Void> addOrUpdate() {
@@ -76,7 +74,10 @@ public class TestBatchController extends BaseController {
         return toAjax(testDemoMapper.insertOrUpdateBatch(list));
     }
 
-    @Operation(summary = "删除批量方法")
+    /**
+     * 删除批量方法
+     * @return
+     */
     @DeleteMapping()
 //    @DS("slave")
     public Result<Void> remove() {

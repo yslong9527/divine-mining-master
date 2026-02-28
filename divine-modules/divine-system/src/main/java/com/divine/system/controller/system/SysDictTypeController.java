@@ -11,8 +11,6 @@ import com.divine.common.excel.utils.ExcelUtil;
 import com.divine.system.domain.dto.SysDictTypeDto;
 import com.divine.system.domain.vo.SysDictTypeVo;
 import com.divine.system.service.SysDictTypeService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "数据字典类型")
+/**
+ * 数据字典类型
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -29,14 +29,23 @@ public class SysDictTypeController extends BaseController {
 
     private final SysDictTypeService dictTypeService;
 
-    @Operation(summary = "查询字典类型列表")
+    /**
+     * 查询字典类型列表
+     * @param dictType
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("system:dict:list")
     @GetMapping("/list")
     public PageInfoRes<SysDictTypeVo> list(SysDictTypeDto dictType, BasePage basePage) {
         return dictTypeService.selectPageDictTypeList(dictType, basePage);
     }
 
-    @Operation(summary = "导出字典类型列表")
+    /**
+     * 导出字典类型列表
+     * @param dictType
+     * @param response
+     */
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:dict:export")
     @PostMapping("/export")
@@ -45,14 +54,22 @@ public class SysDictTypeController extends BaseController {
         ExcelUtil.exportExcel(list, "字典类型", SysDictTypeVo.class, response);
     }
 
-    @Operation(summary = "查询字典类型详细")
+    /**
+     * 查询字典类型详细
+     * @param dictId
+     * @return
+     */
     @SaCheckPermission("system:dict:query")
     @GetMapping(value = "/{dictId}")
     public Result<SysDictTypeVo> getInfo(@PathVariable Long dictId) {
         return Result.success(dictTypeService.selectDictTypeById(dictId));
     }
 
-    @Operation(summary = "新增字典类型")
+    /**
+     * 新增字典类型
+     * @param dict
+     * @return
+     */
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping
@@ -64,7 +81,11 @@ public class SysDictTypeController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "修改字典类型")
+    /**
+     * 修改字典类型
+     * @param dict
+     * @return
+     */
     @SaCheckPermission("system:dict:edit")
     @Log(title = "字典类型", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -76,7 +97,11 @@ public class SysDictTypeController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "删除字典类型")
+    /**
+     * 删除字典类型
+     * @param dictIds
+     * @return
+     */
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictIds}")
@@ -85,7 +110,10 @@ public class SysDictTypeController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "刷新字典缓存")
+    /**
+     * 刷新字典缓存
+     * @return
+     */
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")
@@ -94,7 +122,10 @@ public class SysDictTypeController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "获取字典选择框列表")
+    /**
+     * 获取字典选择框列表
+     * @return
+     */
     @GetMapping("/optionselect")
     public Result<List<SysDictTypeVo>> optionselect() {
         List<SysDictTypeVo> dictTypes = dictTypeService.selectDictTypeAll();

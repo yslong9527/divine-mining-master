@@ -18,8 +18,6 @@ import com.divine.system.domain.vo.SysUserVo;
 import com.divine.system.domain.vo.UploadFileVO;
 import com.divine.system.service.SysFileService;
 import com.divine.system.service.SysUserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +27,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.Map;
 
-@Tag(name = "个人信息")
+/**
+ * 个人信息
+ *
+ * @author yisl
+ * @date 2024-07-19
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +45,6 @@ public class SysProfileController extends BaseController {
     /**
      * 个人信息
      */
-    @Operation(summary = "个人信息")
     @GetMapping
     public Result<ProfileVo> profile() {
         SysUserVo user = userService.selectUserById(LoginHelper.getUserId());
@@ -56,7 +58,6 @@ public class SysProfileController extends BaseController {
     /**
      * 修改用户
      */
-    @Operation(summary = "修改用户")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public Result<Void> updateProfile(@Validated @RequestBody SysUserProfileDto profile) {
@@ -82,7 +83,6 @@ public class SysProfileController extends BaseController {
      * @param newPassword 新密码
      * @param oldPassword 旧密码
      */
-    @Operation(summary = "重置密码")
     @SaCheckRole("admin")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping("/updatePwd")
@@ -106,7 +106,6 @@ public class SysProfileController extends BaseController {
      *
      * @param avatarfile 用户头像
      */
-    @Operation(summary = "头像上传")
     @Log(title = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result<Map<String, Object>> avatar(@RequestPart("avatarfile") MultipartFile avatarfile) {

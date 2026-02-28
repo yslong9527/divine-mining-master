@@ -12,8 +12,6 @@ import com.divine.common.web.core.BaseController;
 import com.divine.system.domain.dto.SysMenuDto;
 import com.divine.system.domain.vo.SysMenuVo;
 import com.divine.system.service.SysMenuService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@Tag(name = "菜单信息")
+/**
+ * 菜单信息
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +30,11 @@ public class SysMenuController extends BaseController {
 
     private final SysMenuService menuService;
 
-    @Operation(summary = "获取菜单列表")
+    /**
+     * 获取菜单列表
+     * @param menu
+     * @return
+     */
     @SaCheckPermission("system:menu:list")
     @GetMapping("/list")
     public Result<List<SysMenuVo>> list(SysMenuDto menu) {
@@ -43,7 +47,6 @@ public class SysMenuController extends BaseController {
      *
      * @param menuId 菜单ID
      */
-    @Operation(summary = "根据菜单编号获取详细信息")
     @SaCheckPermission("system:menu:query")
     @GetMapping(value = "/{menuId}")
     public Result<SysMenuVo> getInfo(@PathVariable Long menuId) {
@@ -53,7 +56,6 @@ public class SysMenuController extends BaseController {
     /**
      * 获取菜单下拉树列表
      */
-    @Operation(summary = "获取菜单下拉树列表")
     @GetMapping("/treeselect")
     public Result<List<Tree<Long>>> treeselect(SysMenuDto menu) {
         List<SysMenuVo> menus = menuService.selectMenuList(menu, LoginHelper.getUserId());
@@ -65,7 +67,6 @@ public class SysMenuController extends BaseController {
      *
      * @param roleId 角色ID
      */
-    @Operation(summary = "加载对应角色菜单列表树")
     @GetMapping(value = "/roleMenuTreeselect/{roleId}")
     public Result<Map<String, Object>> roleMenuTreeselect(@PathVariable("roleId") Long roleId) {
         List<SysMenuVo> menus = menuService.selectMenuList(LoginHelper.getUserId());
@@ -77,7 +78,6 @@ public class SysMenuController extends BaseController {
     /**
      * 新增菜单
      */
-    @Operation(summary = "新增菜单")
     @SaCheckPermission("system:menu:add")
     @Log(title = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -93,7 +93,6 @@ public class SysMenuController extends BaseController {
     /**
      * 修改菜单
      */
-    @Operation(summary = "修改菜单")
     @SaCheckPermission("system:menu:edit")
     @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -113,7 +112,6 @@ public class SysMenuController extends BaseController {
      *
      * @param menuId 菜单ID
      */
-    @Operation(summary = "删除菜单")
     @SaCheckPermission("system:menu:remove")
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{menuId}")

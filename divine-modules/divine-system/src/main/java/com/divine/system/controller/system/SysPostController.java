@@ -12,8 +12,6 @@ import com.divine.common.excel.utils.ExcelUtil;
 import com.divine.system.domain.dto.SysPostDto;
 import com.divine.system.domain.vo.SysPostVo;
 import com.divine.system.service.SysPostService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +24,6 @@ import java.util.List;
  *
  * @author Lion Li
  */
-@Tag(name = "岗位信息操作处理")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -38,7 +35,6 @@ public class SysPostController extends BaseController {
     /**
      * 获取岗位列表
      */
-    @Operation(summary = "获取岗位列表")
     @SaCheckPermission("system:post:list")
     @GetMapping("/list")
     public PageInfoRes<SysPostVo> list(SysPostDto post, BasePage basePage) {
@@ -48,7 +44,6 @@ public class SysPostController extends BaseController {
     /**
      * 导出岗位列表
      */
-    @Operation(summary = "导出岗位列表")
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:post:export")
     @PostMapping("/export")
@@ -62,7 +57,6 @@ public class SysPostController extends BaseController {
      *
      * @param postId 岗位ID
      */
-    @Operation(summary = "根据岗位编号获取详细信息")
     @SaCheckPermission("system:post:query")
     @GetMapping(value = "/{postId}")
     public Result<SysPostVo> getInfo(@PathVariable Long postId) {
@@ -72,7 +66,6 @@ public class SysPostController extends BaseController {
     /**
      * 新增岗位
      */
-    @Operation(summary = "新增岗位")
     @SaCheckPermission("system:post:add")
     @Log(title = "岗位管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -88,7 +81,6 @@ public class SysPostController extends BaseController {
     /**
      * 修改岗位
      */
-    @Operation(summary = "修改岗位")
     @SaCheckPermission("system:post:edit")
     @Log(title = "岗位管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -109,7 +101,6 @@ public class SysPostController extends BaseController {
      *
      * @param postIds 岗位ID串
      */
-    @Operation(summary = "删除岗位")
     @SaCheckPermission("system:post:remove")
     @Log(title = "岗位管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{postIds}")
@@ -120,7 +111,6 @@ public class SysPostController extends BaseController {
     /**
      * 获取岗位选择框列表
      */
-    @Operation(summary = "获取岗位选择框列表")
     @GetMapping("/optionselect")
     public Result<List<SysPostVo>> optionselect() {
         SysPostDto post = new SysPostDto();

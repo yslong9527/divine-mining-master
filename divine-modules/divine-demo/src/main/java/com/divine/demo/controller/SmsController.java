@@ -1,9 +1,6 @@
 package com.divine.demo.controller;
 
 import com.divine.common.core.domain.Result;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.dromara.sms4j.api.SmsBlend;
 import org.dromara.sms4j.api.entity.SmsResponse;
@@ -16,17 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedHashMap;
 
-@Tag(name = "短信演示案例")
+/**
+ * 短信演示案例
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/demo/sms")
 public class SmsController {
 
-    @Operation(summary = "发送短信Aliyun")
+    /**
+     * 发送短信Aliyun
+     *
+     * @param phones     电话号
+     * @param templateId 模板ID
+     * @return
+     */
     @GetMapping("/sendAliyun")
-    public Result<Object> sendAliyun(@Schema(description = "电话号")String phones,
-                                     @Schema(description = "模板ID")String templateId) {
+    public Result<Object> sendAliyun(String phones, String templateId) {
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("code", "1234");
         SmsBlend smsBlend = SmsFactory.createSmsBlend(SupplierType.ALIBABA);
@@ -34,10 +38,15 @@ public class SmsController {
         return Result.success(smsResponse);
     }
 
-    @Operation(summary = "发送短信Tencent")
+    /**
+     * 发送短信Tencent
+     *
+     * @param phones     电话号
+     * @param templateId 模板ID
+     * @return
+     */
     @GetMapping("/sendTencent")
-    public Result<Object> sendTencent(@Schema(description = "电话号") String phones,
-                                      @Schema(description = "模板ID") String templateId) {
+    public Result<Object> sendTencent(String phones, String templateId) {
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
 //        map.put("2", "测试测试");
         map.put("1", "1234");

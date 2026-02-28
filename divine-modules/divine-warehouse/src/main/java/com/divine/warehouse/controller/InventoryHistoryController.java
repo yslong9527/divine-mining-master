@@ -13,8 +13,6 @@ import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.InventoryHistoryVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +29,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-07-22
  */
-@Tag(name = "库存记录")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -43,7 +40,6 @@ public class InventoryHistoryController extends BaseController {
     /**
      * 查询库存记录列表
      */
-    @Operation(summary = "查询库存记录列表")
     @SaCheckPermission("wms:inventoryHistory:all")
     @GetMapping("/list")
     public PageInfoRes<InventoryHistoryVo> list(InventoryHistoryDto dto, BasePage basePage) {
@@ -53,7 +49,6 @@ public class InventoryHistoryController extends BaseController {
     /**
      * 导出库存记录列表
      */
-    @Operation(summary = "导出库存记录列表")
     @SaCheckPermission("wms:inventoryHistory:all")
     @Log(title = "库存记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -67,7 +62,6 @@ public class InventoryHistoryController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取库存记录详细信息")
     @SaCheckPermission("wms:inventoryHistory:all")
     @GetMapping("/{id}")
     public Result<InventoryHistoryVo> getInfo(@NotNull(message = "主键不能为空")
@@ -78,7 +72,6 @@ public class InventoryHistoryController extends BaseController {
     /**
      * 新增库存记录
      */
-    @Operation(summary = "新增库存记录")
     @SaCheckPermission("wms:inventoryHistory:all")
     @Log(title = "库存记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -91,7 +84,6 @@ public class InventoryHistoryController extends BaseController {
     /**
      * 修改库存记录
      */
-    @Operation(summary = "修改库存记录")
     @SaCheckPermission("wms:inventoryHistory:all")
     @Log(title = "库存记录", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -106,7 +98,6 @@ public class InventoryHistoryController extends BaseController {
      *
      * @param ids 主键串
      */
-    @Operation(summary = "删除库存记录")
     @SaCheckPermission("wms:inventoryHistory:all")
     @Log(title = "库存记录", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

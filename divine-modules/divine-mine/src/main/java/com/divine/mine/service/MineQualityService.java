@@ -1,0 +1,48 @@
+package com.divine.mine.service;
+
+import com.divine.common.mybatis.core.page.BasePage;
+import com.divine.common.mybatis.core.page.PageInfoRes;
+import com.divine.mine.domain.dto.MineQualityDto;
+import com.divine.mine.domain.vo.MineQualityVo;
+
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * 送货质量Service业务层处理
+ *
+ * @author yisl
+ * @date 2026-02-28
+ */
+public interface MineQualityService {
+
+    /**
+     * 查询送货质量
+     */
+    MineQualityVo queryById(Long id);
+
+    /**
+     * 查询送货质量列表
+     */
+    PageInfoRes<MineQualityVo> queryPageList(MineQualityDto dto, BasePage basePage);
+
+    /**
+     * 查询送货质量列表
+     */
+    List<MineQualityVo> queryList(MineQualityDto dto);
+
+    /**
+     * 新增送货质量
+     */
+    void insertByBo(MineQualityDto dto);
+
+    /**
+     * 修改送货质量
+     */
+    void updateByBo(MineQualityDto dto);
+
+    /**
+     * 批量删除送货质量
+     */
+    void deleteByIds(Collection<Long> ids);
+}

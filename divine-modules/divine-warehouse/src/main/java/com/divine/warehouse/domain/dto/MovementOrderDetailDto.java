@@ -6,7 +6,6 @@ import com.divine.warehouse.domain.entity.Inventory;
 import com.divine.warehouse.domain.entity.MovementOrderDetail;
 import io.github.linpeilie.annotations.AutoMapper;
 import io.github.linpeilie.annotations.AutoMappers;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,14 +28,12 @@ public class MovementOrderDetailDto extends BaseOrderDetailDto {
     /**
      * 源仓库
      */
-    @Schema(description = "源仓库")
     @NotNull(message = "源仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long sourceWarehouseId;
 
     /**
      * 目标仓库
      */
-    @Schema(description = "目标仓库")
     @NotNull(message = "目标仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long targetWarehouseId;
 

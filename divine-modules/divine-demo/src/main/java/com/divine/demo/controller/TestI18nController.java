@@ -2,8 +2,6 @@ package com.divine.demo.controller;
 
 import com.divine.common.core.domain.Result;
 import com.divine.common.core.utils.MessageUtils;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-@Tag(name = "测试国际化")
+/**
+ * 测试国际化
+ */
 @Validated
 @RestController
 @RequestMapping("/demo/i18n")
@@ -28,7 +28,6 @@ public class TestI18nController {
      *
      * @param code 国际化code
      */
-    @Operation(summary = "通过code获取国际化内容")
     @GetMapping()
     public Result<String> get(String code) {
         return Result.success(MessageUtils.message(code));
@@ -40,7 +39,6 @@ public class TestI18nController {
      * <p>
      * 测试使用 not.null
      */
-    @Operation(summary = "Validator 校验国际化")
     @GetMapping("/test1")
     public Result<String> test1(@NotBlank(message = "{not.null}") String str) {
         return Result.success(str);
@@ -52,7 +50,6 @@ public class TestI18nController {
      * <p>
      * 测试使用 not.null
      */
-    @Operation(summary = "Bean 校验国际化")
     @GetMapping("/test2")
     public Result<TestI18nBo> test2(@Validated TestI18nBo dto) {
         return Result.success(dto);

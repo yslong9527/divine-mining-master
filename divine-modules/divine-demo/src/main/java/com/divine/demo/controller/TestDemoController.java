@@ -20,8 +20,6 @@ import com.divine.common.log.enums.BusinessType;
 import com.divine.common.web.core.BaseController;
 import com.divine.demo.domain.dto.TestDemoImportDto;
 import com.divine.demo.service.ITestDemoService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -35,7 +33,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Tag(name = "测试单表Controller")
+/**
+ * 测试单表Controller
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -44,21 +44,36 @@ public class TestDemoController extends BaseController {
 
     private final ITestDemoService iTestDemoService;
 
-    @Operation(summary = "查询测试单表列表")
+    /**
+     * 查询测试单表列表
+     * @param dto
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("demo:demo:list")
     @GetMapping("/list")
     public PageInfoRes<TestDemoVo> list(@Validated(QueryGroup.class) TestDemoDto dto, BasePage basePage) {
         return iTestDemoService.queryPageList(dto, basePage);
     }
 
-    @Operation(summary = "自定义分页查询")
+    /**
+     * 自定义分页查询
+     * @param dto
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("demo:demo:list")
     @GetMapping("/page")
     public PageInfoRes<TestDemoVo> page(@Validated(QueryGroup.class) TestDemoDto dto, BasePage basePage) {
         return iTestDemoService.customPageList(dto, basePage);
     }
 
-    @Operation(summary = "导入数据")
+    /**
+     * 导入数据
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @Log(title = "测试单表", businessType = BusinessType.IMPORT)
     @SaCheckPermission("demo:demo:import")
     @PostMapping(value = "/importData", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -70,7 +85,11 @@ public class TestDemoController extends BaseController {
         return Result.success(excelResult.getAnalysis());
     }
 
-    @Operation(summary = "导出测试单表列表")
+    /**
+     * 导出测试单表列表
+     * @param dto
+     * @param response
+     */
     @SaCheckPermission("demo:demo:export")
     @Log(title = "测试单表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -83,7 +102,11 @@ public class TestDemoController extends BaseController {
         ExcelUtil.exportExcel(list, "测试单表", TestDemoVo.class, response);
     }
 
-    @Operation(summary = "获取测试单表详细信息")
+    /**
+     * 获取测试单表详细信息
+     * @param id
+     * @return
+     */
     @SaCheckPermission("demo:demo:query")
     @GetMapping("/{id}")
     public Result<TestDemoVo> getInfo(@NotNull(message = "主键不能为空")
@@ -91,7 +114,11 @@ public class TestDemoController extends BaseController {
         return Result.success(iTestDemoService.queryById(id));
     }
 
-    @Operation(summary = "新增测试单表")
+    /**
+     * 新增测试单表
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("demo:demo:add")
     @Log(title = "测试单表", businessType = BusinessType.INSERT)
     @RepeatSubmit(interval = 2, timeUnit = TimeUnit.SECONDS, message = "{repeat.submit.message}")
@@ -103,7 +130,11 @@ public class TestDemoController extends BaseController {
         return toAjax(iTestDemoService.insertByBo(dto));
     }
 
-    @Operation(summary = "修改测试单表")
+    /**
+     * 修改测试单表
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("demo:demo:edit")
     @Log(title = "测试单表", businessType = BusinessType.UPDATE)
     @RepeatSubmit
@@ -112,7 +143,11 @@ public class TestDemoController extends BaseController {
         return toAjax(iTestDemoService.updateByBo(dto));
     }
 
-    @Operation(summary = "删除测试单表")
+    /**
+     * 删除测试单表
+     * @param ids
+     * @return
+     */
     @SaCheckPermission("demo:demo:remove")
     @Log(title = "测试单表", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

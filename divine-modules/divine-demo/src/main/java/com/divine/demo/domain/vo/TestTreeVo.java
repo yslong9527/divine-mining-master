@@ -4,7 +4,6 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.divine.demo.domain.entity.TestTree;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.Date;
@@ -23,26 +22,38 @@ public class TestTreeVo {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "主键")
+    /**
+     * 主键
+     */
     private Long id;
 
-    @Schema(description = "父id")
+    /**
+     * 父id
+     */
     @ExcelProperty(value = "父id")
     private Long parentId;
 
-    @Schema(description = "部门id")
+    /**
+     * 部门id
+     */
     @ExcelProperty(value = "部门id")
     private Long deptId;
 
-    @Schema(description = "用户id")
+    /**
+     * 用户id
+     */
     @ExcelProperty(value = "用户id")
     private Long userId;
 
-    @Schema(description = "树节点名")
+    /**
+     * 树节点名
+     */
     @ExcelProperty(value = "树节点名")
     private String treeName;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @ExcelProperty(value = "创建时间")
     private Date createTime;
 

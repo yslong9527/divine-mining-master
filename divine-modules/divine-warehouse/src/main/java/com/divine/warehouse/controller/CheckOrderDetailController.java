@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.CheckOrderDetailVO;
 import com.divine.warehouse.service.CheckOrderDetailService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +29,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-08-13
  */
-@Tag(name = "库存盘点单据详情")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -43,7 +40,6 @@ public class CheckOrderDetailController extends BaseController {
     /**
      * 查询库存盘点单据详情列表
      */
-    @Operation(summary = "查询库存盘点单据详情列表")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/list")
     public PageInfoRes<CheckOrderDetailVO> list(CheckOrderDetailDto dto, BasePage basePage) {
@@ -53,7 +49,6 @@ public class CheckOrderDetailController extends BaseController {
     /**
      * 导出库存盘点单据详情列表
      */
-    @Operation(summary = "导出库存盘点单据详情列表")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据详情", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -67,7 +62,6 @@ public class CheckOrderDetailController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取库存盘点单据详情详细信息")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/{id}")
     public Result<CheckOrderDetailVO> getInfo(@NotNull(message = "主键不能为空")
@@ -78,7 +72,6 @@ public class CheckOrderDetailController extends BaseController {
     /**
      * 新增库存盘点单据详情
      */
-    @Operation(summary = "新增库存盘点单据详情")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据详情", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -91,7 +84,6 @@ public class CheckOrderDetailController extends BaseController {
     /**
      * 修改库存盘点单据详情
      */
-    @Operation(summary = "修改库存盘点单据详情")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据详情", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -106,7 +98,6 @@ public class CheckOrderDetailController extends BaseController {
      *
      * @param ids 主键串
      */
-    @Operation(summary = "删除库存盘点单据详情")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据详情", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
@@ -119,7 +110,6 @@ public class CheckOrderDetailController extends BaseController {
     /**
      * 根据盘库单id查询盘库单详情列表
      */
-    @Operation(summary = "根据盘库单id查询盘库单详情列表")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/list/{checkOrderId}")
     public Result<List<CheckOrderDetailVO>> listByCheckOrderId(@NotNull @PathVariable Long checkOrderId) {

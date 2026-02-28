@@ -11,8 +11,6 @@ import com.divine.common.log.enums.BusinessType;
 import com.divine.common.excel.utils.ExcelUtil;
 import com.divine.system.domain.vo.SysConfigVo;
 import com.divine.system.service.SysConfigService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "参数配置 信息操作处理")
+/**
+ * 参数配置 信息操作处理
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -29,14 +29,23 @@ public class SysConfigController extends BaseController {
 
     private final SysConfigService configService;
 
-    @Operation(summary = "获取参数配置列表")
+    /**
+     * 获取参数配置列表
+     * @param config
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("system:config:list")
     @GetMapping("/list")
     public PageInfoRes<SysConfigVo> list(SysConfigDto config, BasePage basePage) {
         return configService.selectPageConfigList(config, basePage);
     }
 
-    @Operation(summary = "导出参数配置列表")
+    /**
+     * 导出参数配置列表
+     * @param config
+     * @param response
+     */
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:config:export")
     @PostMapping("/export")
@@ -45,20 +54,32 @@ public class SysConfigController extends BaseController {
         ExcelUtil.exportExcel(list, "参数数据", SysConfigVo.class, response);
     }
 
-    @Operation(summary = "根据参数编号获取详细信息")
+    /**
+     * 根据参数编号获取详细信息
+     * @param configId
+     * @return
+     */
     @SaCheckPermission("system:config:query")
     @GetMapping(value = "/{configId}")
     public Result<SysConfigVo> getInfo(@PathVariable Long configId) {
         return Result.success(configService.selectConfigById(configId));
     }
 
-    @Operation(summary = "根据参数键名查询参数值")
+    /**
+     * 根据参数键名查询参数值
+     * @param configKey
+     * @return
+     */
     @GetMapping(value = "/configKey/{configKey}")
     public Result<String> getConfigKey(@PathVariable String configKey) {
         return Result.success(configService.selectConfigByKey(configKey));
     }
 
-    @Operation(summary = "新增参数配置")
+    /**
+     * 新增参数配置
+     * @param config
+     * @return
+     */
     @SaCheckPermission("system:config:add")
     @Log(title = "参数管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -70,7 +91,11 @@ public class SysConfigController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "修改参数配置")
+    /**
+     * 修改参数配置
+     * @param config
+     * @return
+     */
     @SaCheckPermission("system:config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -82,7 +107,11 @@ public class SysConfigController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "根据参数键名修改参数配置")
+    /**
+     * 根据参数键名修改参数配置
+     * @param config
+     * @return
+     */
     @SaCheckPermission("system:config:edit")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping("/updateByKey")
@@ -91,7 +120,11 @@ public class SysConfigController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "删除参数配置")
+    /**
+     * 删除参数配置
+     * @param configIds
+     * @return
+     */
     @SaCheckPermission("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{configIds}")
@@ -100,7 +133,10 @@ public class SysConfigController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "刷新参数缓存")
+    /**
+     * 刷新参数缓存
+     * @return
+     */
     @SaCheckPermission("system:config:remove")
     @Log(title = "参数管理", businessType = BusinessType.CLEAN)
     @DeleteMapping("/refreshCache")

@@ -5,7 +5,6 @@ import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
 import com.divine.demo.domain.entity.TestDemo;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,27 +23,39 @@ import jakarta.validation.constraints.NotNull;
 @AutoMapper(target = TestDemo.class)
 public class TestDemoDto extends BaseEntity {
 
-    @Schema(description = "主键")
+    /**
+     * 主键id
+     */
     @NotNull(message = "主键不能为空", groups = {EditGroup.class})
     private Long id;
 
-    @Schema(description = "部门id")
+    /**
+     * 部门id
+     */
     @NotNull(message = "部门id不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long deptId;
 
-    @Schema(description = "用户id")
+    /**
+     * 用户id
+     */
     @NotNull(message = "用户id不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long userId;
 
-    @Schema(description = "排序号")
+    /**
+     * 排序号
+     */
     @NotNull(message = "排序号不能为空", groups = {AddGroup.class, EditGroup.class})
     private Integer sort;
 
-    @Schema(description = "key键")
+    /**
+     * key键
+     */
     @NotBlank(message = "key键不能为空", groups = {AddGroup.class, EditGroup.class})
     private String testKey;
 
-    @Schema(description = "值")
+    /**
+     * 值
+     */
     @NotBlank(message = "值不能为空", groups = {AddGroup.class, EditGroup.class})
     private String value;
 

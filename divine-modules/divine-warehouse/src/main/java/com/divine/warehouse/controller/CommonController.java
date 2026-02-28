@@ -6,12 +6,9 @@ import com.divine.system.domain.vo.SysConfigVo;
 import com.divine.warehouse.enums.OptionTypeEnum;
 import com.divine.common.core.domain.vo.OptionVO;
 import com.divine.warehouse.service.CommonService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,17 +20,19 @@ import java.util.List;
  * @Description:
  * @Date: 2026/2/10 9:10
  */
-@Tag(name = "公共接口")
 @RequiredArgsConstructor
 @RestController
 public class CommonController {
 
-    @Autowired
-    private CommonService commonService;
+    private final CommonService commonService;
 
 
+    /**
+     * 获取下拉框
+     * @param type 下拉框类型
+     * @return
+     */
     @GetMapping("/getOption")
-    @Operation(summary = "获取下拉框")
     @SaCheckPermission("wms:common:all")
     public Result<List<OptionVO>> getOption(@RequestParam
                                             @Parameter(
@@ -44,9 +43,12 @@ public class CommonController {
         return Result.success(commonService.getOption(type.getCode()));
     }
 
-
+    /**
+     * 获取配置参数值
+     * @param keyName
+     * @return
+     */
     @GetMapping("/getConfigParam")
-    @Operation(summary = "获取配置参数值")
     @SaCheckPermission("wms:common:all")
     public Result<SysConfigVo> getConfigParam(@RequestParam String keyName) {
         return Result.success(commonService.getConfigParam(keyName));

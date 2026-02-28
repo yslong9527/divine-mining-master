@@ -11,8 +11,6 @@ import com.divine.common.core.utils.StringUtils;
 import com.divine.common.json.utils.JsonUtils;
 import com.divine.common.redis.utils.CacheUtils;
 import com.divine.common.redis.utils.RedisUtils;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -21,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 
-@Tag(name = "缓存监控")
+/**
+ * 缓存监控
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/monitor/cache")
@@ -42,7 +42,11 @@ public class CacheController {
         CACHES.add(new SysCache(CacheConstants.PWD_ERR_CNT_KEY, "密码错误次数"));
     }
 
-    @Operation(summary = "获取缓存监控列表")
+    /**
+     * 获取缓存监控列表
+     * @return
+     * @throws Exception
+     */
     @SaCheckPermission("monitor:cache:list")
     @GetMapping()
     public Result<Map<String, Object>> getInfo() throws Exception {
@@ -66,14 +70,21 @@ public class CacheController {
         ));
     }
 
-    @Operation(summary = "获取缓存监控缓存名列表")
+    /**
+     * 获取缓存监控缓存名列表
+     * @return
+     */
     @SaCheckPermission("monitor:cache:list")
     @GetMapping("/getNames")
     public Result<List<SysCache>> cache() {
         return Result.success(CACHES);
     }
 
-    @Operation(summary = "获取缓存监控Key列表")
+    /**
+     * 获取缓存监控Key列表
+     * @param cacheName
+     * @return
+     */
     @SaCheckPermission("monitor:cache:list")
     @GetMapping("/getKeys/{cacheName}")
     public Result<Collection<String>> getCacheKeys(@PathVariable String cacheName) {
@@ -89,7 +100,12 @@ public class CacheController {
         return Result.success(cacheKeys);
     }
 
-    @Operation(summary = "获取缓存监控缓存值详情")
+    /**
+     * 获取缓存监控缓存值详情
+     * @param cacheName
+     * @param cacheKey
+     * @return
+     */
     @SaCheckPermission("monitor:cache:list")
     @GetMapping("/getValue/{cacheName}/{cacheKey}")
     public Result<SysCache> getCacheValue(@PathVariable String cacheName, @PathVariable String cacheKey) {
@@ -103,7 +119,11 @@ public class CacheController {
         return Result.success(sysCache);
     }
 
-    @Operation(summary = "清理缓存监控缓存名")
+    /**
+     * 清理缓存监控缓存名
+     * @param cacheName
+     * @return
+     */
     @SaCheckPermission("monitor:cache:list")
     @DeleteMapping("/clearCacheName/{cacheName}")
     public Result<Void> clearCacheName(@PathVariable String cacheName) {
@@ -115,7 +135,12 @@ public class CacheController {
         return Result.success();
     }
 
-    @Operation(summary = "清理缓存监控Key")
+    /**
+     * 清理缓存监控Key
+     * @param cacheName
+     * @param cacheKey
+     * @return
+     */
     @SaCheckPermission("monitor:cache:list")
     @DeleteMapping("/clearCacheKey/{cacheName}/{cacheKey}")
     public Result<Void> clearCacheKey(@PathVariable String cacheName, @PathVariable String cacheKey) {
@@ -127,7 +152,10 @@ public class CacheController {
         return Result.success();
     }
 
-    @Operation(summary = "清理全部缓存监控")
+    /**
+     * 清理全部缓存监控
+     * @return
+     */
     @SaCheckPermission("monitor:cache:list")
     @DeleteMapping("/clearCacheAll")
     public Result<Void> clearCacheAll() {

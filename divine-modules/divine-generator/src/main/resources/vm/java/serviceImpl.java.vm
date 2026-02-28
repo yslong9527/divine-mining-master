@@ -4,7 +4,7 @@ import com.divine.common.core.utils.MapstructUtils;
     #if($table.crud || $table.sub)
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.mybatis.core.page.BasePage;
-    import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 #end
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -26,13 +26,14 @@ import java.util.Collection;
  */
 @RequiredArgsConstructor
 @Service
-public class ${ClassName}Service {
+public class ${ClassName}ServiceImpl implements ${ClassName}Service {
 
     private final ${ClassName}Mapper ${className}Mapper;
 
     /**
      * 查询${functionName}
      */
+    @Override
     public ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField}){
         return ${className}Mapper.selectVoById(${pkColumn.javaField});
     }
@@ -41,6 +42,7 @@ public class ${ClassName}Service {
     /**
      * 查询${functionName}列表
      */
+    @Override
     public PageInfoRes<${ClassName}Vo> queryPageList(${ClassName}Dto dto, BasePage basePage) {
         LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(dto);
         Page<${ClassName}Vo> result = ${className}Mapper.selectVoPage(basePage.build(), lqw);
@@ -51,13 +53,13 @@ public class ${ClassName}Service {
     /**
      * 查询${functionName}列表
      */
+    @Override
     public List<${ClassName}Vo> queryList(${ClassName}Dto dto) {
         LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(dto);
         return ${className}Mapper.selectVoList(lqw);
     }
 
     private LambdaQueryWrapper<${ClassName}> buildQueryWrapper(${ClassName}Dto dto) {
-        Map<String, Object> params = dto.getParams();
         LambdaQueryWrapper<${ClassName}> lqw = Wrappers.lambdaQuery();
 #foreach($column in $columns)
 #if($column.query)
@@ -86,6 +88,7 @@ public class ${ClassName}Service {
     /**
      * 新增${functionName}
      */
+    @Override
     public void insertByBo(${ClassName}Dto dto) {
         ${ClassName} add = MapstructUtils.convert(dto, ${ClassName}.class);
         ${className}Mapper.insert(add);
@@ -94,6 +97,7 @@ public class ${ClassName}Service {
     /**
      * 修改${functionName}
      */
+    @Override
     public void updateByBo(${ClassName}Dto dto) {
         ${ClassName} update = MapstructUtils.convert(dto, ${ClassName}.class);
         ${className}Mapper.updateById(update);
@@ -102,6 +106,7 @@ public class ${ClassName}Service {
     /**
      * 批量删除${functionName}
      */
+    @Override
     public void deleteByIds(Collection<${pkColumn.javaType}> ids) {
         ${className}Mapper.deleteBatchIds(ids);
     }

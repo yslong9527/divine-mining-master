@@ -1,0 +1,108 @@
+package com.divine.mine.controller;
+
+import java.util.List;
+
+import com.divine.common.core.domain.Result;
+import com.divine.common.excel.utils.ExcelUtil;
+import com.divine.common.idempotent.annotation.RepeatSubmit;
+import com.divine.common.mybatis.core.page.BasePage;
+import com.divine.common.mybatis.core.page.PageInfoRes;
+import com.divine.mine.domain.dto.MineQualityDto;
+import com.divine.mine.domain.vo.MineQualityVo;
+import com.divine.mine.service.MineQualityService;
+import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.*;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import com.divine.common.log.annotation.Log;
+import com.divine.common.web.core.BaseController;
+import com.divine.common.core.validate.AddGroup;
+import com.divine.common.core.validate.EditGroup;
+import com.divine.common.log.enums.BusinessType;
+
+/**
+ * 送货质量
+ *
+ * @author yisl
+ * @date 2026-02-28
+ */
+@Validated
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/wms/quality")
+public class MineQualityController extends BaseController {
+
+    private final MineQualityService mineQualityService;
+
+    /**
+     * 查询送货质量列表
+     */
+    @SaCheckPermission("wms:quality:list")
+    @GetMapping("/list")
+    public PageInfoRes<MineQualityVo> list(MineQualityDto dto, BasePage basePage) {
+        return mineQualityService.queryPageList(dto, basePage);
+    }
+
+    /**
+     * 导出送货质量列表
+     */
+    @SaCheckPermission("wms:quality:export")
+    @Log(title = "送货质量", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(MineQualityDto dto, HttpServletResponse response) {
+        List<MineQualityVo> list = mineQualityService.queryList(dto);
+        ExcelUtil.exportExcel(list, "送货质量", MineQualityVo.class, response);
+    }
+
+    /**
+     * 获取送货质量详细信息
+     *
+     * @param id 主键
+     */
+    @SaCheckPermission("wms:quality:query")
+    @GetMapping("/{id}")
+    public Result<MineQualityVo> getInfo(@NotNull(message = "主键不能为空")
+                                     @PathVariable Long id) {
+        return Result.success(mineQualityService.queryById(id));
+    }
+
+    /**
+     * 新增送货质量
+     */
+    @SaCheckPermission("wms:quality:add")
+    @Log(title = "送货质量", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping()
+    public Result<Void> add(@Validated(AddGroup.class) @RequestBody MineQualityDto dto) {
+        mineQualityService.insertByBo(dto);
+        return Result.success();
+    }
+
+    /**
+     * 修改送货质量
+     */
+    @SaCheckPermission("wms:quality:edit")
+    @Log(title = "送货质量", businessType = BusinessType.UPDATE)
+    @RepeatSubmit()
+    @PutMapping()
+    public Result<Void> edit(@Validated(EditGroup.class) @RequestBody MineQualityDto dto) {
+        mineQualityService.updateByBo(dto);
+        return Result.success();
+    }
+
+    /**
+     * 删除送货质量
+     *
+     * @param ids 主键串
+     */
+    @SaCheckPermission("wms:quality:remove")
+    @Log(title = "送货质量", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{ids}")
+    public Result<Void> remove(@NotEmpty(message = "主键不能为空")
+                          @PathVariable Long[] ids) {
+        mineQualityService.deleteByIds(List.of(ids));
+        return Result.success();
+    }
+}

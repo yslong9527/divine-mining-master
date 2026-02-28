@@ -4,7 +4,6 @@ import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
 import com.divine.warehouse.domain.entity.ReceiptOrder;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,18 +20,25 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = ReceiptOrder.class, reverseConvertGenerate = false)
 public class ReceiptOrderDto extends BaseOrderDto<ReceiptOrderDetailDto> {
 
-
-    @Schema(description = "入库类型")
+    /**
+     * 入库类型(0:采购入库,1:归还入库)
+     */
     @NotNull(message = "入库类型不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long optType;
 
-    @Schema(description = "第三方订单号")
+    /**
+     * 第三方订单号
+     */
     private String bizOrderNo;
 
-    @Schema(description = "对接商户")
+    /**
+     * 对接商户
+     */
     private Long merchantId;
 
-    @Schema(description = "仓库id")
+    /**
+     * 仓库id
+     */
     @NotNull(message = "仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long warehouseId;
 

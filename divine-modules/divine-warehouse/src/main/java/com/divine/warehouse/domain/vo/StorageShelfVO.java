@@ -1,6 +1,5 @@
 package com.divine.warehouse.domain.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -11,13 +10,19 @@ import lombok.Data;
 @Data
 public class StorageShelfVO {
 
-    @Schema(description = "id(删除货架时传这个id)")
+    /**
+     * id(删除货架时传这个id)
+     */
     private Long id;
 
-    @Schema(description = "库存数量")
+    /**
+     * 库存数量
+     */
     private Long quantity;
 
-    @Schema(description = "货架")
+    /**
+     * 货架
+     */
     private String storageShelf;
 
 }

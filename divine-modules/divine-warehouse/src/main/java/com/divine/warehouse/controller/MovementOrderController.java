@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.MovementOrderVo;
 import com.divine.warehouse.service.MovementOrderService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-08-09
  */
-@Tag(name = "移库单")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +39,6 @@ public class MovementOrderController extends BaseController {
     /**
      * 查询移库单列表
      */
-    @Operation(summary = "查询移库单列表")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/list")
     public PageInfoRes<MovementOrderVo> list(MovementOrderDto dto, BasePage basePage) {
@@ -52,7 +48,6 @@ public class MovementOrderController extends BaseController {
     /**
      * 导出移库单列表
      */
-    @Operation(summary = "导出移库单列表")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "移库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -66,7 +61,6 @@ public class MovementOrderController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取移库单详细信息")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/{id}")
     public Result<MovementOrderVo> getInfo(@NotNull(message = "主键不能为空")
@@ -77,7 +71,6 @@ public class MovementOrderController extends BaseController {
     /**
      * 新增移库单
      */
-    @Operation(summary = "新增移库单")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "移库单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -90,7 +83,6 @@ public class MovementOrderController extends BaseController {
     /**
      * 修改移库单
      */
-    @Operation(summary = "修改移库单")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "移库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -103,7 +95,6 @@ public class MovementOrderController extends BaseController {
     /**
      * 移库
      */
-    @Operation(summary = "移库")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "移库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -118,7 +109,6 @@ public class MovementOrderController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除移库单")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "移库单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")

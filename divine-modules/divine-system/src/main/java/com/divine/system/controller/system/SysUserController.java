@@ -30,8 +30,6 @@ import com.divine.system.domain.vo.SysUserExportVo;
 import com.divine.system.domain.vo.SysUserImportVo;
 import com.divine.system.domain.vo.SysUserVo;
 import com.divine.system.listener.SysUserImportListener;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +43,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-@Tag(name = "用户信息")
+/**
+ * 用户信息
+ *
+ * @author yisl
+ * @date 2024-07-19
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -60,14 +62,23 @@ public class SysUserController extends BaseController {
     private final SysDeptService deptService;
 
 
-    @Operation(summary = "获取用户列表")
+    /**
+     * 获取用户列表
+     * @param user
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("system:user:list")
     @GetMapping("/list")
     public PageInfoRes<SysUserVo> list(SysUserDto user, BasePage basePage) {
         return userService.selectPageUserList(user, basePage);
     }
 
-    @Operation(summary = "导出用户列表")
+    /**
+     * 导出用户列表
+     * @param user
+     * @param response
+     */
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:user:export")
     @PostMapping("/export")
@@ -82,7 +93,6 @@ public class SysUserController extends BaseController {
      * @param file          导入文件
      * @param updateSupport 是否更新已存在数据
      */
-    @Operation(summary = "导入数据")
     @Log(title = "用户管理", businessType = BusinessType.IMPORT)
     @SaCheckPermission("system:user:import")
     @PostMapping(value = "/importData", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -91,7 +101,10 @@ public class SysUserController extends BaseController {
         return Result.success(result.getAnalysis());
     }
 
-    @Operation(summary = "获取导入模板")
+    /**
+     * 获取导入模板
+     * @param response
+     */
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
         ExcelUtil.exportExcel(new ArrayList<>(), "用户数据", SysUserImportVo.class, response);
@@ -102,7 +115,6 @@ public class SysUserController extends BaseController {
      *
      * @param userId 用户ID
      */
-    @Operation(summary = "根据用户编号获取详细信息")
     @SaCheckPermission("system:user:query")
     @GetMapping(value = {"/", "/{userId}"})
     public Result<Map<String, Object>> getInfo(@PathVariable(value = "userId", required = false) Long userId) {
@@ -124,7 +136,11 @@ public class SysUserController extends BaseController {
         return Result.success(ajax);
     }
 
-    @Operation(summary = "新增用户")
+    /**
+     * 新增用户
+     * @param user
+     * @return
+     */
     @SaCheckPermission("system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -145,8 +161,11 @@ public class SysUserController extends BaseController {
         System.out.println(BCrypt.hashpw("123456"));
     }
 
-
-    @Operation(summary = "修改用户")
+    /**
+     * 修改用户
+     * @param user
+     * @return
+     */
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -169,7 +188,6 @@ public class SysUserController extends BaseController {
      *
      * @param userIds 角色ID串
      */
-    @Operation(summary = "删除用户")
     @SaCheckPermission("system:user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
@@ -180,7 +198,6 @@ public class SysUserController extends BaseController {
         return toAjax(userService.deleteUserByIds(userIds));
     }
 
-    @Operation(summary = "重置密码")
     @SaCheckPermission("system:user:resetPwd")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
@@ -194,7 +211,11 @@ public class SysUserController extends BaseController {
         return toAjax(userService.resetUserPwd(user.getUserId(), user.getPassword()));
     }
 
-    @Operation(summary = "状态修改")
+    /**
+     * 状态修改
+     * @param user
+     * @return
+     */
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
@@ -209,7 +230,6 @@ public class SysUserController extends BaseController {
      *
      * @param userId 用户ID
      */
-    @Operation(summary = "根据用户编号获取授权角色")
     @SaCheckPermission("system:user:query")
     @GetMapping("/authRole/{userId}")
     public Result<Map<String, Object>> authRole(@PathVariable Long userId) {
@@ -227,7 +247,6 @@ public class SysUserController extends BaseController {
      * @param userId  用户Id
      * @param roleIds 角色ID串
      */
-    @Operation(summary = "用户授权角色")
     @SaCheckPermission("system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.GRANT)
     @PutMapping("/authRole")
@@ -237,7 +256,11 @@ public class SysUserController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "获取部门树列表")
+    /**
+     * 获取部门树列表
+     * @param dept
+     * @return
+     */
     @SaCheckPermission("system:user:list")
     @GetMapping("/deptTree")
     public Result<List<Tree<Long>>> deptTree(SysDeptDto dept) {

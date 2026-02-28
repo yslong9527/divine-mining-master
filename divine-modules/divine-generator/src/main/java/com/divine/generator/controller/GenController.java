@@ -12,8 +12,6 @@ import com.divine.common.web.core.BaseController;
 import com.divine.generator.domain.GenTable;
 import com.divine.generator.domain.GenTableColumn;
 import com.divine.generator.service.IGenTableService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +27,6 @@ import java.util.Map;
  *
  * @author Lion Li
  */
-@Tag(name = "代码生成")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -41,7 +38,6 @@ public class GenController extends BaseController {
     /**
      * 查询代码生成列表
      */
-    @Operation(summary = "查询代码生成列表")
     @SaCheckPermission("tool:gen:list")
     @GetMapping("/list")
     public PageInfoRes<GenTable> genList(GenTable genTable, BasePage basePage) {
@@ -53,7 +49,6 @@ public class GenController extends BaseController {
      *
      * @param tableId 表ID
      */
-    @Operation(summary = "修改代码生成业务")
     @SaCheckPermission("tool:gen:query")
     @GetMapping(value = "/{tableId}")
     public Result<Map<String, Object>> getInfo(@PathVariable Long tableId) {
@@ -70,7 +65,6 @@ public class GenController extends BaseController {
     /**
      * 查询数据库列表
      */
-    @Operation(summary = "查询数据库列表")
     @SaCheckPermission("tool:gen:list")
     @GetMapping("/db/list")
     public PageInfoRes<GenTable> dataList(GenTable genTable, BasePage basePage) {
@@ -82,7 +76,6 @@ public class GenController extends BaseController {
      *
      * @param tableId 表ID
      */
-    @Operation(summary = "查询数据表字段列表")
     @SaCheckPermission("tool:gen:list")
     @GetMapping(value = "/column/{tableId}")
     public PageInfoRes<GenTableColumn> columnList(@PathVariable("tableId") Long tableId) {
@@ -98,7 +91,6 @@ public class GenController extends BaseController {
      *
      * @param tables 表名串
      */
-    @Operation(summary = "导入表结构（保存）")
     @SaCheckPermission("tool:gen:import")
     @Log(title = "代码生成", businessType = BusinessType.IMPORT)
     @PostMapping("/importTable")
@@ -113,7 +105,6 @@ public class GenController extends BaseController {
     /**
      * 修改保存代码生成业务
      */
-    @Operation(summary = "修改保存代码生成业务")
     @SaCheckPermission("tool:gen:edit")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -128,7 +119,6 @@ public class GenController extends BaseController {
      *
      * @param tableIds 表ID串
      */
-    @Operation(summary = "删除代码生成")
     @SaCheckPermission("tool:gen:remove")
     @Log(title = "代码生成", businessType = BusinessType.DELETE)
     @DeleteMapping("/{tableIds}")
@@ -142,7 +132,6 @@ public class GenController extends BaseController {
      *
      * @param tableId 表ID
      */
-    @Operation(summary = "预览代码")
     @SaCheckPermission("tool:gen:preview")
     @GetMapping("/preview/{tableId}")
     public Result<Map<String, String>> preview(@PathVariable("tableId") Long tableId) throws IOException {
@@ -155,7 +144,6 @@ public class GenController extends BaseController {
      *
      * @param tableName 表名
      */
-    @Operation(summary = "生成代码（下载方式）")
     @SaCheckPermission("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/download/{tableName}")
@@ -169,7 +157,6 @@ public class GenController extends BaseController {
      *
      * @param tableName 表名
      */
-    @Operation(summary = "生成代码（自定义路径）")
     @SaCheckPermission("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/genCode/{tableName}")
@@ -183,7 +170,6 @@ public class GenController extends BaseController {
      *
      * @param tableName 表名
      */
-    @Operation(summary = "同步数据库")
     @SaCheckPermission("tool:gen:edit")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
     @GetMapping("/synchDb/{tableName}")
@@ -197,7 +183,6 @@ public class GenController extends BaseController {
      *
      * @param tables 表名串
      */
-    @Operation(summary = "批量生成代码")
     @SaCheckPermission("tool:gen:code")
     @Log(title = "代码生成", businessType = BusinessType.GENCODE)
     @GetMapping("/batchGenCode")

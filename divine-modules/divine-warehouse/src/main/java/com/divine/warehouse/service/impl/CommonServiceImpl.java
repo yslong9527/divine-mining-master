@@ -30,8 +30,7 @@ import java.util.List;
 @Service
 public class CommonServiceImpl implements CommonService {
 
-    @Autowired
-    private SysConfigMapper configMapper;
+    private final SysConfigMapper configMapper;
 
     private static final DateTimeFormatter DATE_FORMATTER =
         DateTimeFormatter.ofPattern("yyyyMMdd");

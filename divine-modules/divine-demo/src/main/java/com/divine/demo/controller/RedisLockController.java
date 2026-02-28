@@ -6,8 +6,6 @@ import com.baomidou.lock.annotation.Lock4j;
 import com.baomidou.lock.executor.RedissonLockExecutor;
 import com.divine.common.core.domain.Result;
 import com.divine.common.core.exception.base.BusinessException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalTime;
 
-@Tag(name = "测试分布式锁的样例")
+/**
+ * 测试分布式锁的样例
+ */
 @Slf4j
 @RestController
 @RequestMapping("/demo/redisLock")
@@ -25,7 +25,12 @@ public class RedisLockController {
     @Autowired
     private LockTemplate lockTemplate;
 
-    @Operation(summary = "测试lock4j注解")
+    /**
+     * 测试lock4j注解
+     * @param key
+     * @param value
+     * @return
+     */
     @Lock4j(keys = {"#key"})
     @GetMapping("/testLock4j")
     public Result<String> testLock4j(String key, String value) {
@@ -39,7 +44,12 @@ public class RedisLockController {
         return Result.success("操作成功", value);
     }
 
-    @Operation(summary = "测试lock4j工具")
+    /**
+     * 测试lock4j工具
+     * @param key
+     * @param value
+     * @return
+     */
     @GetMapping("/testLock4jLockTemplate")
     public Result<String> testLock4jLockTemplate(String key, String value) {
         final LockInfo lockInfo = lockTemplate.lock(key, 30000L, 5000L, RedissonLockExecutor.class);

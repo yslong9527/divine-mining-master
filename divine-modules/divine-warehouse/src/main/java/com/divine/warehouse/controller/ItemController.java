@@ -13,8 +13,6 @@ import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.ItemVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +21,12 @@ import org.springframework.web.bind.annotation.*;
 import com.divine.warehouse.service.ItemService;
 
 import java.util.List;
-
-@Tag(name = "物品列表")
+/**
+ * 物品列表
+ *
+ * @author yisl
+ * @date 2024-07-19
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +38,6 @@ public class ItemController extends BaseController {
     /**
      * 查询物料列表
      */
-    @Operation(summary = "查询物料列表")
     @GetMapping("/list")
     @SaCheckPermission("wms:item:list")
     public PageInfoRes<ItemVo> list(ItemDto dto, BasePage basePage) {
@@ -46,7 +47,6 @@ public class ItemController extends BaseController {
     /**
      * 查询物料列表
      */
-    @Operation(summary = "查询物料列表")
     @GetMapping("/listNoPage")
     @SaCheckPermission("wms:item:list")
     public Result<List<ItemVo>> list(ItemDto dto) {
@@ -56,7 +56,6 @@ public class ItemController extends BaseController {
     /**
      * 导出物料列表
      */
-    @Operation(summary = "导出物料列表")
     @Log(title = "物料", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @SaCheckPermission("wms:item:list")
@@ -70,7 +69,6 @@ public class ItemController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取物料详细信息")
     @GetMapping("/{id}")
     @SaCheckPermission("wms:item:list")
     public Result<ItemVo> getInfo(@NotNull(message = "主键不能为空")
@@ -81,7 +79,6 @@ public class ItemController extends BaseController {
     /**
      * 新增物料
      */
-    @Operation(summary = "新增物料")
     @Log(title = "物料", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -93,7 +90,6 @@ public class ItemController extends BaseController {
     /**
      * 修改物料
      */
-    @Operation(summary = "修改物料")
     @Log(title = "物料", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -108,7 +104,6 @@ public class ItemController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除物料")
     @Log(title = "物料", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     @SaCheckPermission("wms:item:edit")

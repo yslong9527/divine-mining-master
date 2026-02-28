@@ -4,7 +4,6 @@ import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
 import com.divine.warehouse.domain.entity.CheckOrder;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +22,6 @@ public class CheckOrderDto extends BaseOrderDto<CheckOrderDetailDto> {
     /**
      * 仓库id
      */
-    @Schema(description = "仓库id")
     @NotNull(message = "仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long warehouseId;
 }

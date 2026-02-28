@@ -1,0 +1,113 @@
+package com.divine.mine.domain.vo;
+
+import java.util.Date;
+
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.divine.mine.domain.entity.MineWeighting;
+import lombok.Data;
+import io.github.linpeilie.annotations.AutoMapper;
+
+import java.io.Serializable;
+import java.io.Serial;
+
+/**
+ * 过磅记录视图对象 mine_weighting
+ *
+ * @author yisl
+ * @date 2026-02-28
+ */
+@Data
+@ExcelIgnoreUnannotated
+@AutoMapper(target = MineWeighting.class)
+public class MineWeightingVo implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * id
+     */
+    @ExcelProperty(value = "id")
+    private Long id;
+
+    /**
+     * 车牌号
+     */
+    @ExcelProperty(value = "车牌号")
+    private String carNumber;
+
+    /**
+     * 过磅单编号
+     */
+    @ExcelProperty(value = "过磅单编号")
+    private String weighingNo;
+
+    /**
+     * 商品名称
+     */
+    @ExcelProperty(value = "商品名称")
+    private String goodsName;
+
+    /**
+     * 发货单位
+     */
+    @ExcelProperty(value = "发货单位")
+    private Long shipMerchantId;
+
+    /**
+     * 发货日期
+     */
+    @ExcelProperty(value = "发货日期")
+    private Date shipTime;
+
+    /**
+     * 发货地址
+     */
+    @ExcelProperty(value = "发货地址")
+    private String shipAddress;
+
+    /**
+     * 收货单位
+     */
+    @ExcelProperty(value = "收货单位")
+    private String deliveryMerchant;
+
+    /**
+     * 收货日期
+     */
+    @ExcelProperty(value = "收货日期")
+    private Date deliveryTime;
+
+    /**
+     * 过磅状态(0:已过磅,1:已回磅)
+     */
+    @ExcelProperty(value = "过磅状态(0:已过磅,1:已回磅)")
+    private String weighingStatus;
+
+    /**
+     * 总重
+     */
+    @ExcelProperty(value = "总重")
+    private Long totalWeight;
+
+    /**
+     * 皮重
+     */
+    @ExcelProperty(value = "皮重")
+    private Long tareWeight;
+
+    /**
+     * 净重
+     */
+    @ExcelProperty(value = "净重")
+    private Long netWeight;
+
+    /**
+     * 备注
+     */
+    @ExcelProperty(value = "备注")
+    private String remark;
+
+
+}

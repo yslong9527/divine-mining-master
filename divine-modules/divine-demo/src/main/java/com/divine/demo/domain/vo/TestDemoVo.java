@@ -4,7 +4,6 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.divine.demo.domain.entity.TestDemo;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.Date;
@@ -23,43 +22,63 @@ public class TestDemoVo {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "主键")
+    /**
+     * id
+     */
     @ExcelProperty(value = "主键")
     private Long id;
 
-    @Schema(description = "部门id")
+    /**
+     * 部门id
+     */
     @ExcelProperty(value = "部门id")
     private Long deptId;
 
-    @Schema(description = "用户id")
+    /**
+     * 用户id
+     */
     @ExcelProperty(value = "用户id")
     private Long userId;
 
-    @Schema(description = "排序号")
+    /**
+     * 排序号
+     */
     @ExcelProperty(value = "排序号")
     private Integer sort;
 
-    @Schema(description = "key键")
+    /**
+     * key键
+     */
     @ExcelProperty(value = "key键")
     private String testKey;
 
-    @Schema(description = "值")
+    /**
+     * 值
+     */
     @ExcelProperty(value = "值")
     private String value;
 
-    @Schema(description = "创建时间")
+    /**
+     * 创建时间
+     */
     @ExcelProperty(value = "创建时间")
     private Date createTime;
 
-    @Schema(description = "创建人")
+    /**
+     * 创建人
+     */
     @ExcelProperty(value = "创建人")
     private String createBy;
 
-    @Schema(description = "更新时间")
+    /**
+     * 更新时间
+     */
     @ExcelProperty(value = "更新时间")
     private Date updateTime;
 
-    @Schema(description = "更新人")
+    /**
+     * 更新人
+     */
     @ExcelProperty(value = "更新人")
     private String updateBy;
 

@@ -16,8 +16,6 @@ import com.divine.system.domain.dto.SysQueryFileDto;
 import com.divine.system.domain.vo.SysFileVo;
 import com.divine.system.domain.vo.UploadFileVO;
 import com.divine.system.service.SysFileService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +28,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-@Tag(name = "文件上传")
+/**
+ * 文件上传
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -39,14 +39,23 @@ public class SysFileController extends BaseController {
 
     private final SysFileService sysSssService;
 
-    @Operation(summary = "获取文件列表")
+    /**
+     * 获取文件列表
+     * @param dto
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("system:oss:list")
     @GetMapping("/list")
     public PageInfoRes<SysFileVo> list(@Validated(QueryGroup.class) SysQueryFileDto dto, BasePage basePage) {
         return sysSssService.queryPageList(dto, basePage);
     }
 
-    @Operation(summary = "获取文件详情")
+    /**
+     * 获取文件详情
+     * @param ossIds
+     * @return
+     */
     @SaCheckPermission("system:oss:list")
     @GetMapping("/listByIds/{ossIds}")
     public Result<List<SysFileVo>> listByIds(@NotEmpty(message = "主键不能为空")
@@ -55,7 +64,11 @@ public class SysFileController extends BaseController {
         return Result.success(list);
     }
 
-    @Operation(summary = "上传文件")
+    /**
+     * 上传文件
+     * @param file
+     * @return
+     */
     @SaCheckPermission("system:oss:upload")
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -66,7 +79,11 @@ public class SysFileController extends BaseController {
         return Result.success(sysSssService.upload(file));
     }
 
-    @Operation(summary = "保存文件信息")
+    /**
+     * 保存文件信息
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("system:oss:save")
     @Log(title = "OSS对象存储", businessType = BusinessType.INSERT)
     @PostMapping(value = "/save")
@@ -75,14 +92,23 @@ public class SysFileController extends BaseController {
         return Result.success(true);
     }
 
-    @Operation(summary = "下载文件")
+    /**
+     * 下载文件
+     * @param ossId
+     * @param response
+     * @throws IOException
+     */
     @SaCheckPermission("system:oss:download")
     @GetMapping("/download/{ossId}")
     public void download(@PathVariable Long ossId, HttpServletResponse response) throws IOException {
         sysSssService.download(ossId,response);
     }
 
-    @Operation(summary = "删除文件")
+    /**
+     * 删除文件
+     * @param ossIds
+     * @return
+     */
     @SaCheckPermission("system:oss:remove")
     @Log(title = "OSS对象存储", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ossIds}")

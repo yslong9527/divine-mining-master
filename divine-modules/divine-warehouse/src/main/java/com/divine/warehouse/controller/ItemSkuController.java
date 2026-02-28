@@ -15,8 +15,6 @@ import com.divine.warehouse.domain.dto.ItemSkuDto;
 import com.divine.warehouse.domain.vo.ItemSkuMapVo;
 import com.divine.warehouse.domain.vo.ItemSkuVo;
 import com.divine.warehouse.service.ItemSkuService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +22,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-@Tag(name = "物品sku")
+/**
+ * sku管理
+ *
+ * @author yisl
+ * @date 2024-07-19
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -37,7 +39,6 @@ public class ItemSkuController extends BaseController {
     /**
      * 查询sku信息列表
      */
-    @Operation(summary = "查询sku信息列表")
     @GetMapping("/list")
     @SaCheckPermission("wms:item:list")
     public PageInfoRes<ItemSkuMapVo> list(ItemSkuDto dto, BasePage basePage) {
@@ -46,7 +47,6 @@ public class ItemSkuController extends BaseController {
     /**
      * 查询sku信息列表
      */
-    @Operation(summary = "查询sku信息列表")
     @GetMapping("/listNoPage")
     @SaCheckPermission("wms:item:list")
     public Result<List<ItemSkuVo>> list(ItemSkuDto dto) {
@@ -56,7 +56,6 @@ public class ItemSkuController extends BaseController {
     /**
      * 导出sku信息列表
      */
-    @Operation(summary = "导出sku信息列表")
     @Log(title = "sku信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @SaCheckPermission("wms:item:list")
@@ -70,7 +69,6 @@ public class ItemSkuController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取sku信息详细信息")
     @GetMapping("/{id}")
     @SaCheckPermission("wms:item:list")
     public Result<ItemSkuVo> getInfo(@NotNull(message = "主键不能为空")
@@ -81,7 +79,6 @@ public class ItemSkuController extends BaseController {
     /**
      * 新增sku信息
      */
-    @Operation(summary = "新增sku信息")
     @Log(title = "sku信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
@@ -93,7 +90,6 @@ public class ItemSkuController extends BaseController {
     /**
      * 修改sku信息
      */
-    @Operation(summary = "修改sku信息")
     @Log(title = "sku信息", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
@@ -107,7 +103,6 @@ public class ItemSkuController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除sku信息")
     @Log(title = "sku信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     @SaCheckPermission("wms:item:edit")

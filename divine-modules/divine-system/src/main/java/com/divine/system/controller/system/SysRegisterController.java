@@ -6,15 +6,18 @@ import com.divine.common.web.core.BaseController;
 import com.divine.common.core.domain.dto.RegisterBody;
 import com.divine.system.service.SysConfigService;
 import com.divine.system.service.SysRegisterService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "注册验证")
+/**
+ * 注册验证
+ *
+ * @author yisl
+ * @date 2024-07-19
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -26,7 +29,6 @@ public class SysRegisterController extends BaseController {
     /**
      * 用户注册
      */
-    @Operation(summary = "用户注册")
     @SaIgnore
     @PostMapping("/register")
     public Result<Void> register(@Validated @RequestBody RegisterBody user) {

@@ -5,7 +5,6 @@ import com.divine.common.core.validate.EditGroup;
 import com.divine.common.mybatis.core.domain.BaseEntity;
 import com.divine.warehouse.domain.entity.Inventory;
 import io.github.linpeilie.annotations.AutoMapper;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,43 +23,67 @@ import java.math.BigDecimal;
 @AutoMapper(target = Inventory.class, reverseConvertGenerate = false)
 public class InventoryDto extends BaseEntity {
 
-    @Schema(description = "id")
+    /**
+     * id
+     */
     @NotNull(message = "id不能为空", groups = { EditGroup.class })
     private Long id;
 
-    @Schema(description = "规格ID")
+    /**
+     * 规格ID
+     */
     @NotNull(message = "规格ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long skuId;
 
-    @Schema(description = "所属仓库")
+    /**
+     * 所属仓库
+     */
     @NotNull(message = "所属仓库不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long warehouseId;
 
-    @Schema(description = "库存")
+    /**
+     * 库存
+     */
     @NotNull(message = "库存不能为空", groups = { AddGroup.class, EditGroup.class })
     private BigDecimal quantity;
 
-    @Schema(description = "备注")
+    /**
+     * 备注
+     */
     private String remark;
 
-    @Schema(description = "最大数量")
+    /**
+     * 最大数量
+     */
     private Long maxQuantity;
 
-    @Schema(description = "物品名称")
+    /**
+     * 物品名称
+     */
     private String itemName;
 
-    @Schema(description = "物品编号")
+    /**
+     * 物品编号
+     */
     private String itemNo;
 
-    @Schema(description = "规格名称")
+    /**
+     * 规格名称
+     */
     private String skuName;
 
-    @Schema(description = "规格编号")
+    /**
+     * 规格编号
+     */
     private String skuNo;
 
-    @Schema(description = "物品id")
+    /**
+     * 物品id
+     */
     private Long itemId;
 
-    @Schema(description = "itemCategory")
+    /**
+     * 类别
+     */
     private Long itemCategory;
 }

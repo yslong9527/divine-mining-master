@@ -14,8 +14,6 @@ import com.divine.common.core.utils.reflect.ReflectUtils;
 import com.divine.common.redis.utils.RedisUtils;
 import com.divine.common.web.config.properties.CaptchaProperties;
 import com.divine.common.web.enums.CaptchaType;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +32,9 @@ import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Tag(name = "验证码操作处理")
+/**
+ * 验证码操作处理
+ */
 @SaIgnore
 @Slf4j
 @Validated
@@ -44,7 +44,11 @@ public class CaptchaController {
 
     private final CaptchaProperties captchaProperties;
 
-    @Operation(summary = "短信验证码")
+    /**
+     * 短信验证码
+     * @param phonenumber
+     * @return
+     */
     @GetMapping("/captchaSms")
     public Result<Void> smsCaptcha(@NotBlank(message = "{user.phonenumber.not.blank}") String phonenumber) {
         String key = CacheConstants.CAPTCHA_CODE_KEY + phonenumber;
@@ -63,7 +67,10 @@ public class CaptchaController {
         return Result.success();
     }
 
-    @Operation(summary = "生成验证码")
+    /**
+     * 生成验证码
+     * @return
+     */
     @GetMapping("/captchaImage")
     public Result<Map<String, Object>> getCode() {
         boolean captchaEnabled = captchaProperties.getEnable();

@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.BoardListVO;
 import com.divine.warehouse.domain.vo.InventoryVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -32,7 +30,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-07-19
  */
-@Tag(name = "库存")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -41,28 +38,46 @@ public class InventoryController extends BaseController {
 
     private final InventoryService inventoryService;
 
-    @Operation(summary = "查询库存列表物品维度")
+    /**
+     * 查询库存列表物品维度
+     * @param dto
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @GetMapping(value = {"/boardList/item"})
     public PageInfoRes<BoardListVO> queryItemBoardList(InventoryDto dto, BasePage basePage) {
         return inventoryService.queryItemBoardList(dto, basePage);
     }
 
-    @Operation(summary = "查询库存列表仓库维度")
+    /**
+     * 查询库存列表仓库维度
+     * @param dto
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @GetMapping("/boardList/warehouse")
     public PageInfoRes<BoardListVO> queryWarehouseBoardList(InventoryDto dto, BasePage basePage) {
         return inventoryService.queryWarehouseBoardList(dto, basePage);
     }
 
-    @Operation(summary = "查询库存列表物品维度")
+    /**
+     * 查询库存列表物品维度
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @GetMapping(value = {"/listNoPage"})
     public Result<List<InventoryVo>> listNoPage(InventoryDto dto) {
         return Result.success(inventoryService.queryList(dto));
     }
 
-    @Operation(summary = "导出库存列表")
+    /**
+     * 导出库存列表
+     * @param dto
+     * @param response
+     */
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -71,7 +86,11 @@ public class InventoryController extends BaseController {
         ExcelUtil.exportExcel(list, "库存", InventoryVo.class, response);
     }
 
-    @Operation(summary = "获取库存详细信息")
+    /**
+     * 获取库存详细信息
+     * @param id
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @GetMapping("/{id}")
     public Result<InventoryVo> getInfo(@NotNull(message = "主键不能为空")
@@ -79,7 +98,11 @@ public class InventoryController extends BaseController {
         return Result.success(inventoryService.queryById(id));
     }
 
-    @Operation(summary = "新增库存")
+    /**
+     * 新增库存
+      * @param dto
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -89,7 +112,11 @@ public class InventoryController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "修改库存")
+    /**
+     * 修改库存
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -99,7 +126,11 @@ public class InventoryController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "删除库存")
+    /**
+     * 删除库存
+     * @param ids
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
@@ -109,7 +140,11 @@ public class InventoryController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "删除货架")
+    /**
+     * 删除货架
+     * @param id
+     * @return
+     */
     @SaCheckPermission("wms:inventory:all")
     @Log(title = "库存", businessType = BusinessType.DELETE)
     @DeleteMapping("/deleteStorageShelf/{id}")

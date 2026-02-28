@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.ShipmentOrderVo;
 import com.divine.warehouse.service.ShipmentOrderService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-08-01
  */
-@Tag(name = "出库单")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +39,6 @@ public class ShipmentOrderController extends BaseController {
     /**
      * 查询出库单列表
      */
-    @Operation(summary = "查询出库单列表")
     @SaCheckPermission("wms:shipment:all")
     @GetMapping("/list")
     public PageInfoRes<ShipmentOrderVo> list(ShipmentOrderDto dto, BasePage basePage) {
@@ -52,7 +48,6 @@ public class ShipmentOrderController extends BaseController {
     /**
      * 导出出库单列表
      */
-    @Operation(summary = "导出出库单列表")
     @SaCheckPermission("wms:shipment:all")
     @Log(title = "出库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -66,7 +61,6 @@ public class ShipmentOrderController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取出库单详细信息")
     @SaCheckPermission("wms:shipment:all")
     @GetMapping("/{id}")
     public Result<ShipmentOrderVo> getInfo(@NotNull(message = "主键不能为空")
@@ -74,7 +68,11 @@ public class ShipmentOrderController extends BaseController {
         return Result.success(shipmentOrderService.queryById(id));
     }
 
-    @Operation(summary = "getIdByNo")
+    /**
+     * 获取id
+     * @param orderNo
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/getIdByNo")
     public Result<Long> getId(@RequestParam String orderNo) {
@@ -84,7 +82,6 @@ public class ShipmentOrderController extends BaseController {
     /**
      * 新增出库单
      */
-    @Operation(summary = "新增出库单")
     @SaCheckPermission("wms:shipment:all")
     @Log(title = "出库单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -97,7 +94,6 @@ public class ShipmentOrderController extends BaseController {
     /**
      * 修改出库单
      */
-    @Operation(summary = "修改出库单")
     @SaCheckPermission("wms:shipment:all")
     @Log(title = "出库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -110,7 +106,6 @@ public class ShipmentOrderController extends BaseController {
     /**
      * 出库
      */
-    @Operation(summary = "出库")
     @SaCheckPermission("wms:shipment:all")
     @Log(title = "出库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -125,7 +120,6 @@ public class ShipmentOrderController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除出库单")
     @SaCheckPermission("wms:shipment:all")
     @Log(title = "出库单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")

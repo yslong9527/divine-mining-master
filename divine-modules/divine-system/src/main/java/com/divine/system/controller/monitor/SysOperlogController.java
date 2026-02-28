@@ -11,8 +11,6 @@ import com.divine.common.excel.utils.ExcelUtil;
 import com.divine.system.domain.dto.SysOperLogDto;
 import com.divine.system.domain.vo.SysOperLogVo;
 import com.divine.system.service.SysOperLogService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "操作日志记录")
+/**
+ * 操作日志记录
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -29,14 +29,23 @@ public class SysOperlogController extends BaseController {
 
     private final SysOperLogService operLogService;
 
-    @Operation(summary = "获取操作日志记录列表")
+    /**
+     * 获取操作日志记录列表
+     * @param operLog
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("monitor:operlog:list")
     @GetMapping("/list")
     public PageInfoRes<SysOperLogVo> list(SysOperLogDto operLog, BasePage basePage) {
         return operLogService.selectPageOperLogList(operLog, basePage);
     }
 
-    @Operation(summary = "导出操作日志记录列表")
+    /**
+     * 导出操作日志记录列表
+     * @param operLog
+     * @param response
+     */
     @Log(title = "操作日志", businessType = BusinessType.EXPORT)
     @SaCheckPermission("monitor:operlog:export")
     @PostMapping("/export")
@@ -49,7 +58,6 @@ public class SysOperlogController extends BaseController {
      * 批量删除操作日志记录
      * @param operIds 日志ids
      */
-    @Operation(summary = "批量删除操作日志记录")
     @Log(title = "操作日志", businessType = BusinessType.DELETE)
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/{operIds}")
@@ -57,7 +65,10 @@ public class SysOperlogController extends BaseController {
         return toAjax(operLogService.deleteOperLogByIds(operIds));
     }
 
-    @Operation(summary = "清理操作日志记录")
+    /**
+     * 清理操作日志记录
+     * @return
+     */
     @Log(title = "操作日志", businessType = BusinessType.CLEAN)
     @SaCheckPermission("monitor:operlog:remove")
     @DeleteMapping("/clean")

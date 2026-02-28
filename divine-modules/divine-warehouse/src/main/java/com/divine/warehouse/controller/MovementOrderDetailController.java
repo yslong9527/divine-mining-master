@@ -14,8 +14,6 @@ import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.dto.MovementOrderDetailDto;
 import com.divine.warehouse.domain.vo.MovementOrderDetailVO;
 import com.divine.warehouse.service.MovementOrderDetailService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +29,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-08-09
  */
-@Tag(name = "库存移动详情")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -43,7 +40,6 @@ public class MovementOrderDetailController extends BaseController {
     /**
      * 查询库存移动详情列表
      */
-    @Operation(summary = "查询库存移动详情列表")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/list")
     public PageInfoRes<MovementOrderDetailVO> list(MovementOrderDetailDto dto, BasePage basePage) {
@@ -53,7 +49,6 @@ public class MovementOrderDetailController extends BaseController {
     /**
      * 导出库存移动详情列表
      */
-    @Operation(summary = "导出库存移动详情列表")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "库存移动详情", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -67,7 +62,6 @@ public class MovementOrderDetailController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取库存移动详情详细信息")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/{id}")
     public Result<MovementOrderDetailVO> getInfo(@NotNull(message = "主键不能为空")
@@ -78,7 +72,6 @@ public class MovementOrderDetailController extends BaseController {
     /**
      * 新增库存移动详情
      */
-    @Operation(summary = "新增库存移动详情")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "库存移动详情", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -91,7 +84,6 @@ public class MovementOrderDetailController extends BaseController {
     /**
      * 修改库存移动详情
      */
-    @Operation(summary = "修改库存移动详情")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "库存移动详情", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -106,7 +98,6 @@ public class MovementOrderDetailController extends BaseController {
      *
      * @param ids 主键串
      */
-    @Operation(summary = "删除库存移动详情")
     @SaCheckPermission("wms:movement:all")
     @Log(title = "库存移动详情", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
@@ -119,7 +110,6 @@ public class MovementOrderDetailController extends BaseController {
     /**
      * 根据移库单id查询移库单详情列表
      */
-    @Operation(summary = "根据移库单id查询移库单详情列表")
     @SaCheckPermission("wms:movement:all")
     @GetMapping("/list/{movementOrderId}")
     public Result<List<MovementOrderDetailVO>> listByMovementOrderId(@NotNull @PathVariable Long movementOrderId) {

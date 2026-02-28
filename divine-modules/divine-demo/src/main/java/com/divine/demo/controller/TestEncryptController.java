@@ -4,9 +4,6 @@ import com.divine.common.core.domain.Result;
 import com.divine.common.core.exception.base.BusinessException;
 import com.divine.demo.domain.entity.TestDemoEncrypt;
 import com.divine.demo.mapper.TestDemoEncryptMapper;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-@Tag(name = "测试数据库加解密功能")
+/**
+ * 测试数据库加解密功能
+ */
 @Validated
 @RestController
 @RequestMapping("/demo/encrypt")
@@ -29,10 +28,15 @@ public class TestEncryptController {
     @Value("${mybatis-encryptor.enable}")
     private Boolean encryptEnable;
 
-    @Operation(summary = "测试数据库加解密")
+    /**
+     * 测试数据库加解密
+     *
+     * @param key   测试key
+     * @param value 测试value
+     * @return
+     */
     @GetMapping()
-    public Result<Map<String, TestDemoEncrypt>> test(@Schema(description = "测试key") String key,
-                                                     @Schema(description = "测试value") String value) {
+    public Result<Map<String, TestDemoEncrypt>> test(String key, String value) {
         if (!encryptEnable) {
             throw new BusinessException("加密功能未开启!");
         }

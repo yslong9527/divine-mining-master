@@ -13,8 +13,6 @@ import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.MerchantVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-07-16
  */
-@Tag(name = "往来单位")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +39,6 @@ public class MerchantController extends BaseController {
     /**
      * 查询往来单位列表
      */
-    @Operation(summary = "查询往来单位列表")
     @SaCheckPermission("wms:merchant:list")
     @GetMapping("/list")
     public PageInfoRes<MerchantVo> list(MerchantDto dto, BasePage basePage) {
@@ -52,7 +48,6 @@ public class MerchantController extends BaseController {
     /**
      * 查询往来单位列表
      */
-    @Operation(summary = "查询往来单位列表")
     @SaCheckPermission("wms:merchant:list")
     @GetMapping("/listNoPage")
     public Result<List<MerchantVo>> listNoPage(MerchantDto dto) {
@@ -62,7 +57,6 @@ public class MerchantController extends BaseController {
     /**
      * 导出往来单位列表
      */
-    @Operation(summary = "导出往来单位列表")
     @SaCheckPermission("wms:merchant:list")
     @Log(title = "往来单位", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -76,7 +70,6 @@ public class MerchantController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取往来单位详细信息")
     @SaCheckPermission("wms:merchant:list")
     @GetMapping("/{id}")
     public Result<MerchantVo> getInfo(@NotNull(message = "主键不能为空")
@@ -87,7 +80,6 @@ public class MerchantController extends BaseController {
     /**
      * 新增往来单位
      */
-    @Operation(summary = "新增往来单位")
     @SaCheckPermission("wms:merchant:edit")
     @Log(title = "往来单位", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -100,7 +92,6 @@ public class MerchantController extends BaseController {
     /**
      * 修改往来单位
      */
-    @Operation(summary = "修改往来单位")
     @SaCheckPermission("wms:merchant:edit")
     @Log(title = "往来单位", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -115,7 +106,6 @@ public class MerchantController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除往来单位")
     @SaCheckPermission("wms:merchant:edit")
     @Log(title = "往来单位", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")

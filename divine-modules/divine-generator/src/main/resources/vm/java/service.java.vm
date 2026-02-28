@@ -1,0 +1,51 @@
+package ${packageName}.service;
+
+
+import com.divine.common.mybatis.core.page.BasePage;
+import com.divine.common.mybatis.core.page.PageInfoRes;
+import ${packageName}.domain.dto.${ClassName}Dto;
+import ${packageName}.domain.vo.${ClassName}Vo;
+
+import java.util.List;
+import java.util.Collection;
+
+/**
+ * ${functionName}Service业务层处理
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${ClassName}Service {
+
+    /**
+     * 查询${functionName}
+     */
+    ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField});
+
+#if($table.crud || $table.sub)
+    /**
+     * 查询${functionName}列表
+     */
+    PageInfoRes<${ClassName}Vo> queryPageList(${ClassName}Dto dto, BasePage basePage);
+#end
+
+    /**
+     * 查询${functionName}列表
+     */
+    List<${ClassName}Vo> queryList(${ClassName}Dto dto);
+
+    /**
+     * 新增${functionName}
+     */
+    void insertByBo(${ClassName}Dto dto);
+
+    /**
+     * 修改${functionName}
+     */
+    void updateByBo(${ClassName}Dto dto);
+
+    /**
+     * 批量删除${functionName}
+     */
+    void deleteByIds(Collection<${pkColumn.javaType}> ids);
+}

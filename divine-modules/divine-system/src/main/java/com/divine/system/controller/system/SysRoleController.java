@@ -17,8 +17,6 @@ import com.divine.system.domain.vo.SysUserVo;
 import com.divine.system.service.SysDeptService;
 import com.divine.system.service.SysRoleService;
 import com.divine.system.service.SysUserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -26,8 +24,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-
-@Tag(name = "角色信息")
+/**
+ * 角色信息
+ *
+ * @author yisl
+ * @date 2024-07-19
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -41,7 +43,6 @@ public class SysRoleController extends BaseController {
     /**
      * 获取角色信息列表
      */
-    @Operation(summary = "获取角色信息列表")
     @SaCheckPermission("system:role:list")
     @GetMapping("/list")
     public PageInfoRes<SysRoleVo> list(SysRoleDto role, BasePage basePage) {
@@ -51,7 +52,6 @@ public class SysRoleController extends BaseController {
     /**
      * 导出角色信息列表
      */
-    @Operation(summary = "导出角色信息列表")
     @Log(title = "角色管理", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:role:export")
     @PostMapping("/export")
@@ -65,7 +65,6 @@ public class SysRoleController extends BaseController {
      *
      * @param roleId 角色ID
      */
-    @Operation(summary = "根据角色编号获取详细信息")
     @SaCheckPermission("system:role:query")
     @GetMapping(value = "/{roleId}")
     public Result<SysRoleVo> getInfo(@PathVariable Long roleId) {
@@ -76,7 +75,6 @@ public class SysRoleController extends BaseController {
     /**
      * 新增角色
      */
-    @Operation(summary = "新增角色")
     @SaCheckPermission("system:role:add")
     @Log(title = "角色管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -94,7 +92,6 @@ public class SysRoleController extends BaseController {
     /**
      * 修改保存角色
      */
-    @Operation(summary = "修改保存角色")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -117,7 +114,6 @@ public class SysRoleController extends BaseController {
     /**
      * 修改保存数据权限
      */
-    @Operation(summary = "修改保存数据权限")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping("/dataScope")
@@ -130,7 +126,6 @@ public class SysRoleController extends BaseController {
     /**
      * 状态修改
      */
-    @Operation(summary = "状态修改")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
@@ -145,7 +140,6 @@ public class SysRoleController extends BaseController {
      *
      * @param roleIds 角色ID串
      */
-    @Operation(summary = "删除角色")
     @SaCheckPermission("system:role:remove")
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{roleIds}")
@@ -156,7 +150,6 @@ public class SysRoleController extends BaseController {
     /**
      * 获取角色选择框列表
      */
-    @Operation(summary = "获取角色选择框列表")
     @SaCheckPermission("system:role:query")
     @GetMapping("/optionselect")
     public Result<List<SysRoleVo>> optionselect() {
@@ -166,7 +159,6 @@ public class SysRoleController extends BaseController {
     /**
      * 查询已分配用户角色列表
      */
-    @Operation(summary = "查询已分配用户角色列表")
     @SaCheckPermission("system:role:list")
     @GetMapping("/authUser/allocatedList")
     public PageInfoRes<SysUserVo> allocatedList(SysUserDto user, BasePage basePage) {
@@ -176,7 +168,6 @@ public class SysRoleController extends BaseController {
     /**
      * 查询未分配用户角色列表
      */
-    @Operation(summary = "查询未分配用户角色列表")
     @SaCheckPermission("system:role:list")
     @GetMapping("/authUser/unallocatedList")
     public PageInfoRes<SysUserVo> unallocatedList(SysUserDto user, BasePage basePage) {
@@ -186,7 +177,6 @@ public class SysRoleController extends BaseController {
     /**
      * 取消授权用户
      */
-    @Operation(summary = "取消授权用户")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.GRANT)
     @PutMapping("/authUser/cancel")
@@ -200,7 +190,6 @@ public class SysRoleController extends BaseController {
      * @param roleId  角色ID
      * @param userIds 用户ID串
      */
-    @Operation(summary = "批量取消授权用户")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.GRANT)
     @PutMapping("/authUser/cancelAll")
@@ -214,7 +203,6 @@ public class SysRoleController extends BaseController {
      * @param roleId  角色ID
      * @param userIds 用户ID串
      */
-    @Operation(summary = "批量选择用户授权")
     @SaCheckPermission("system:role:edit")
     @Log(title = "角色管理", businessType = BusinessType.GRANT)
     @PutMapping("/authUser/selectAll")
@@ -228,7 +216,6 @@ public class SysRoleController extends BaseController {
      *
      * @param roleId 角色ID
      */
-    @Operation(summary = "获取对应角色部门树列表")
     @SaCheckPermission("system:role:list")
     @GetMapping(value = "/deptTree/{roleId}")
     public Result<Map<String, Object>> roleDeptTreeselect(@PathVariable("roleId") Long roleId) {

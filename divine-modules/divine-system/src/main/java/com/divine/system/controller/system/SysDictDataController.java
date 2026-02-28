@@ -13,8 +13,6 @@ import com.divine.common.excel.utils.ExcelUtil;
 import com.divine.system.domain.vo.SysDictDataVo;
 import com.divine.system.service.SysDictDataService;
 import com.divine.system.service.SysDictTypeService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Tag(name = "数据字典信息")
+/**
+ * 数据字典信息
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -33,7 +33,12 @@ public class SysDictDataController extends BaseController {
     private final SysDictDataService dictDataService;
     private final SysDictTypeService dictTypeService;
 
-    @Operation(summary = "查询字典数据列表")
+    /**
+     * 查询字典数据列表
+     * @param dictData
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("system:dict:list")
     @GetMapping("/list")
     public PageInfoRes<SysDictDataVo> list(SysDictDataDto dictData, BasePage basePage) {
@@ -43,7 +48,6 @@ public class SysDictDataController extends BaseController {
     /**
      * 导出字典数据列表
      */
-    @Operation(summary = "导出字典数据列表")
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @SaCheckPermission("system:dict:export")
     @PostMapping("/export")
@@ -57,7 +61,6 @@ public class SysDictDataController extends BaseController {
      *
      * @param dictCode 字典code
      */
-    @Operation(summary = "查询字典数据详细")
     @SaCheckPermission("system:dict:query")
     @GetMapping(value = "/{dictCode}")
     public Result<SysDictDataVo> getInfo(@PathVariable Long dictCode) {
@@ -69,7 +72,6 @@ public class SysDictDataController extends BaseController {
      *
      * @param dictType 字典类型
      */
-    @Operation(summary = "根据字典类型查询字典数据信息")
     @GetMapping(value = "/type/{dictType}")
     public Result<List<SysDictDataVo>> dictType(@PathVariable String dictType) {
         List<SysDictDataVo> data = dictTypeService.selectDictDataByType(dictType);
@@ -79,7 +81,11 @@ public class SysDictDataController extends BaseController {
         return Result.success(data);
     }
 
-    @Operation(summary = "新增字典类型")
+    /**
+     * 新增字典类型
+     * @param dict
+     * @return
+     */
     @SaCheckPermission("system:dict:add")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
@@ -91,7 +97,11 @@ public class SysDictDataController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "修改保存字典类型")
+    /**
+     * 修改保存字典类型
+     * @param dict
+     * @return
+     */
     @SaCheckPermission("system:dict:edit")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -108,7 +118,6 @@ public class SysDictDataController extends BaseController {
      *
      * @param dictCodes 字典code串
      */
-    @Operation(summary = "删除字典类型")
     @SaCheckPermission("system:dict:remove")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")

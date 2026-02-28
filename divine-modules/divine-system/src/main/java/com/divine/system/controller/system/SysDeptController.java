@@ -11,15 +11,15 @@ import com.divine.common.log.enums.BusinessType;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.system.domain.vo.SysDeptVo;
 import com.divine.system.service.SysDeptService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "部门信息")
+/**
+ * 部门信息
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -28,7 +28,11 @@ public class SysDeptController extends BaseController {
 
     private final SysDeptService deptService;
 
-    @Operation(summary = "获取部门列表")
+    /**
+     * 获取部门列表
+     * @param dept
+     * @return
+     */
     @SaCheckPermission("system:dept:list")
     @GetMapping("/list")
     public Result<List<SysDeptVo>> list(SysDeptDto dept) {
@@ -36,7 +40,11 @@ public class SysDeptController extends BaseController {
         return Result.success(depts);
     }
 
-    @Operation(summary = "查询部门列表（排除节点）")
+    /**
+     * 查询部门列表（排除节点）
+     * @param deptId
+     * @return
+     */
     @SaCheckPermission("system:dept:list")
     @GetMapping("/list/exclude/{deptId}")
     public Result<List<SysDeptVo>> excludeChild(@PathVariable(value = "deptId", required = false) Long deptId) {
@@ -46,7 +54,11 @@ public class SysDeptController extends BaseController {
         return Result.success(depts);
     }
 
-    @Operation(summary = "根据部门编号获取详细信息")
+    /**
+     * 根据部门编号获取详细信息
+     * @param deptId
+     * @return
+     */
     @SaCheckPermission("system:dept:query")
     @GetMapping(value = "/{deptId}")
     public Result<SysDeptVo> getInfo(@PathVariable Long deptId) {
@@ -54,7 +66,11 @@ public class SysDeptController extends BaseController {
         return Result.success(deptService.selectDeptById(deptId));
     }
 
-    @Operation(summary = "新增部门")
+    /**
+     * 新增部门
+     * @param dept
+     * @return
+     */
     @SaCheckPermission("system:dept:add")
     @Log(title = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -65,7 +81,11 @@ public class SysDeptController extends BaseController {
         return toAjax(deptService.insertDept(dept));
     }
 
-    @Operation(summary = "修改部门")
+    /**
+     * 修改部门
+     * @param dept
+     * @return
+     */
     @SaCheckPermission("system:dept:edit")
     @Log(title = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -91,7 +111,6 @@ public class SysDeptController extends BaseController {
      *
      * @param deptId 部门ID
      */
-    @Operation(summary = "删除部门")
     @SaCheckPermission("system:dept:remove")
     @Log(title = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")

@@ -13,8 +13,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.dto.ReceiptOrderDto;
 import com.divine.warehouse.domain.vo.ReceiptOrderVo;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-07-19
  */
-@Tag(name = "入库单")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -39,14 +36,23 @@ public class ReceiptOrderController extends BaseController {
 
     private final ReceiptOrderService receiptOrderService;
 
-    @Operation(summary = "查询入库单列表")
+    /**
+     * 查询入库单列表
+     * @param dto
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/list")
     public PageInfoRes<ReceiptOrderVo> list(ReceiptOrderDto dto, BasePage basePage) {
         return receiptOrderService.queryPageList(dto, basePage);
     }
 
-    @Operation(summary = "导出入库单列表")
+    /**
+     * 导出入库单列表
+     * @param dto
+     * @param response
+     */
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -55,7 +61,11 @@ public class ReceiptOrderController extends BaseController {
         ExcelUtil.exportExcel(list, "入库单", ReceiptOrderVo.class, response);
     }
 
-    @Operation(summary = "获取入库单详细信息")
+    /**
+     * 获取入库单详细信息
+     * @param id
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/{id}")
     public Result<ReceiptOrderVo> getInfo(@NotNull(message = "主键不能为空")
@@ -63,14 +73,22 @@ public class ReceiptOrderController extends BaseController {
         return Result.success(receiptOrderService.queryById(id));
     }
 
-    @Operation(summary = "获取id")
+    /**
+     * 获取id
+     * @param orderNo
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/getIdByNo")
     public Result<Long> getId(@RequestParam String orderNo) {
         return Result.success(receiptOrderService.queryIdByOrderNo(orderNo));
     }
 
-    @Operation(summary = "暂存入库单")
+    /**
+     * 暂存入库单
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -79,7 +97,11 @@ public class ReceiptOrderController extends BaseController {
         return Result.success(receiptOrderService.insertByBo(dto));
     }
 
-    @Operation(summary = "入库")
+    /**
+     * 入库
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -89,7 +111,11 @@ public class ReceiptOrderController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "修改入库单")
+    /**
+     * 修改入库单
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -99,7 +125,11 @@ public class ReceiptOrderController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "删除入库单")
+    /**
+     * 删除入库单
+     * @param id
+     * @return
+     */
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")

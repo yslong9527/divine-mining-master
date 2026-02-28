@@ -13,8 +13,6 @@ import com.divine.common.log.enums.BusinessType;
 import com.divine.common.web.core.BaseController;
 import com.divine.demo.domain.dto.TestTreeDto;
 import com.divine.demo.service.ITestTreeService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -25,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
-@Tag(name = "测试树表Controller")
+/**
+ * 测试树表Controller
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -34,7 +34,11 @@ public class TestTreeController extends BaseController {
 
     private final ITestTreeService iTestTreeService;
 
-    @Operation(summary = "查询测试树表列表")
+    /**
+     * 查询测试树表列表
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("demo:tree:list")
     @GetMapping("/list")
     public Result<List<TestTreeVo>> list(@Validated(QueryGroup.class) TestTreeDto dto) {
@@ -42,7 +46,11 @@ public class TestTreeController extends BaseController {
         return Result.success(list);
     }
 
-    @Operation(summary = "导出测试树表列表")
+    /**
+     * 导出测试树表列表
+     * @param dto
+     * @param response
+     */
     @SaCheckPermission("demo:tree:export")
     @Log(title = "测试树表", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
@@ -51,7 +59,11 @@ public class TestTreeController extends BaseController {
         ExcelUtil.exportExcel(list, "测试树表", TestTreeVo.class, response);
     }
 
-    @Operation(summary = "获取测试树表详细信息")
+    /**
+     * 获取测试树表详细信息
+     * @param id
+     * @return
+     */
     @SaCheckPermission("demo:tree:query")
     @GetMapping("/{id}")
     public Result<TestTreeVo> getInfo(@NotNull(message = "主键不能为空")
@@ -59,7 +71,11 @@ public class TestTreeController extends BaseController {
         return Result.success(iTestTreeService.queryById(id));
     }
 
-    @Operation(summary = "新增测试树表")
+    /**
+     * 新增测试树表
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("demo:tree:add")
     @Log(title = "测试树表", businessType = BusinessType.INSERT)
     @RepeatSubmit
@@ -68,7 +84,11 @@ public class TestTreeController extends BaseController {
         return toAjax(iTestTreeService.insertByBo(dto));
     }
 
-    @Operation(summary = "修改测试树表")
+    /**
+     * 修改测试树表
+     * @param dto
+     * @return
+     */
     @SaCheckPermission("demo:tree:edit")
     @Log(title = "测试树表", businessType = BusinessType.UPDATE)
     @RepeatSubmit
@@ -77,7 +97,11 @@ public class TestTreeController extends BaseController {
         return toAjax(iTestTreeService.updateByBo(dto));
     }
 
-    @Operation(summary = "删除测试树表")
+    /**
+     * 删除测试树表
+     * @param ids
+     * @return
+     */
     @SaCheckPermission("demo:tree:remove")
     @Log(title = "测试树表", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")

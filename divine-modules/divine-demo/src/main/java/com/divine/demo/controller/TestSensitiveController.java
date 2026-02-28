@@ -4,19 +4,22 @@ import com.divine.common.core.domain.Result;
 import com.divine.common.sensitive.annotation.Sensitive;
 import com.divine.common.sensitive.core.SensitiveStrategy;
 import com.divine.common.web.core.BaseController;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "测试数据脱敏控制器(默认管理员不过滤,需自行根据业务重写实现)")
+/**
+ * 测试数据脱敏控制器(默认管理员不过滤,需自行根据业务重写实现)
+ */
 @RestController
 @RequestMapping("/demo/sensitive")
 public class TestSensitiveController extends BaseController {
 
-    @Operation(summary = "测试数据脱敏")
+    /**
+     * 测试数据脱敏
+     * @return
+     */
     @GetMapping("/test")
     public Result<TestSensitive> test() {
         TestSensitive testSensitive = new TestSensitive();

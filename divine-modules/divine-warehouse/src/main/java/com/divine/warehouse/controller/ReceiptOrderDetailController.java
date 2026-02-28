@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.ReceiptOrderDetailVO;
 import com.divine.warehouse.service.ReceiptOrderDetailService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +29,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-07-19
  */
-@Tag(name = "入库单详情")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -43,7 +40,6 @@ public class ReceiptOrderDetailController extends BaseController {
     /**
      * 查询入库单详情列表
      */
-    @Operation(summary = "查询入库单详情列表")
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/list")
     public PageInfoRes<ReceiptOrderDetailVO> list(ReceiptOrderDetailDto dto, BasePage basePage) {
@@ -53,7 +49,6 @@ public class ReceiptOrderDetailController extends BaseController {
     /**
      * 导出入库单详情列表
      */
-    @Operation(summary = "导出入库单详情列表")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单详情", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -67,7 +62,6 @@ public class ReceiptOrderDetailController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取入库单详情详细信息")
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/{id}")
     public Result<ReceiptOrderDetailVO> getInfo(@NotNull(message = "主键不能为空")
@@ -78,7 +72,6 @@ public class ReceiptOrderDetailController extends BaseController {
     /**
      * 新增入库单详情
      */
-    @Operation(summary = "新增入库单详情")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单详情", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -91,7 +84,6 @@ public class ReceiptOrderDetailController extends BaseController {
     /**
      * 修改入库单详情
      */
-    @Operation(summary = "修改入库单详情")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单详情", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -106,7 +98,6 @@ public class ReceiptOrderDetailController extends BaseController {
      *
      * @param ids 主键串
      */
-    @Operation(summary = "删除入库单详情")
     @SaCheckPermission("wms:receipt:all")
     @Log(title = "入库单详情", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
@@ -119,7 +110,6 @@ public class ReceiptOrderDetailController extends BaseController {
     /**
      * 根据入库单id查询入库单详情列表
      */
-    @Operation(summary = "根据入库单id查询入库单详情列表")
     @SaCheckPermission("wms:receipt:all")
     @GetMapping("/list/{receiptOrderId}")
     public Result<List<ReceiptOrderDetailVO>> listByReceiptOrderId(@NotNull @PathVariable Long receiptOrderId) {

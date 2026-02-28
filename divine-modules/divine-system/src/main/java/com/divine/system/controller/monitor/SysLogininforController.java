@@ -14,8 +14,6 @@ import com.divine.common.excel.utils.ExcelUtil;
 import com.divine.system.domain.entity.SysLogininfor;
 import com.divine.system.domain.vo.SysLogininforVo;
 import com.divine.system.service.SysLogininforService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "系统访问记录")
+/**
+ * 系统访问记录
+ */
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -32,14 +32,23 @@ public class SysLogininforController extends BaseController {
 
     private final SysLogininforService sysLoginInforService;
 
-    @Operation(summary = "获取系统访问记录列表")
+    /**
+     * 获取系统访问记录列表
+     * @param logininfor
+     * @param basePage
+     * @return
+     */
     @SaCheckPermission("monitor:logininfor:list")
     @GetMapping("/list")
     public PageInfoRes<SysLogininforVo> list(SysLogininforDto logininfor, BasePage basePage) {
         return sysLoginInforService.selectPageLogininforList(logininfor, basePage);
     }
 
-    @Operation(summary = "导出系统访问记录列表")
+    /**
+     * 导出系统访问记录列表
+     * @param logininfor
+     * @param response
+     */
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @SaCheckPermission("monitor:logininfor:export")
     @PostMapping("/export")
@@ -52,7 +61,6 @@ public class SysLogininforController extends BaseController {
      * 批量删除登录日志
      * @param infoIds 日志ids
      */
-    @Operation(summary = "批量删除登录日志")
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
@@ -60,7 +68,10 @@ public class SysLogininforController extends BaseController {
         return toAjax(sysLoginInforService.deleteLogininforByIds(infoIds));
     }
 
-    @Operation(summary = "清理系统访问记录")
+    /**
+     * 清理系统访问记录
+     * @return
+     */
     @SaCheckPermission("monitor:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
@@ -69,7 +80,11 @@ public class SysLogininforController extends BaseController {
         return Result.success();
     }
 
-    @Operation(summary = "账户解锁")
+    /**
+     * 账户解锁
+     * @param userName
+     * @return
+     */
     @SaCheckPermission("monitor:logininfor:unlock")
     @Log(title = "账户解锁", businessType = BusinessType.OTHER)
     @GetMapping("/unlock/{userName}")

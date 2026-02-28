@@ -4,7 +4,6 @@ import com.divine.warehouse.domain.entity.ItemBrand;
 import com.divine.common.core.validate.AddGroup;
 import com.divine.common.core.validate.EditGroup;
 import com.divine.common.mybatis.core.domain.BaseEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.*;
@@ -26,14 +25,12 @@ public class ItemBrandDto extends BaseEntity {
     /**
      * id
      */
-    @Schema(description = "id")
     @NotNull(message = "id不能为空", groups = { EditGroup.class })
     private Long id;
 
     /**
      * 品牌名称
      */
-    @Schema(description = "品牌名称")
     @NotBlank(message = "品牌名称不能为空", groups = { AddGroup.class, EditGroup.class })
     private String brandName;
 

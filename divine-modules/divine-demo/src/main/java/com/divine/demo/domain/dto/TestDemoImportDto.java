@@ -1,7 +1,6 @@
 package com.divine.demo.domain.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import jakarta.validation.constraints.NotBlank;
@@ -16,27 +15,37 @@ import jakarta.validation.constraints.NotNull;
 @Data
 public class TestDemoImportDto {
 
-    @Schema(description = "部门id")
+    /**
+     * 部门id
+     */
     @NotNull(message = "部门id不能为空")
     @ExcelProperty(value = "部门id")
     private Long deptId;
 
-    @Schema(description = "用户id")
+    /**
+     * 用户id
+     */
     @NotNull(message = "用户id不能为空")
     @ExcelProperty(value = "用户id")
     private Long userId;
 
-    @Schema(description = "排序号")
+    /**
+     * 排序号
+     */
     @NotNull(message = "排序号不能为空")
     @ExcelProperty(value = "排序号")
     private Integer sort;
 
-    @Schema(description = "key键")
+    /**
+     * key键
+     */
     @NotBlank(message = "key键不能为空")
     @ExcelProperty(value = "key键")
     private String testKey;
 
-    @Schema(description = "值")
+    /**
+     * 值
+     */
     @NotBlank(message = "值不能为空")
     @ExcelProperty(value = "值")
     private String value;

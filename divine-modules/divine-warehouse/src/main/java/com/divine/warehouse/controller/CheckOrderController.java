@@ -14,8 +14,6 @@ import com.divine.common.mybatis.core.page.PageInfoRes;
 import com.divine.common.web.core.BaseController;
 import com.divine.warehouse.domain.vo.CheckOrderVo;
 import com.divine.warehouse.service.CheckOrderService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,6 @@ import java.util.List;
  * @author yisl
  * @date 2024-08-13
  */
-@Tag(name = "库存盘点单据")
 @Validated
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +39,6 @@ public class CheckOrderController extends BaseController {
     /**
      * 查询库存盘点单据列表
      */
-    @Operation(summary = "查询库存盘点单据列表")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/list")
     public PageInfoRes<CheckOrderVo> list(CheckOrderDto dto, BasePage basePage) {
@@ -52,7 +48,6 @@ public class CheckOrderController extends BaseController {
     /**
      * 导出库存盘点单据列表
      */
-    @Operation(summary = "导出库存盘点单据列表")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -66,7 +61,6 @@ public class CheckOrderController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "获取库存盘点单据详细信息")
     @SaCheckPermission("wms:check:all")
     @GetMapping("/{id}")
     public Result<CheckOrderVo> getInfo(@NotNull(message = "主键不能为空")
@@ -77,7 +71,6 @@ public class CheckOrderController extends BaseController {
     /**
      * 新增库存盘点单据
      */
-    @Operation(summary = "新增库存盘点单据")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据", businessType = BusinessType.INSERT)
     @RepeatSubmit()
@@ -90,7 +83,6 @@ public class CheckOrderController extends BaseController {
     /**
      * 修改库存盘点单据
      */
-    @Operation(summary = "修改库存盘点单据")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -103,7 +95,6 @@ public class CheckOrderController extends BaseController {
     /**
      * 盘库结束
      */
-    @Operation(summary = "盘库结束")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
@@ -118,7 +109,6 @@ public class CheckOrderController extends BaseController {
      *
      * @param id 主键
      */
-    @Operation(summary = "删除库存盘点单据")
     @SaCheckPermission("wms:check:all")
     @Log(title = "库存盘点单据", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
