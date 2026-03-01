@@ -14,24 +14,38 @@ import java.util.List;
 @ExcelIgnoreUnannotated
 public class BaseOrderVo<T extends BaseOrderDetailVO> extends BaseVo {
 
-    @ExcelProperty(value = "id")
+    /**
+     * 主键id
+     */
+    @ExcelProperty(value = "主键id")
     private Long id;
 
-    @ExcelProperty(value = "业务单号")
-    private String bizNo;
-
-    @ExcelProperty(value = "物品总数")
-    private BigDecimal totalQuantity;
-
-    @ExcelProperty(value = "总金额")
-    private BigDecimal totalPrice;
-
-    @ExcelProperty(value = "状态")
-    private Integer orderStatus;
-
+    /**
+     * 仓库id
+     */
     @ExcelProperty(value = "仓库id")
     private Long warehouseId;
 
+    /**
+     * 仓库名称
+     */
+    private String warehouseName;
+
+    /**
+     * 物品总数
+     */
+    @ExcelProperty(value = "物品总数")
+    private BigDecimal totalQuantity;
+
+    /**
+     * 总金额
+     */
+    @ExcelProperty(value = "总金额")
+    private BigDecimal totalPrice;
+
+    /**
+     * 总金额
+     */
     @ExcelProperty(value = "备注")
     private String remark;
 

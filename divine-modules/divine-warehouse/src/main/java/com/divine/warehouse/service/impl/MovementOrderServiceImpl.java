@@ -1,6 +1,7 @@
 package com.divine.warehouse.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,23 +11,25 @@ import com.divine.common.core.exception.base.BusinessException;
 import com.divine.warehouse.domain.dto.MovementOrderDto;
 import com.divine.warehouse.domain.entity.MovementOrder;
 import com.divine.warehouse.domain.entity.MovementOrderDetail;
+import com.divine.warehouse.domain.entity.Warehouse;
+import com.divine.warehouse.domain.vo.CheckOrderVo;
 import com.divine.warehouse.domain.vo.MovementOrderVo;
 import com.divine.warehouse.mapper.MovementOrderMapper;
+import com.divine.warehouse.mapper.WarehouseMapper;
 import com.divine.warehouse.service.*;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
+import com.google.api.client.util.Lists;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 移库单Service业务层处理
@@ -43,6 +46,7 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     private final InventoryService inventoryService;
     private final InventoryHistoryService inventoryHistoryService;
     private final CommonService commonService;
+    private final WarehouseMapper warehouseMapper;
 
 
     /**
@@ -65,6 +69,19 @@ public class MovementOrderServiceImpl implements MovementOrderService {
     public PageInfoRes<MovementOrderVo> queryPageList(MovementOrderDto dto, BasePage basePage) {
         LambdaQueryWrapper<MovementOrder> lqw = buildQueryWrapper(dto);
         Page<MovementOrderVo> result = movementOrderMapper.selectVoPage(basePage.build(), lqw);
+        // 获取仓库信息
+        List<MovementOrderVo> records = result.getRecords();
+        Set<Long> wareIds = records.stream().map(MovementOrderVo::getSourceWarehouseId).collect(Collectors.toSet());
+        wareIds.addAll(records.stream().map(MovementOrderVo::getTargetWarehouseId).distinct().toList());
+        if (CollectionUtil.isNotEmpty(wareIds)){
+            List<Warehouse> warehouses = warehouseMapper.selectList(new LambdaQueryWrapper<>(Warehouse.class)
+                .in(Warehouse::getId, wareIds));
+            Map<Long, String> warehousesMap = warehouses.stream().collect(Collectors.toMap(Warehouse::getId, Warehouse::getWarehouseName));
+            records.forEach(r->{
+                r.setSourceWarehouseName(warehousesMap.get(r.getSourceWarehouseId()));
+                r.setTargetWarehouseName(warehousesMap.get(r.getTargetWarehouseId()));
+            });
+        }
         return PageInfoRes.build(result);
     }
 
@@ -140,8 +157,8 @@ public class MovementOrderServiceImpl implements MovementOrderService {
         if (movementOrderVo == null) {
             throw new com.divine.common.core.exception.base.BusinessException("移库单不存在");
         }
-        if (InventoryStatusEnum.FINISH.getCode().equals(movementOrderVo.getOrderStatus())) {
-            throw new BusinessException("移库单【" + movementOrderVo.getBizNo() + "】已移库，无法删除！");
+        if (InventoryStatusEnum.FINISH.getCode().equals(movementOrderVo.getMoveStatus())) {
+            throw new BusinessException("移库单【" + movementOrderVo.getMoveNo() + "】已移库，无法删除！");
         }
     }
 

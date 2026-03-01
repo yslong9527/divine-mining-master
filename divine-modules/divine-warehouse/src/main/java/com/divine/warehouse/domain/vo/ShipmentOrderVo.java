@@ -19,11 +19,22 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = ShipmentOrder.class)
 public class ShipmentOrderVo extends BaseOrderVo<ShipmentOrderDetailVO>{
 
+
     /**
-     * 入库类型
+     * 出库单号
      */
-    @ExcelProperty(value = "操作类型")
-    private Long optType;
+    private String shipmentNo;
+
+    /**
+     * 出库状态(0:未出库,1:已出库,-1:已作废)
+     */
+    private Integer shipmentStatus;
+
+    /**
+     * 出库类型
+     */
+    @ExcelProperty(value = "出库类型")
+    private Integer optType;
 
     /**
      * 领用人
@@ -32,8 +43,7 @@ public class ShipmentOrderVo extends BaseOrderVo<ShipmentOrderDetailVO>{
     private String recipient;
 
     /**
-     * 订单号
+     * 仓库名称
      */
-    @ExcelProperty(value = "第三方订单号")
-    private String bizOrderNo;
+    private String warehouseName;
 }

@@ -20,9 +20,19 @@ import lombok.EqualsAndHashCode;
 public class ReceiptOrderVo extends BaseOrderVo<ReceiptOrderDetailVO> {
 
     /**
+     * 入库单号
+     */
+    private String receiptNo;
+
+    /**
+     * 入库状态(0:未入库,1:已入库,-1:已作废)
+     */
+    private Integer receiptStatus;
+
+    /**
      * 入库类型
      */
-    @ExcelProperty(value = "操作类型")
+    @ExcelProperty(value = "入库类型")
     private Long optType;
 
     /**

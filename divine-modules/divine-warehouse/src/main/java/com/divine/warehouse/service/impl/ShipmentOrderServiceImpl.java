@@ -14,10 +14,13 @@ import com.divine.warehouse.domain.dto.ShipmentOrderDto;
 import com.divine.warehouse.domain.entity.BaseOrderDetail;
 import com.divine.warehouse.domain.entity.ShipmentOrder;
 import com.divine.warehouse.domain.entity.ShipmentOrderDetail;
+import com.divine.warehouse.domain.entity.Warehouse;
 import com.divine.warehouse.domain.vo.BaseOrderDetailVO;
+import com.divine.warehouse.domain.vo.ReceiptOrderVo;
 import com.divine.warehouse.domain.vo.ShipmentOrderDetailVO;
 import com.divine.warehouse.domain.vo.ShipmentOrderVo;
 import com.divine.warehouse.mapper.ShipmentOrderMapper;
+import com.divine.warehouse.mapper.WarehouseMapper;
 import com.divine.warehouse.service.*;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.core.utils.StringUtils;
@@ -29,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,6 +52,7 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
     private final InventoryService inventoryService;
     private final InventoryHistoryService inventoryHistoryService;
     private final CommonService commonService;
+    private final WarehouseMapper warehouseMapper;
 
     /**
      * 查询出库单
@@ -69,6 +74,13 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
     public PageInfoRes<ShipmentOrderVo> queryPageList(ShipmentOrderDto dto, BasePage basePage) {
         LambdaQueryWrapper<ShipmentOrder> lqw = buildQueryWrapper(dto);
         Page<ShipmentOrderVo> result = shipmentOrderMapper.selectVoPage(basePage.build(), lqw);
+        // 获取仓库信息
+        List<ShipmentOrderVo> records = result.getRecords();
+        List<Long> wareIds = records.stream().map(ShipmentOrderVo::getWarehouseId).toList();
+        List<Warehouse> warehouses = warehouseMapper.selectList(new LambdaQueryWrapper<>(Warehouse.class)
+            .in(Warehouse::getId, wareIds));
+        Map<Long, String> warehousesMap = warehouses.stream().collect(Collectors.toMap(Warehouse::getId, Warehouse::getWarehouseName));
+        records.forEach(r-> r.setWarehouseName(warehousesMap.get(r.getWarehouseId())));
         return PageInfoRes.build(result);
     }
 
@@ -154,8 +166,8 @@ public class ShipmentOrderServiceImpl implements ShipmentOrderService {
         if (shipmentOrderVo == null) {
             throw new com.divine.common.core.exception.base.BusinessException("出库单不存在");
         }
-        if (InventoryStatusEnum.FINISH.getCode().equals(shipmentOrderVo.getOrderStatus())) {
-            throw new BusinessException("出库单【" + shipmentOrderVo.getBizNo() + "】已出库，无法删除！");
+        if (InventoryStatusEnum.FINISH.getCode().equals(shipmentOrderVo.getShipmentStatus())) {
+            throw new BusinessException("出库单【" + shipmentOrderVo.getShipmentNo() + "】已出库，无法删除！");
         }
     }
 

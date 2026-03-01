@@ -20,14 +20,36 @@ import lombok.EqualsAndHashCode;
 public class MovementOrderVo extends BaseOrderVo<MovementOrderDetailVO>{
 
     /**
-     * 源仓库
+     * 盘库单号
      */
-    @ExcelProperty(value = "源仓库")
+    private String moveNo;
+
+    /**
+     * 盘库状态(0:未盘库,1:已盘库,-1:已作废)
+     */
+    private Integer moveStatus;
+
+    /**
+     * 源仓库id
+     */
+    @ExcelProperty(value = "源仓库id")
     private Long sourceWarehouseId;
 
     /**
-     * 目标仓库
+     * 源仓库
+     */
+    @ExcelProperty(value = "源仓库")
+    private String sourceWarehouseName;
+
+    /**
+     * 目标仓库id
+     */
+    @ExcelProperty(value = "目标仓库id")
+    private Long targetWarehouseId;
+
+    /**
+     * 目标仓库名称
      */
     @ExcelProperty(value = "目标仓库")
-    private Long targetWarehouseId;
+    private String targetWarehouseName;
 }

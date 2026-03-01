@@ -10,8 +10,11 @@ import com.divine.warehouse.domain.dto.CheckOrderDetailDto;
 import com.divine.warehouse.domain.dto.CheckOrderDto;
 import com.divine.warehouse.domain.entity.CheckOrder;
 import com.divine.warehouse.domain.entity.CheckOrderDetail;
+import com.divine.warehouse.domain.entity.Warehouse;
 import com.divine.warehouse.domain.vo.CheckOrderVo;
+import com.divine.warehouse.domain.vo.ShipmentOrderVo;
 import com.divine.warehouse.mapper.CheckOrderMapper;
+import com.divine.warehouse.mapper.WarehouseMapper;
 import com.divine.warehouse.service.*;
 import com.divine.common.core.utils.MapstructUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
@@ -22,10 +25,11 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 库存盘点单据Service业务层处理
@@ -42,6 +46,7 @@ public class CheckOrderServiceImpl implements CheckOrderService {
     private final InventoryService inventoryService;
     private final InventoryHistoryService inventoryHistoryService;
     private final CommonService commonService;
+    private final WarehouseMapper warehouseMapper;
 
     /**
      * 查询库存盘点单据
@@ -63,6 +68,13 @@ public class CheckOrderServiceImpl implements CheckOrderService {
     public PageInfoRes<CheckOrderVo> queryPageList(CheckOrderDto dto, BasePage basePage) {
         LambdaQueryWrapper<CheckOrder> lqw = buildQueryWrapper(dto);
         Page<CheckOrderVo> result = checkOrderMapper.selectVoPage(basePage.build(), lqw);
+        // 获取仓库信息
+        List<CheckOrderVo> records = result.getRecords();
+        List<Long> wareIds = records.stream().map(CheckOrderVo::getWarehouseId).toList();
+        List<Warehouse> warehouses = warehouseMapper.selectList(new LambdaQueryWrapper<>(Warehouse.class)
+            .in(Warehouse::getId, wareIds));
+        Map<Long, String> warehousesMap = warehouses.stream().collect(Collectors.toMap(Warehouse::getId, Warehouse::getWarehouseName));
+        records.forEach(r-> r.setWarehouseName(warehousesMap.get(r.getWarehouseId())));
         return PageInfoRes.build(result);
     }
 
@@ -130,8 +142,8 @@ public class CheckOrderServiceImpl implements CheckOrderService {
         if (checkOrderVo == null) {
             throw new com.divine.common.core.exception.base.BusinessException("盘库单不存在");
         }
-        if (InventoryStatusEnum.FINISH.getCode().equals(checkOrderVo.getOrderStatus())) {
-            throw new BusinessException("盘库单【" + checkOrderVo.getBizNo() + "】已盘库完成，无法删除！");
+        if (InventoryStatusEnum.FINISH.getCode().equals(checkOrderVo.getCheckStatus())) {
+            throw new BusinessException("盘库单【" + checkOrderVo.getCheckNo() + "】已盘库完成，无法删除！");
         }
     }
 

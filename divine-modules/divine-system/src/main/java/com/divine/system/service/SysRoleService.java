@@ -107,7 +107,7 @@ public interface SysRoleService {
     /**
      * 新增保存角色信息
      *
-     * @param role 角色信息
+     * @param dto 角色信息
      * @return 结果
      */
     int insertRole(SysRoleDto dto);

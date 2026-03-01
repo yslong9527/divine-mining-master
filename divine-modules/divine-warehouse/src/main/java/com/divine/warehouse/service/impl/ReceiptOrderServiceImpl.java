@@ -16,13 +16,14 @@ import com.divine.warehouse.domain.dto.ReceiptOrderDto;
 import com.divine.warehouse.domain.entity.BaseOrderDetail;
 import com.divine.warehouse.domain.entity.ReceiptOrder;
 import com.divine.warehouse.domain.entity.ReceiptOrderDetail;
+import com.divine.warehouse.domain.entity.Warehouse;
 import com.divine.warehouse.domain.vo.BaseOrderDetailVO;
 import com.divine.warehouse.domain.vo.ReceiptOrderDetailVO;
 import com.divine.warehouse.domain.vo.ReceiptOrderVo;
 import com.divine.warehouse.mapper.ReceiptOrderMapper;
+import com.divine.warehouse.mapper.WarehouseMapper;
 import com.divine.warehouse.service.*;
 import com.divine.common.core.utils.MapstructUtils;
-import com.divine.common.core.utils.StringUtils;
 import com.divine.common.mybatis.core.domain.BaseEntity;
 import com.divine.common.mybatis.core.page.BasePage;
 import com.divine.common.mybatis.core.page.PageInfoRes;
@@ -48,6 +49,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     private final InventoryService inventoryService;
     private final InventoryHistoryService inventoryHistoryService;
     private final CommonService commonService;
+    private final WarehouseMapper warehouseMapper;
 
     /**
      * 查询入库单
@@ -73,6 +75,13 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     public PageInfoRes<ReceiptOrderVo> queryPageList(ReceiptOrderDto dto, BasePage basePage) {
         LambdaQueryWrapper<ReceiptOrder> lqw = buildQueryWrapper(dto);
         Page<ReceiptOrderVo> result = receiptOrderMapper.selectVoPage(basePage.build(), lqw);
+        // 获取仓库信息
+        List<ReceiptOrderVo> records = result.getRecords();
+        List<Long> wareIds = records.stream().map(ReceiptOrderVo::getWarehouseId).toList();
+        List<Warehouse> warehouses = warehouseMapper.selectList(new LambdaQueryWrapper<>(Warehouse.class)
+            .in(Warehouse::getId, wareIds));
+        Map<Long, String> warehousesMap = warehouses.stream().collect(Collectors.toMap(Warehouse::getId, Warehouse::getWarehouseName));
+        records.forEach(r-> r.setWarehouseName(warehousesMap.get(r.getWarehouseId())));
         return PageInfoRes.build(result);
     }
 
@@ -106,6 +115,7 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
         // 创建入库单
         String receiptNo = commonService.getNo(InventoryTypeEnum.CHECK.getCode());
         dto.setBizNo(receiptNo);
+        // 考虑是否计算总金额 是否完全信任前端
         ReceiptOrder receiptOrder = MapstructUtils.convert(dto, ReceiptOrder.class);
         receiptOrder.setReceiptNo(receiptNo);
         receiptOrderMapper.insert(receiptOrder);
@@ -195,8 +205,8 @@ public class ReceiptOrderServiceImpl implements ReceiptOrderService {
     private void validateIdBeforeDelete(Long id) {
         ReceiptOrderVo receiptOrderVo = queryById(id);
         Assert.notNull(receiptOrderVo, "入库单不存在");
-        if (InventoryStatusEnum.FINISH.getCode().equals(receiptOrderVo.getOrderStatus())) {
-            throw new BusinessException("入库单【" + receiptOrderVo.getBizNo() + "】已入库，无法删除！");
+        if (InventoryStatusEnum.FINISH.getCode().equals(receiptOrderVo.getReceiptStatus())) {
+            throw new BusinessException("入库单【" + receiptOrderVo.getReceiptNo() + "】已入库，无法删除！");
         }
     }
 

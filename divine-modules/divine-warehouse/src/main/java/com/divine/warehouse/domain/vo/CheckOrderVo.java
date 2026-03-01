@@ -18,4 +18,14 @@ import lombok.EqualsAndHashCode;
 @AutoMapper(target = CheckOrder.class)
 public class CheckOrderVo extends BaseOrderVo<CheckOrderDetailVO> {
 
+    /**
+     * 盘库单号
+     */
+    private Integer checkNo;
+
+    /**
+     * 盘库单状态
+     */
+    private Integer checkStatus;
+
 }
